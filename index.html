@@ -1,0 +1,2054 @@
+<!doctype html>
+<html lang="uz"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
+<script>if(!/^#mijoz/.test(location.hash))document.documentElement.className="nolink"</script><style>html.nolink body>*{display:none!important}html.nolink body:before{content:"Loyiha havolasi to'liq emas. Iltimos, yuborilgan havolani to'liq oching.";display:block;padding:40px 20px;font:16px sans-serif;text-align:center}</style>
+</head><body>
+<title>Mebel loyihasi</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+/* Maket: ustaxona stoli. Modul bo'limida parametrlar va 3D, Xona bo'limida reja, 3D xona va bloklar ro'yxati. */
+:root{
+  --bg:#e9ecea; --surface:#f7f8f7; --field:#ffffff; --ink:#1b2220; --muted:#5b6965; --line:#cfd6d3;
+  --accent:#b0551a; --accent-ink:#ffffff; --accent-soft:#f1dfd0; --view:#dde2df; --tall:#d3d9d6;
+  --warn:#8f5a06; --warn-soft:#f6e9cf; --bad:#a3271f; --ok:#2b774a;
+  --font-display:'Barlow Condensed','Arial Narrow',Arial,sans-serif;
+  --font-body:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#131817; --surface:#1b2220; --field:#121716; --ink:#e5eae8; --muted:#8f9d98; --line:#303a37;
+    --accent:#e48b4c; --accent-ink:#1b0e05; --accent-soft:#3b2b1e; --view:#222a28; --tall:#2c3633;
+    --warn:#e3b360; --warn-soft:#352a14; --bad:#ff8a80; --ok:#6cc08c; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#131817; --surface:#1b2220; --field:#121716; --ink:#e5eae8; --muted:#8f9d98; --line:#303a37;
+  --accent:#e48b4c; --accent-ink:#1b0e05; --accent-soft:#3b2b1e; --view:#222a28; --tall:#2c3633;
+  --warn:#e3b360; --warn-soft:#352a14; --bad:#ff8a80; --ok:#6cc08c; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:14px;line-height:1.45;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--surface);z-index:10}
+h1,h2,h3{margin:0;font-family:var(--font-display);text-transform:uppercase;letter-spacing:.06em;font-weight:600;text-wrap:balance}
+h2{font-size:17px}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--surface);border-bottom:1px solid var(--line)}
+.top-in{max-width:1320px;margin:0 auto;display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:8px max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px))}
+.brand{font-family:var(--font-display);font-size:24px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding-bottom:6px}
+.brand b{color:var(--accent);font-weight:700}
+.tabs{display:flex;gap:2px;flex-wrap:wrap}
+.tabs button{background:none;border:0;border-bottom:3px solid transparent;color:var(--muted);font:600 15px var(--font-display);letter-spacing:.07em;text-transform:uppercase;padding:8px 14px 7px;cursor:pointer}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tabs .cnt{font-family:var(--font-mono);font-size:11px;background:var(--accent);color:var(--accent-ink);border-radius:9px;padding:1px 6px;margin-left:6px;letter-spacing:0}
+.wrap{max-width:1320px;margin:0 auto;padding-top:16px;padding-bottom:48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px;min-width:0}
+.stack{display:flex;flex-direction:column;gap:14px;min-width:0}
+.grid-mod,.grid-room{display:grid;grid-template-columns:minmax(0,370px) minmax(0,1fr);gap:16px;align-items:start}
+.grid-room{grid-template-columns:minmax(0,340px) minmax(0,1fr)}
+@media (max-width:920px){.grid-mod,.grid-room{grid-template-columns:minmax(0,1fr)}.stage{order:-1}}
+.sec-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.fields{display:grid;gap:10px}
+.r2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.r3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+label.f{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--muted);min-width:0}
+input,select{font:14px var(--font-body);color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:4px;height:36px;padding:0 8px;width:100%;min-width:0}
+input[type=number]{font-family:var(--font-mono)}
+input[type=color]{padding:2px;width:44px;height:30px}
+input[type=checkbox]{width:18px;height:18px;accent-color:var(--accent);flex:none}
+input:disabled{opacity:.5}
+:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.chk{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink)}
+.btn{font:600 14px var(--font-body);background:var(--field);color:var(--ink);border:1px solid var(--line);border-radius:4px;height:38px;padding:0 14px;cursor:pointer}
+.btn.pri{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.sm{height:30px;padding:0 10px;font-size:12px;white-space:nowrap}
+.btn.danger{color:var(--bad)}
+.btn.armed{background:var(--bad);color:#fff;border-color:var(--bad)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+.hint{font-size:12px;color:var(--muted)}
+.view-wrap{position:relative;background:var(--view);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.view{height:clamp(300px,46vh,470px);touch-action:none;cursor:grab}
+.view canvas{display:block;width:100%;height:100%}
+.view-cap{position:absolute;left:12px;top:10px;max-width:46%;font:500 12px var(--font-mono);color:var(--muted);pointer-events:none}
+.view-tools{position:absolute;right:10px;top:8px;display:flex;gap:6px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:4px 6px}
+.tbl-scroll{overflow-x:auto;max-width:100%}
+table.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{font:600 11px var(--font-body);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl td{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tbl td.n,.tbl th.n{text-align:right;font-family:var(--font-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tbl tr.grp td{background:var(--bg);font:600 11px var(--font-body);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.tbl tr.tot td{font-weight:600}
+.tbl tr.sel td{background:var(--accent-soft)}
+.tbl tr[data-row]{cursor:pointer}
+.tbl input,.tbl select{height:30px;font-size:13px}
+.tbl td.in{padding:4px 4px}
+.tbl .w-name{min-width:180px}.tbl .w-num{width:88px}
+.sell-box{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;border-top:2px solid var(--ink);margin-top:10px;padding-top:10px}
+.sell{font:700 38px/1 var(--font-display);letter-spacing:.02em;font-variant-numeric:tabular-nums}
+.sell small{font:500 14px var(--font-body);color:var(--muted);margin-left:4px}
+.warn{background:var(--warn-soft);color:var(--ink);border:1px solid var(--warn);border-radius:4px;padding:8px 10px;font-size:13px}
+.warn b{color:var(--warn);text-transform:uppercase;font-size:11px;letter-spacing:.06em}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--accent-soft);border-radius:4px;padding:3px 4px 3px 8px;font-size:12px}
+.chip button{border:0;background:none;color:var(--ink);cursor:pointer;font-size:15px;line-height:1;padding:0 4px}
+.empty{padding:28px 12px;text-align:center;color:var(--muted)}
+.empty b{display:block;color:var(--ink);font:600 18px var(--font-display);letter-spacing:.05em;text-transform:uppercase;margin-bottom:4px}
+.empty .btns{justify-content:center;margin-top:12px}
+.set-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.tag{font:500 11px var(--font-mono);background:var(--accent-soft);color:var(--ink);padding:2px 6px;border-radius:3px}
+.neg{color:var(--bad)}
+.plan svg{display:block;width:100%;height:auto;max-height:560px}
+.plan .p-room{fill:var(--field);stroke:var(--ink);stroke-width:2.5;vector-effect:non-scaling-stroke}
+.plan .p-it{stroke:var(--ink);stroke-width:1.2;vector-effect:non-scaling-stroke;cursor:pointer}
+.plan .p-floor{fill:var(--accent-soft)}
+.plan .p-tall{fill:var(--tall)}
+.plan .p-app{fill:var(--bg)}
+.plan .p-hang{fill:none;stroke-dasharray:6 4}
+.plan .p-counter{fill:none;stroke:var(--muted);stroke-dasharray:2 3}
+.plan .p-fartuk{fill:var(--muted);stroke:none}
+.plan .p-sel{stroke:var(--accent);stroke-width:3;vector-effect:non-scaling-stroke}
+.plan text{fill:var(--ink);font-family:var(--font-body);text-anchor:middle;dominant-baseline:middle;pointer-events:none}
+.plan text.w{fill:var(--muted);font-family:var(--font-display);letter-spacing:.1em}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:8px}
+.legend i{display:inline-block;width:14px;height:10px;border:1px solid var(--ink);margin-right:5px;vertical-align:-1px}
+
+.plan .p-gap{fill:#2f7fc4;fill-opacity:.32;stroke:none}
+.plan .p-dim line{stroke:var(--muted);stroke-width:1;vector-effect:non-scaling-stroke}
+.plan .p-dim text{fill:var(--muted);font-family:var(--font-mono)}
+.plan .p-dim text.g{fill:var(--ok);font-weight:600}
+.plan .p-dim text.neg{fill:var(--bad);font-weight:600}
+.plan .pipe{stroke:var(--ink);stroke-width:1.2;vector-effect:non-scaling-stroke}
+.plan .pipe-water{fill:#2f7fc4}.plan .pipe-sewer{fill:#8a7458}.plan .pipe-gas{fill:#e0b020}.plan .pipe-other{fill:#8c969b}
+.plan text.pt{fill:#fff;font-weight:700}
+.plan text.o{fill:var(--muted)}
+.pipe-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;border:1px solid var(--ink);vertical-align:-1px}
+.free{border:1px solid var(--line);background:var(--bg);border-radius:4px;padding:8px 10px;font-size:13px}
+.ok{color:var(--ok)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:13px;margin:0 0 10px}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;font-family:var(--font-mono);font-variant-numeric:tabular-nums;text-align:right}
+.nudge{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.sub-h{font:600 11px var(--font-body);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:10px 0 6px}
+[hidden]{display:none!important}
+
+.grid-mod{grid-template-areas:"form view" "form res"}
+.grid-mod>.form{grid-area:form}.grid-mod>.vstage{grid-area:view}.grid-mod>.res{grid-area:res}
+@media (max-width:920px){.grid-mod{grid-template-columns:minmax(0,1fr);grid-template-areas:"view" "form" "res"}}
+.vbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:6px 8px;border-top:1px solid var(--line);background:var(--surface)}
+.vbar .btn.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.vbar input[type=range]{width:100px;height:24px;padding:0;border:0;background:none;accent-color:var(--accent)}
+.vbar .sp{flex:1}
+.view-tools{flex-wrap:wrap;max-width:calc(100% - 20px);justify-content:flex-end}
+.savestate{cursor:pointer;font:500 12px var(--font-mono);color:var(--muted);padding-bottom:6px;margin-left:auto}
+.savestate.bad{color:var(--bad)}
+.cl-mode .tabs,.cl-mode .savestate{display:none}
+.cl-mode .brand{padding-bottom:8px}
+.linkbox{display:flex;gap:6px}
+.linkbox input{font-family:var(--font-mono);font-size:12px}
+.pj-row td{vertical-align:middle}
+.swatch{display:inline-block;width:12px;height:12px;border:1px solid var(--ink);border-radius:2px;vertical-align:-2px;margin-right:6px}
+.fgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.numrow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.toast{position:fixed;left:12px;right:12px;bottom:max(14px,env(safe-area-inset-bottom));z-index:50;background:var(--ink);color:var(--bg);padding:10px 14px;border-radius:8px;font-size:13px;text-align:center}.toast.bad{background:var(--bad);color:#fff}.toast[hidden]{display:none}
+</style>
+
+<header class="top">
+  <div class="top-in">
+    <div class="brand">Mebel<b>Loyihachi</b></div>
+    <div class="tabs" role="tablist">
+      <button role="tab" id="tab-module" aria-selected="true" data-tab="module">Modul</button>
+      <button role="tab" id="tab-room" aria-selected="false" data-tab="room">Xona<span class="cnt" id="pcount">0</span></button>
+      <button role="tab" id="tab-mats" aria-selected="false" data-tab="mats">Materiallar</button>
+      <button role="tab" id="tab-project" aria-selected="false" data-tab="project">Hisob</button>
+      <button role="tab" id="tab-saved" aria-selected="false" data-tab="saved">Loyihalar</button>
+    </div>
+    <div class="savestate" id="saveState" aria-live="polite"></div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- MODUL -->
+<section id="p-module" class="grid-mod">
+  <div class="stack form">
+    <div class="panel">
+      <div class="sec-h"><h2>Blok</h2><span class="tag" id="editTag" hidden>Tahrirlanmoqda</span><button class="btn sm" id="b-new-mod">Yangi blok</button></div>
+      <div class="fields">
+        <label class="f">Nomi<input id="f-name" data-k="name" type="text"></label>
+        <label class="f">Turi
+          <select id="f-type" data-k="type">
+            <optgroup label="Shkaflar">
+              <option value="pastki">Pastki shkaf (oshxona)</option>
+              <option value="moyka">Moyka shkafi</option>
+              <option value="yuqori">Yuqori shkaf (oshxona)</option>
+              <option value="antresol">Antresol</option>
+              <option value="shkaf">Baland shkaf / kiyim shkafi</option>
+              <option value="tumba">Tumba / komod</option>
+              <option value="burchak">Burchak shkaf (pastki)</option>
+              <option value="burchakY">Burchak shkaf (yuqori)</option>
+            </optgroup>
+            <optgroup label="Qoplama">
+              <option value="stoleshnitsa">Stoleshnitsa</option>
+              <option value="fartuk">Kafel fartuk</option>
+            </optgroup>
+            <optgroup label="Texnika">
+              <option value="plita">Gaz plita</option>
+              <option value="xolodilnik">Xolodilnik</option>
+              <option value="mashina">Idish yuvish mashinasi</option>
+              <option value="vityazhka">Vityajka (gaz plita usti)</option>
+              <option value="texnika">Boshqa texnika</option>
+            </optgroup>
+            <optgroup label="Qo'lda">
+              <option value="maxsus">Maxsus blok (detallarni o'zim kiritaman)</option>
+            </optgroup>
+          </select>
+        </label>
+        <div class="r3">
+          <label class="f"><span id="lb-W">Eni, mm</span><input id="f-W" data-k="W" type="number" min="1" step="10"></label>
+          <label class="f"><span id="lb-H">Bo'yi, mm</span><input id="f-H" data-k="H" type="number" min="1" step="10"></label>
+          <label class="f"><span id="lb-D">Chuqurligi, mm</span><input id="f-D" data-k="D" type="number" min="1" step="10"></label>
+        </div>
+        <div class="r2" id="w-corner">
+          <label class="f">Ikkinchi tomon uzunligi, mm<input id="f-W2" data-k="W2" type="number" min="1" step="10"></label>
+          <label class="chk" style="align-self:end;height:36px"><input id="f-cornerEnd" data-k="cornerEnd" type="checkbox">Burchak oxirgi tomonda</label>
+        </div>
+        <div class="r2">
+          <label class="f" id="w-leg">Oyoq balandligi, mm<input id="f-leg" data-k="leg" type="number" min="0" step="10"></label>
+          <label class="f" id="w-shelves">Polkalar soni<input id="f-shelves" data-k="shelves" type="number" min="0" max="10" step="1"></label>
+          <label class="f" id="w-elev">Poldan balandligi, mm<input id="f-elev" data-k="elev" type="number" min="0" step="10"></label>
+        </div>
+        <label class="chk" id="w-sink"><input id="f-sinkIncl" data-k="sinkIncl" type="checkbox">Moyka va smesitel narxga qo'shilsin</label>
+        <div class="btns" id="b-fetchw"><button class="btn sm" id="b-fetch">Uzunlikni devordagi pastki modullardan olish</button></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="sec-h"><h2>Shablonlar</h2><span class="hint">O'zingiz yaratgan bloklar</span></div>
+      <div class="fields">
+        <div class="r2" style="grid-template-columns:minmax(0,1fr) auto auto;align-items:end">
+          <label class="f">Shablon<select id="tpl-sel"></select></label>
+          <button class="btn sm" id="tpl-load" style="height:36px">Yuklash</button>
+          <button class="btn sm danger" id="tpl-del" style="height:36px">O'chirish</button>
+        </div>
+        <div class="btns"><button class="btn sm" id="tpl-save">Joriy blokni shablon qilib saqlash</button></div>
+        <p class="hint" id="tpl-hint" style="margin:0"></p>
+      </div>
+    </div>
+
+    <div class="panel" data-for="app">
+      <div class="sec-h"><h2>Texnika narxi</h2></div>
+      <div class="fields">
+        <label class="f">Narxi, so'm<input id="f-price" data-k="price" type="number" min="0" step="10000"></label>
+        <label class="chk"><input id="f-incl" data-k="incl" type="checkbox">Narxni loyiha hisobiga qo'shish</label>
+        <p class="hint" style="margin:0">Texnikani odatda mijoz o'zi sotib oladi. Belgilanmasa, narxga kirmaydi, faqat joyi ajratiladi.</p>
+      </div>
+    </div>
+
+    <div class="panel" data-for="surf">
+      <div class="sec-h"><h2>Qoplama materiali</h2><span class="hint">«Materiallar» bo'limidan</span></div>
+      <label class="f">Material<select id="f-surfMat" data-k="surfMat"></select></label>
+    </div>
+
+    <div class="panel" data-for="cab" id="pFront">
+      <div class="sec-h"><h2>Old qismi</h2></div>
+      <div class="fields">
+        <div class="r2">
+          <label class="f">Turi
+            <select id="f-frontType" data-k="frontType">
+              <option value="door">Eshik</option>
+              <option value="drawer">Tortma</option>
+              <option value="open">Ochiq (old qismi yo'q)</option>
+            </select>
+          </label>
+          <label class="f" id="w-count"><span id="countLbl">Eshiklar soni</span><input id="f-frontCount" data-k="frontCount" type="number" min="1" max="6" step="1"></label>
+        </div>
+        <label class="chk" id="w-plinth"><input id="f-plinth" data-k="plinth" type="checkbox">Tsokol (taxta) qo'shish</label>
+        <label class="chk" id="w-rod"><input id="f-rod" data-k="rod" type="checkbox">Shtanga (kiyim osadigan quvur)</label>
+      </div>
+    </div>
+
+    <div class="panel" data-for="cab">
+      <div class="sec-h"><h2>Materiallar</h2><span class="hint">«Materiallar» bo'limidan</span></div>
+      <div class="fields">
+        <label class="f">Korpus<select id="f-korpus" data-k="korpus"></select></label>
+        <label class="f">Orqa devor<select id="f-back" data-k="back"></select></label>
+        <label class="f">Eshik / tortma old qismi<select id="f-front" data-k="front"></select></label>
+        <div class="r2">
+          <label class="f">Korpus kromkasi<select id="f-kK" data-k="kK"></select></label>
+          <label class="f">Old qism kromkasi<select id="f-kF" data-k="kF"></select></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" data-for="cab" id="pCustom">
+      <div class="sec-h"><h2>Detallar (qo'lda)</h2><label class="f" style="flex-direction:row;align-items:center;gap:8px">3D rangi<input id="f-color" data-k="color" type="color"></label></div>
+      <div class="tbl-scroll" id="cp-list"></div>
+      <div class="btns" style="margin-top:8px"><button class="btn sm" id="cp-add">+ Detal qo'shish</button><button class="btn sm" id="cp-std">Standart shkafdan detallarni olish</button></div>
+      <p class="hint" style="margin:8px 0 0">Har bir detalga «Turi» ni tanlang: 3D ko'rinishda yon tomonlar chap-o'ngga, tub pastga, usti tepaga, polkalar orasiga tekis, eshiklar oldiga joylashadi. Uzunlik va eni mm. Kromka: shu detalning uzun va qisqa tomonidan nechtasiga kromka yopishtiriladi (0, 1 yoki 2). Material va kromka «Materiallar» bo'limidagi ro'yxatdan olinadi. 3D ko'rinishda shkaf o'lcham, polka va old qismdan chiziladi, narx esa shu jadvaldagi detallardan hisoblanadi. Petlya va tutqichni «Qo'shimcha furnitura»dan qo'shing.</p>
+    </div>
+
+    <div class="panel" data-for="cab surf">
+      <div class="sec-h"><h2>Qo'shimcha furnitura</h2></div>
+      <div class="r2" style="grid-template-columns:minmax(0,1fr) 76px auto;align-items:end">
+        <label class="f">Nomi<select id="x-sel"></select></label>
+        <label class="f">Soni<input id="x-qty" type="number" min="1" value="1"></label>
+        <button class="btn sm" id="x-add" style="height:36px">Qo'shish</button>
+      </div>
+      <div class="chips" id="x-list" style="margin-top:10px"></div>
+    </div>
+
+    <div class="panel">
+      <div class="sec-h"><h2>Joylashuvi</h2><span class="hint">Xona bo'limidagi rejada ko'rinadi</span></div>
+      <div class="r2">
+        <label class="f">Devor<select id="pl-wall"><option value="A">A · orqa devor</option><option value="B">B · o'ng devor</option><option value="C">C · old devor</option><option value="D">D · chap devor</option></select></label>
+        <label class="f">Burchakdan, mm<input id="pl-x" type="number" min="0" step="10" placeholder="Avto"></label>
+      </div>
+      <label class="f" style="margin-top:10px">Devordan masofa (quvurlar uchun), mm<input id="pl-off" type="number" min="0" step="10" placeholder="0"></label>
+      <div class="btns" style="margin-top:6px"><button class="btn sm" data-off="0">0</button><button class="btn sm" data-off="50">50</button><button class="btn sm" data-off="100">100</button><button class="btn sm" data-off="150">150</button></div>
+      <p class="hint" style="margin:8px 0 0">Burchakdan masofani bo'sh qoldirsangiz, blok shu devordagi oxirgi blokdan keyin joylashadi. Devordan masofa blokni devordan oldinga suradi, orqasida quvurlar uchun joy qoladi.</p>
+      <div id="pl-free" class="free" style="margin-top:10px"></div>
+    </div>
+
+  </div>
+
+  <div class="stack vstage">
+    <div class="btns">
+      <button class="btn pri" id="b-add">Xonaga qo'shish</button>
+      <button class="btn" id="b-cancel" hidden>Bekor qilish</button>
+    </div>
+    <div class="view-wrap">
+      <div class="view" id="view" aria-label="Blokning 3D ko'rinishi"></div>
+      <div class="view-cap" id="cap"></div>
+      <div class="vbar vm"></div>
+    </div>
+    <div id="warns" class="stack" style="gap:8px"></div>
+  </div>
+
+  <div class="stack res">
+    <div class="panel">
+      <div class="sec-h"><h2>Sarf va narx</h2><span class="hint" id="costHint"></span></div>
+      <div class="tbl-scroll" id="bomMod"></div>
+      <div id="sumMod"></div>
+    </div>
+    <div class="panel" id="partsPanel">
+      <div class="sec-h"><h2>Detallar ro'yxati</h2><span class="hint">Mm. Uzunlik tola yo'nalishi bo'ylab</span></div>
+      <div class="tbl-scroll" id="partsMod"></div>
+    </div>
+  </div>
+</section>
+
+<!-- XONA -->
+<section id="p-room" hidden class="stack">
+  <div class="grid-room">
+    <div class="stack">
+      <div class="panel">
+        <div class="sec-h"><h2>Tanlangan blok</h2></div>
+        <div id="selCard"></div>
+      </div>
+      <div class="panel">
+        <div class="sec-h"><h2>Xona o'lchami</h2></div>
+        <div class="fields">
+          <div class="r2">
+            <label class="f">A va C devor uzunligi, mm<input id="r-W" data-r="W" type="number" min="500" step="10"></label>
+            <label class="f">B va D devor uzunligi, mm<input id="r-L" data-r="L" type="number" min="500" step="10"></label>
+          </div>
+          <label class="f">Shift balandligi, mm<input id="r-H" data-r="H" type="number" min="1800" step="10"></label>
+        </div>
+        <p class="hint" style="margin:8px 0 0">A orqa devor, B o'ng, C old, D chap. Rejada tepasi A devor.</p>
+      </div>
+      <div class="panel">
+        <div class="sec-h"><h2>Devorlar</h2></div>
+        <div class="tbl-scroll" id="wallTbl"></div>
+      </div>
+      <div class="panel">
+        <div class="sec-h"><h2>Kommunikatsiyalar</h2><button class="btn sm" id="b-pipe">+ Quvur qo'shish</button></div>
+        <label class="f" style="margin-bottom:10px">Quvur oldida devordan minimal masofa, mm<input id="r-pipeGap" data-r="pipeGap" type="number" min="0" step="10"></label>
+        <div class="tbl-scroll" id="pipeList"></div>
+        <p class="hint" style="margin:8px 0 0">Suv, kanalizatsiya va gaz chiqadigan joyni kiriting. Shu joyga qo'yilgan blok devordan kamida shuncha masofada turmasa, dastur ogohlantiradi.</p>
+      </div>
+      <div id="roomWarns" class="stack" style="gap:8px"></div>
+    </div>
+    <div class="stack stage">
+      <div class="view-wrap">
+        <div class="view" id="rview" aria-label="Xonaning 3D ko'rinishi"></div>
+        <div class="view-tools">
+          <button class="btn sm" data-cam="front">Old</button>
+          <button class="btn sm" data-cam="iso">Burchak</button>
+          <button class="btn sm" data-cam="top">Tepadan</button>
+          <button class="btn sm" data-dims id="b-dims2"></button>
+        </div>
+        <div class="view-cap" id="rcap"></div>
+        <div class="vbar vm"></div>
+      </div>
+      <div class="panel plan">
+        <div class="sec-h"><h2>Reja (tepadan)</h2><div class="btns" style="align-items:center"><span class="hint">Blokni bossangiz, tanlanadi</span><button class="btn sm" data-dims id="b-dims1"></button></div></div>
+        <div id="planBox"></div>
+        <div class="legend"><span><i style="background:var(--accent-soft)"></i>Pol shkafi</span><span><i style="background:var(--tall)"></i>Baland</span><span><i style="background:var(--bg)"></i>Texnika</span><span><i style="border-style:dashed;background:none"></i>Osma</span><span><i style="background:#2f7fc4;opacity:.45"></i>Devor bilan oraliq</span><span><b class="pipe-dot" style="background:#2f7fc4"></b>Suv</span><span><b class="pipe-dot" style="background:#8a7458"></b>Kanalizatsiya</span><span><b class="pipe-dot" style="background:#e0b020"></b>Gaz</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="sec-h"><h2>Bloklar</h2>
+      <div class="btns">
+        <button class="btn sm" id="b-newblock">+ Yangi blok</button>
+        <button class="btn sm" id="b-pack">Bo'shliqlarni yig'ish</button>
+        <button class="btn sm" id="b-undo" hidden>Qaytarish</button>
+      </div>
+    </div>
+    <div class="tbl-scroll" id="roomList"></div>
+    <div id="roomTotals" style="margin-top:10px"></div>
+  </div>
+</section>
+
+<!-- MATERIALLAR -->
+<section id="p-mats" hidden class="stack">
+  <div class="warn"><b>Namuna narxlar</b><br>Jadvaldagi narxlar misol uchun qo'yilgan. O'zingiz sotib oladigan narxlarni kiriting, hisob-kitob shunga qarab o'zgaradi. Ma'lumotlar akkauntingizda avtomatik saqlanadi (tepada holati ko'rinadi).</div>
+
+  <div class="panel">
+    <div class="sec-h"><h2>Plitali materiallar</h2><button class="btn sm" data-addcat="plita">+ Material qo'shish</button></div>
+    <p class="hint" style="margin:0 0 8px">LDSP, MDF, HDF va boshqa listlar. Narx bitta list uchun. Rang 3D ko'rinishda ishlatiladi.</p>
+    <div class="tbl-scroll" id="t-plita"></div>
+  </div>
+
+  <div class="panel">
+    <div class="sec-h"><h2>Stoleshnitsa va kafel</h2><button class="btn sm" data-addcat="qoplama">+ Qoplama qo'shish</button></div>
+    <p class="hint" style="margin:0 0 8px">«m» bo'lsa narx bir pogon metr uchun, «m²» bo'lsa bir kvadrat metr uchun hisoblanadi.</p>
+    <div class="tbl-scroll" id="t-qoplama"></div>
+  </div>
+
+  <div class="panel">
+    <div class="sec-h"><h2>Kromka</h2><button class="btn sm" data-addcat="kromka">+ Kromka qo'shish</button></div>
+    <div class="tbl-scroll" id="t-kromka"></div>
+  </div>
+
+  <div class="panel">
+    <div class="sec-h"><h2>Furnitura</h2><button class="btn sm" data-addcat="furn">+ Furnitura qo'shish</button></div>
+    <p class="hint" style="margin:0 0 8px">Belgilangan qatorlar hisobda o'zi ishlatiladi (petlya, tutqich, yo'naltirgich va h.k.). Qolganlarini blokka qo'lda qo'shasiz.</p>
+    <div class="tbl-scroll" id="t-furn"></div>
+  </div>
+
+  <div class="panel">
+    <div class="sec-h"><h2>Hisob sozlamalari</h2></div>
+    <div class="set-grid">
+      <label class="f">List foydalanish, %<input id="s-eff" data-s="eff" type="number" min="40" max="100" step="1"></label>
+      <label class="f">Kromka zaxirasi, %<input id="s-kz" data-s="kz" type="number" min="0" max="50" step="1"></label>
+      <label class="f">Ish haqi, % (materialdan)<input id="s-labor" data-s="labor" type="number" min="0" max="300" step="1"></label>
+      <label class="f">Foyda, % (tannarxdan)<input id="s-margin" data-s="margin" type="number" min="0" max="300" step="1"></label>
+      <label class="f">Loyihada list hisobi
+        <select id="s-mode" data-s="mode"><option value="cut">Raskroy bo'yicha (haqiqiy kesish)</option><option value="sheet">Butun listlar bo'yicha (maydondan)</option><option value="area">Ishlatilgan maydon bo'yicha</option></select>
+      </label>
+      <label class="f">Arra kengligi, mm<input id="s-kerf" data-s="kerf" type="number" min="0" max="10" step="0.5"></label>
+      <label class="f">List chekkasi (kesib tashlanadi), mm<input id="s-trim" data-s="trim" type="number" min="0" max="50" step="1"></label>
+      <label class="f">Detalni aylantirish
+        <select id="s-rot" data-s="rot"><option value="0">Yo'q (tola yo'nalishi saqlanadi)</option><option value="1">Ha (tekstursiz material)</option></select>
+      </label>
+    </div>
+    <p class="hint" style="margin:10px 0 0">Raskroy bo'yicha hisobda detallar listlarga haqiqatan joylanadi (arra kengligi va chekka bilan), narx butun listlar soniga qarab chiqadi. «Loyihalar» emas, «Hisob» bo'limida kesish sxemasi ko'rinadi. List foydalanish: boshqa hisob usullarida detallar listning necha foizini egallashi. 85% bo'lsa 15% chiqindi hisoblanadi. Ish haqi stoleshnitsa va texnikaga qo'shilmaydi, texnika narxiga foyda ham qo'shilmaydi.</p>
+    <div class="btns" style="margin-top:12px"><button class="btn sm danger" id="b-reset">Namuna ro'yxatni qayta tiklash</button></div>
+  </div>
+</section>
+
+<!-- HISOB -->
+<section id="p-project" hidden class="stack">
+  <div id="projEmpty" class="panel"></div>
+  <div id="projBody" class="stack">
+    <div class="panel">
+      <div class="sec-h"><h2>Umumiy sarf</h2><span class="hint" id="projHint"></span></div>
+      <div class="tbl-scroll" id="bomProj"></div>
+      <div id="sumProj"></div>
+    </div>
+    <div class="panel">
+      <div class="sec-h"><h2>Raskroy (kesish sxemasi)</h2><span class="hint">Listlar soni shu sxemadan olinadi</span></div>
+      <div id="rkProj"></div>
+    </div>
+    <div class="panel">
+      <div class="sec-h"><h2>Kesish ro'yxati</h2><button class="btn sm" id="b-copy">Nusxa olish (Excel uchun)</button></div>
+      <div class="tbl-scroll" id="cutProj"></div>
+      <p class="hint" id="copyMsg" style="margin:8px 0 0"></p>
+    </div>
+  </div>
+</section>
+
+<!-- LOYIHALAR -->
+<section id="p-saved" hidden class="stack">
+  <div class="panel">
+    <div class="sec-h"><h2>Joriy loyiha</h2><span class="hint" id="pjMsg"></span></div>
+    <div class="r2" style="grid-template-columns:minmax(0,1fr) auto auto auto;align-items:end">
+      <label class="f">Loyiha nomi<input id="pj-name" type="text" placeholder="Masalan: Aliyev oshxonasi"></label>
+      <button class="btn pri" id="pj-save">Saqlash</button>
+      <button class="btn" id="pj-share">Mijozga havola</button>
+      <button class="btn danger" id="pj-new">Yangi loyiha</button>
+    </div>
+    <p class="hint" style="margin:8px 0 0">«Saqlash» xonadagi barcha bloklarni, o'lchamlarni va quvurlarni shu nom bilan saqlaydi. Xuddi shu nom bilan qayta saqlasangiz yangilanadi.</p>
+  </div>
+  <div class="panel" id="pj-sharebox" hidden>
+    <div class="sec-h"><h2>Mijozga yuborish</h2><span class="hint">Narxlar va sarflar yo'q</span></div>
+    <p class="hint" style="margin:0 0 8px"><b>Asosiy usul:</b> havola (jok-mebelloyiha.github.io). Mijoz bosadi, akkauntsiz ochiladi, 3D ni aylantirib, eshiklarni ochib ko'radi. Narx yo'q. <b>Zaxira:</b> «PDF» (3D rasmlar va ro'yxat).</p>
+    <div class="linkbox"><input id="pj-link" type="text" readonly><button class="btn sm" id="pj-copy" style="height:36px">Nusxa</button></div>
+    <div class="btns" style="margin-top:8px"><a class="btn pri" id="pj-tg" target="_blank" rel="noopener">Telegramda havola yuborish</a><button class="btn sm" id="pj-pdf">PDF tayyorlash (Telegram uchun)</button><button class="btn sm" id="pj-file">Interaktiv fayl (kompyuter uchun)</button><button class="btn sm" id="pj-view">Mijoz ko'rinishini ochish</button></div>
+    
+    <p class="hint" style="margin:8px 0 0" id="pj-linkmsg">Havolani mijozga yuboring. Mijoz telefonida loyihani 3D ko'rinishda aylantirib ko'radi, narxsiz. Mijoz ochishi uchun sahifani «Share» (ulashish) orqali ochiq qiling.</p>
+  </div>
+  <div class="panel">
+    <div class="sec-h"><h2>Saqlangan loyihalar</h2><span class="hint" id="pjCount"></span></div>
+    <div class="tbl-scroll" id="pj-list"></div>
+  </div>
+</section>
+
+<!-- MIJOZ -->
+<section id="p-client" hidden class="stack">
+  <div class="panel">
+    <div class="sec-h"><h2 id="cl-title">Loyiha</h2><button class="btn sm" id="cl-exit" hidden>Muharrirga qaytish</button></div>
+    <div class="hint" id="cl-sub"></div>
+  </div>
+  <div class="view-wrap">
+    <div class="view" id="cview" aria-label="Xonaning 3D ko'rinishi"></div>
+    <div class="view-tools">
+      <button class="btn sm" data-ccam="front">Old</button>
+      <button class="btn sm" data-ccam="iso">Burchak</button>
+      <button class="btn sm" data-ccam="top">Tepadan</button>
+    </div>
+    <div class="view-cap" id="ccap"></div>
+    <div class="vbar vm"></div>
+  </div>
+  <div class="panel plan">
+    <div class="sec-h"><h2>Reja (tepadan)</h2><span class="hint">Blokni bossangiz, tanlanadi</span></div>
+    <div id="cplan"></div>
+  </div>
+  <div class="panel">
+    <div class="sec-h"><h2>Bloklar</h2></div>
+    <div class="tbl-scroll" id="cblocks"></div>
+  </div>
+  <div class="panel">
+    <div class="sec-h"><h2>Materiallar</h2></div>
+    <div class="tbl-scroll" id="cmats"></div>
+  </div>
+</section>
+
+</main>
+
+<script>
+(function(){
+'use strict';
+var LS='mebel-loyihachi-v2',LS1='mebel-loyihachi-v1';
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+var fmt=function(n){return Math.round(n).toLocaleString('ru-RU')};
+var f2=function(n){return (Math.round(n*100)/100).toLocaleString('ru-RU',{minimumFractionDigits:2,maximumFractionDigits:2})};
+var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+var uid=function(){return 'm'+Math.random().toString(36).slice(2,8)};
+
+function defMats(){return [
+ {id:'ldsp16',cat:'plita',name:'LDSP 16 mm (korpus)',th:16,L:2800,W:2070,price:480000,color:'#cdb892'},
+ {id:'ldsp18',cat:'plita',name:'LDSP 18 mm',th:18,L:2800,W:2070,price:540000,color:'#c4ad86'},
+ {id:'mdf18',cat:'plita',name:'MDF 18 mm (fasad, emal)',th:18,L:2800,W:1220,price:1150000,color:'#eceae3'},
+ {id:'hdf3',cat:'plita',name:'HDF 3 mm (orqa devor)',th:3,L:2800,W:2070,price:140000,color:'#a08c70'},
+ {id:'st38',cat:'qoplama',name:'Stoleshnitsa 38 mm (postforming)',unit:'m',th:38,price:380000,color:'#4d5258'},
+ {id:'stq',cat:'qoplama',name:'Stoleshnitsa kvarts tosh',unit:'m',th:20,price:1500000,color:'#e2e2de'},
+ {id:'kafel',cat:'qoplama',name:"Kafel fartuk (o'rnatish bilan)",unit:'m²',th:10,price:220000,color:'#a9c7cf'},
+ {id:'k04',cat:'kromka',name:'PVX kromka 0.4 mm',th:0.4,width:22,price:1200},
+ {id:'k2',cat:'kromka',name:'PVX kromka 2 mm',th:2,width:22,price:3500},
+ {id:'hinge',cat:'furn',role:'hinge',name:'Petlya, sekin yopiladigan',price:14000,unit:'dona'},
+ {id:'handle',cat:'furn',role:'handle',name:'Tutqich',price:22000,unit:'dona'},
+ {id:'slider',cat:'furn',role:'slider',name:"Tortma yo'naltirgichi (juft)",price:65000,unit:'juft'},
+ {id:'shelfpin',cat:'furn',role:'shelfpin',name:'Polka tayanchi',price:500,unit:'dona'},
+ {id:'foot',cat:'furn',role:'foot',name:"Mebel oyog'i",price:4500,unit:'dona'},
+ {id:'confirmat',cat:'furn',role:'confirmat',name:'Konfirmat (evrovint)',price:350,unit:'dona'},
+ {id:'rod',cat:'furn',role:'rod',name:'Shtanga (quvur)',price:45000,unit:'dona'},
+ {id:'rodholder',cat:'furn',role:'rodholder',name:'Shtanga ushlagichi',price:5000,unit:'dona'},
+ {id:'hanger',cat:'furn',role:'hanger',name:'Osma kronshteyn',price:18000,unit:'dona'},
+ {id:'sink',cat:'furn',role:'sink',name:"Moyka (zanglamas po'lat)",price:450000,unit:'dona'},
+ {id:'mixer',cat:'furn',role:'mixer',name:'Smesitel (kran)',price:250000,unit:'dona'},
+ {id:'cutout',cat:'furn',name:'Stoleshnitsada kesim (moyka / plita)',price:60000,unit:'dona'},
+ {id:'lock',cat:'furn',name:'Zamok (mebel)',price:15000,unit:'dona'}
+];}
+
+/* cls: cab (shkaf), surf (qoplama), app (texnika). row: floor / hang / free */
+var TYPES={
+ pastki:{label:'Pastki shkaf',cls:'cab',base:true,row:'floor',W:800,H:820,D:560,leg:100,shelves:1,frontType:'door',frontCount:2,plinth:true},
+ moyka:{label:'Moyka shkafi',cls:'cab',base:true,row:'floor',W:800,H:820,D:560,leg:100,shelves:0,frontType:'door',frontCount:2,plinth:true},
+ yuqori:{label:'Yuqori shkaf',cls:'cab',hang:true,elev:true,row:'hang',W:800,H:720,D:320,leg:0,shelves:1,frontType:'door',frontCount:2,e0:1450},
+ antresol:{label:'Antresol',cls:'cab',hang:true,elev:true,row:'hang',W:800,H:450,D:320,leg:0,shelves:0,frontType:'door',frontCount:2,e0:2250},
+ shkaf:{label:'Baland shkaf',cls:'cab',tall:true,row:'floor',W:1000,H:2200,D:550,leg:50,shelves:4,frontType:'door',frontCount:2,plinth:true,rod:true},
+ tumba:{label:'Tumba',cls:'cab',row:'floor',W:450,H:500,D:400,leg:40,shelves:0,frontType:'drawer',frontCount:2},
+ stoleshnitsa:{label:'Stoleshnitsa',cls:'surf',elev:true,row:'free',W:2000,H:38,D:600,e0:820},
+ fartuk:{label:'Kafel fartuk',cls:'surf',elev:true,row:'free',W:2000,H:600,D:10,e0:900},
+ plita:{label:'Gaz plita',cls:'app',row:'floor',W:600,H:850,D:600,price:3500000},
+ xolodilnik:{label:'Xolodilnik',cls:'app',tall:true,row:'floor',W:600,H:1850,D:650,price:6000000},
+ mashina:{label:'Idish yuvish mashinasi',cls:'app',row:'floor',W:600,H:820,D:570,price:4500000},
+ vityazhka:{label:'Vityajka',cls:'app',row:'hang',elev:true,W:600,H:700,D:480,e0:1500,price:1200000},
+ texnika:{label:'Texnika',cls:'app',row:'floor',W:600,H:600,D:600,price:0},
+ burchak:{label:'Burchak shkaf (pastki)',cls:'cab',base:true,corner:true,row:'floor',W:900,W2:900,H:820,D:560,leg:100,shelves:1,frontType:'door',frontCount:1},
+ burchakY:{label:'Burchak shkaf (yuqori)',cls:'cab',hang:true,corner:true,elev:true,row:'hang',W:650,W2:650,H:720,D:320,leg:0,shelves:1,frontType:'door',frontCount:1,e0:1450},
+ maxsus:{label:'Maxsus blok',cls:'cab',custom:true,elev:true,row:'floor',W:600,H:720,D:500,leg:0,shelves:0,frontType:'open',frontCount:1,e0:0}
+};
+var KINDS={water:'Suv',sewer:'Kanalizatsiya',gas:'Gaz',other:'Boshqa'};
+var WALLS={A:"A · orqa devor",B:"B · o'ng devor",C:"C · old devor",D:"D · chap devor"};
+
+var S={mats:defMats(),set:{eff:85,kz:10,labor:20,margin:30,mode:'cut',kerf:4,trim:10,rot:0,v:2},room:{W:3400,L:2800,H:2700,pipeGap:50},project:[],pipes:[],showDims:true,cur:null,curPlace:{wall:'A',x:null,off:0},editing:null,selected:null,showFront:true,tab:'module',lastWall:'A',undo:null};
+var M=function(id){return S.mats.find(function(m){return m.id===id})};
+var ofCat=function(c){return S.mats.filter(function(m){return m.cat===c})};
+var byRole=function(r){return S.mats.find(function(m){return m.role===r})};
+
+function surfUnit(type){return type==='fartuk'?'m²':'m'}
+function ensureRefs(m){
+  var pl=ofCat('plita'),kr=ofCat('kromka');
+  ['korpus','back','front'].forEach(function(k){if(!M(m[k])&&pl.length)m[k]=pl[0].id});
+  ['kK','kF'].forEach(function(k){if(!M(m[k])&&kr.length)m[k]=kr[0].id});
+  m.extras=(m.extras||[]).filter(function(e){return M(e.id)});
+  if(TYPES[m.type].cls==='surf'){var u=surfUnit(m.type),c=ofCat('qoplama').filter(function(x){return x.unit===u}),cur=M(m.surfMat);if(!cur||cur.unit!==u)m.surfMat=c.length?c[0].id:''}
+}
+function newCur(type){
+  var d=TYPES[type],c={name:d.label+' '+d.W,type:type,W:d.W,H:d.H,D:d.D,leg:d.leg||0,shelves:d.shelves||0,frontType:d.frontType||'door',frontCount:d.frontCount||2,plinth:!!d.plinth,rod:!!d.rod,
+    korpus:'ldsp16',back:'hdf3',front:'mdf18',kK:'k04',kF:'k2',extras:[],elev:d.e0||0,price:d.price||0,incl:false,sinkIncl:true,surfMat:'',W2:d.W2||d.W,cornerEnd:false,color:'#c9b48a',cparts:[]};
+  if(type==='antresol')c.elev=Math.max(0,S.room.H-d.H);
+  ensureRefs(c);return c;
+}
+
+function migrate(p){
+  var out=[];
+  (p||[]).forEach(function(it){
+    var n=it.q||1;
+    for(var i=0;i<n;i++){var m=JSON.parse(JSON.stringify(it.m));if(!TYPES[m.type])continue;
+      out.push({id:i?uid():it.id,m:m,wall:it.wall||'A',x:typeof it.x==='number'?it.x:0,off:it.off||0});}
+  });
+  var ends={};out.forEach(function(it){if(typeof it.x==='number'&&it.x>0)return;var T=TYPES[it.m.type];if(T.row==='free')return;var k=it.wall+T.row;it.x=ends[k]||0;ends[k]=it.x+it.m.W});
+  return out;
+}
+var LSP='mebel-loyihachi-pj';
+S.templates=[];S.pname='';S.pid=null;S.view='solid';S.client=false;
+var DB={ok:false,loaded:false,last:{},chain:{s:Promise.resolve(),w:Promise.resolve()},timer:null,uid:null,col:null,refs:{},err:false};
+function setState(t,bad){var el=$('#saveState');if(!el)return;el.textContent=t;el.classList.toggle('bad',!!bad)}
+function applySettings(d){
+  if(!d)return;
+  if(Array.isArray(d.mats)&&d.mats.length)S.mats=d.mats;
+  S.set=Object.assign(S.set,d.set||{});
+  if(!(d.set&&d.set.v>=2)){S.set.mode='cut';S.set.v=2}
+  if(Array.isArray(d.templates))S.templates=d.templates;
+}
+function applyWork(j){
+  if(!j)return;
+  S.room=Object.assign(S.room,j.room||{});S.project=migrate(j.project);S.lastWall=j.lastWall||'A';S.pipes=j.pipes||[];
+  if(typeof j.showDims==='boolean')S.showDims=j.showDims;
+  if(j.curPlace)S.curPlace=Object.assign({wall:'A',x:null,off:0},j.curPlace);
+  if(j.cur&&TYPES[j.cur.type])S.cur=Object.assign(newCur(j.cur.type),j.cur);
+  S.pname=j.pname||'';S.pid=j.pid||null;
+}
+function mergeDefaults(){
+  defMats().forEach(function(d){if(d.role&&!S.mats.some(function(x){return x.id===d.id}))S.mats.push(d)});
+}
+try{
+  var j=JSON.parse(localStorage.getItem(LS)||localStorage.getItem(LS1)||'null');
+  if(j&&j.mats){applySettings(j);applyWork(j);S.ts=j.ts||0}
+}catch(e){}
+S.curPlace.off=S.curPlace.off||0;
+mergeDefaults();
+if(!S.cur)S.cur=newCur('pastki');
+ensureRefs(S.cur);
+function dSettings(){return {mats:S.mats,set:S.set,templates:S.templates,ts:S.ts||0}}
+function dWork(){return {ts:S.ts||0,room:S.room,project:S.project,pipes:S.pipes,cur:S.cur,curPlace:S.curPlace,lastWall:S.lastWall,pname:S.pname,pid:S.pid,showDims:S.showDims}}
+function save(){
+  if(S.client)return;
+  S.ts=Date.now();
+  try{localStorage.setItem(LS,JSON.stringify(Object.assign(dSettings(),dWork())))}catch(e){}
+  DB.sched();
+}
+DB.sched=function(){
+  if(!DB.ok||!DB.loaded)return;
+  setState('Saqlanmoqda…');clearTimeout(DB.timer);DB.timer=setTimeout(DB.flush,800);
+};
+DB.errs={s:null,w:null};
+DB.flush=function(){
+  clearTimeout(DB.timer);if(!DB.ok||!DB.loaded||S.client)return;
+  var pend=0;
+  [['s',dSettings()],['w',dWork()]].forEach(function(jb){
+    var k=jb[0],json=JSON.stringify(jb[1]);if(DB.last[k]===json)return;pend++;
+    DB.chain[k]=DB.chain[k].then(function(){
+      return Promise.race([DB.refs[k].set(JSON.parse(json)),new Promise(function(_,r){setTimeout(function(){r(new Error('timeout'))},12000)})]);
+    }).then(function(){DB.last[k]=json;DB.errs[k]=null},function(e){DB.errs[k]=String((e&&e.message)||e)}).then(function(){
+      if(DB.errs.s||DB.errs.w){setState('Bulutga saqlanmadi. Qayta urinish uchun bosing',true);clearTimeout(DB.retry);DB.retry=setTimeout(DB.flush,6000)}
+      else setState('Saqlandi ✓');
+    });
+  });
+  if(!pend&&!DB.errs.s&&!DB.errs.w)setState('Saqlandi ✓');
+};
+DB.init=async function(){
+  function to(p,ms){return Promise.race([p,new Promise(function(_,r){setTimeout(function(){r(new Error('timeout'))},ms)})])}
+  try{
+    if(!window.claude||typeof window.claude.use!=='function')throw new Error('claude yo\'q');
+    var db=await to(window.claude.use('db'),10000),us=await to(window.claude.use('user'),10000);
+    if(!db||!us)throw new Error('capability yo\'q');
+    var id=await to(us.id(),10000);if(!id)throw new Error('id yo\'q');
+    DB.uid=id;var base='data/users/'+id;
+    DB.refs.s=db.doc(base+'/settings');DB.refs.w=db.doc(base+'/work');DB.col=db.doc(base+'/ws').collection('projects');
+    var r=await to(Promise.all([DB.refs.s.get(),DB.refs.w.get()]),10000);
+    var sd=r[0].exists?clone(r[0].data()):null,wd=r[1].exists?clone(r[1].data()):null;
+    var rts=Math.max(sd?sd.ts||0:0,wd?wd.ts||0:0);
+    if(sd)DB.last.s=JSON.stringify(sd);
+    if(wd)DB.last.w=JSON.stringify(wd);
+    if(rts>=(S.ts||0)){if(sd)applySettings(sd);if(wd)applyWork(wd);S.ts=rts}
+    mergeDefaults();if(!TYPES[S.cur.type])S.cur=newCur('pastki');ensureRefs(S.cur);
+    DB.ok=true;DB.loaded=true;setState('Saqlandi ✓');
+    return true;
+  }catch(e){
+    DB.ok=false;setState('Faqat shu brauzerda saqlanadi',true);return false;
+  }
+};
+var PJ={list:[]};
+PJ.load=async function(){
+  if(DB.ok){try{var q=await DB.col.get();PJ.list=q.docs.map(function(d){return Object.assign({id:d.id},clone(d.data()))})}catch(e){PJ.list=[]}}
+  else{try{PJ.list=JSON.parse(localStorage.getItem(LSP)||'[]')}catch(e){PJ.list=[]}}
+  PJ.list.sort(function(a,b){return (b.ts||0)-(a.ts||0)});
+};
+PJ.put=async function(rec){
+  var clean=JSON.parse(JSON.stringify(rec));
+  if(DB.ok){var o=Object.assign({},clean);delete o.id;await DB.col.doc(rec.id).set(o)}
+  else{var a=PJ.list.filter(function(x){return x.id!==rec.id});a.push(clean);localStorage.setItem(LSP,JSON.stringify(a))}
+  await PJ.load();
+};
+PJ.del=async function(id){
+  if(DB.ok)await DB.col.doc(id).delete();
+  else localStorage.setItem(LSP,JSON.stringify(PJ.list.filter(function(x){return x.id!==id})));
+  await PJ.load();
+};
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')DB.flush()});
+window.addEventListener('pagehide',function(){DB.flush()});
+$('#saveState').addEventListener('click',function(){DB.flush()});
+
+/* ---------- Hisob ---------- */
+function hingesFor(h){return h<=900?2:h<=1600?3:h<=2200?4:5}
+function calc(m){
+  var T=TYPES[m.type],r={parts:[],area:{},kr:{},fu:{},lines:[],doors:0,drawers:0,fh:0,bd:0,leg:0,Hk:m.H,t:16,tb:3,ft:16,shelves:0};
+  var fu=r.fu;
+  function F(role,q){var x=byRole(role);if(x&&q>0)fu[x.id]=(fu[x.id]||0)+q}
+  function extras(){(m.extras||[]).forEach(function(e){if(M(e.id))fu[e.id]=(fu[e.id]||0)+e.qty})}
+  if(T.cls==='app'){
+    if(m.incl&&m.price>0)r.lines.push({g:'texnika',key:'t'+m.name+m.price,name:m.name||T.label,spec:m.W+'×'+m.H+'×'+m.D,unit:'dona',q:1,price:m.price});
+    return r;
+  }
+  if(T.cls==='surf'){
+    var s=M(m.surfMat);
+    if(s){var q=s.unit==='m²'?m.W*m.H/1e6:m.W/1000;r.lines.push({g:'qoplama',key:'q'+s.id,name:s.name,spec:s.unit==='m²'?'kvadrat metr':'pogon metr',unit:s.unit,q:q,price:s.price})}
+    extras();return r;
+  }
+  var t=(M(m.korpus)||{th:16}).th,tb=(M(m.back)||{th:3}).th,ft=(M(m.front)||{th:16}).th;
+  var W=m.W,H=m.H,D=m.D,leg=T.hang?0:m.leg,Hk=H-leg,shelves=m.frontType==='drawer'?0:m.shelves;
+  function add(name,qty,a,b,mat,la,lb,k){r.parts.push({name:name,qty:qty,a:Math.round(a),b:Math.round(b),mat:mat,la:la||0,lb:lb||0,k:k})}
+  var doors=0,drawers=0,fh=0,bd=0;
+  if(T.custom){
+    var hc=0,dc=0,gc=0,pc=0;
+    (m.cparts||[]).forEach(function(p){if(p.q>0&&p.a>0&&p.b>0){add(p.n||'Detal',p.q,p.a,p.b,p.mat,p.la,p.lb,m.kK);
+      var o=p.o||partType(p.n);if(o==='e'){dc+=p.q;hc+=p.q*hingesFor(p.a)}if(o==='g'||o==='u')gc+=p.q;if(o==='p')pc+=p.q}});
+    F('hinge',hc);F('handle',dc);F('confirmat',gc>=3?8:4*gc);F('shelfpin',4*pc);
+  }else if(T.corner){
+    var W2=m.W2||W,u=Math.max(0,W2-D-t);
+    add('Yon (tor tomon)',1,Hk,D,m.korpus,1,0,m.kK);
+    add('Yon (ichki)',1,Hk,u,m.korpus,1,0,m.kK);
+    add('Yon (eshik tomon)',1,Hk,D,m.korpus,1,0,m.kK);
+    add('Tub (1)',1,W,D,m.korpus,1,0,m.kK);add('Tub (2)',1,D,Math.max(0,W2-D),m.korpus,1,0,m.kK);
+    add('Usti (1)',1,W,D,m.korpus,1,0,m.kK);add('Usti (2)',1,D,Math.max(0,W2-D),m.korpus,1,0,m.kK);
+    if(shelves>0){add('Polka (1)',shelves,W-t,D-20,m.korpus,1,0,m.kK);add('Polka (2)',shelves,D-t,Math.max(0,W2-D-t),m.korpus,1,0,m.kK)}
+    add('Orqa devor (A)',1,Hk-2,W-2,m.back,0,0,null);add('Orqa devor (D)',1,Hk-2,W2-2,m.back,0,0,null);
+    doors=1;fh=Hk-3;add('Eshik',1,fh,Math.max(50,W-D-3),m.front,2,2,m.kF);
+  }else{
+  add('Yon devor',2,Hk,D,m.korpus,1,0,m.kK);
+  add('Tub',1,W-2*t,D,m.korpus,1,0,m.kK);
+  if(T.base)add('Usti planka',2,W-2*t,100,m.korpus,1,0,m.kK);else add('Usti',1,W-2*t,D,m.korpus,1,0,m.kK);
+  if(shelves>0)add('Polka',shelves,W-2*t,D-20,m.korpus,1,0,m.kK);
+  add('Orqa devor',1,Hk-2,W-2,m.back,0,0,null);
+  if(m.plinth&&leg>0)add('Tsokol',1,W,leg-5,m.korpus,1,0,m.kK);
+  if(m.frontType==='door'){
+    doors=m.frontCount;var fw=(W-3-(doors-1)*3)/doors;fh=Hk-3;add('Eshik',doors,fh,fw,m.front,2,2,m.kF);
+  }else if(m.frontType==='drawer'){
+    drawers=m.frontCount;fh=(Hk-3*(drawers+1))/drawers;add('Tortma old qismi',drawers,W-3,fh,m.front,2,2,m.kF);
+    bd=Math.max(250,Math.floor((D-50)/50)*50);
+    var hb=Math.max(80,Math.min(150,Math.round(fh-50))),bw=W-2*t-26;
+    add('Tortma yoni ('+bd+')',2*drawers,bd,hb,m.korpus,1,0,m.kK);
+    add('Tortma oldi/orqasi',2*drawers,bw-2*t,hb,m.korpus,1,0,m.kK);
+    add('Tortma tubi (HDF)',drawers,bd-2,bw-2,m.back,0,0,null);
+  }
+  }
+  r.parts.forEach(function(p){
+    r.area[p.mat]=(r.area[p.mat]||0)+p.qty*p.a*p.b/1e6;
+    if(p.k&&(p.la||p.lb))r.kr[p.k]=(r.kr[p.k]||0)+p.qty*(p.la*p.a+p.lb*p.b)/1000;
+  });
+  if(!T.custom){
+  F('hinge',doors*hingesFor(fh));F('handle',doors+drawers);F('slider',drawers);
+  F('shelfpin',4*shelves);if(leg>0)F('foot',T.corner?5:(W>900?6:4));
+  F('confirmat',T.corner?10:(T.base?8:12));
+  if(m.rod&&m.type==='shkaf'){F('rod',1);F('rodholder',2)}
+  if(T.hang)F('hanger',2);
+  if(m.type==='moyka'&&m.sinkIncl){F('sink',1);F('mixer',1)}
+  }
+  extras();
+  r.doors=doors;r.drawers=drawers;r.fh=fh;r.bd=bd;r.leg=leg;r.Hk=Hk;r.t=t;r.tb=tb;r.ft=ft;r.shelves=shelves;
+  return r;
+}
+function agg(items){
+  var out={area:{},kr:{},fu:{},lines:[],parts:[]};
+  items.forEach(function(it){
+    var c=calc(it.m);
+    for(var k in c.area)out.area[k]=(out.area[k]||0)+c.area[k];
+    for(var k2 in c.kr)out.kr[k2]=(out.kr[k2]||0)+c.kr[k2];
+    for(var k3 in c.fu)out.fu[k3]=(out.fu[k3]||0)+c.fu[k3];
+    c.lines.forEach(function(l){out.lines.push(l)});
+    c.parts.forEach(function(p){out.parts.push(Object.assign({},p,{mod:it.m.name}))});
+  });
+  return out;
+}
+function packSheets(parts,L,W){
+  var kerf=parseFloat(S.set.kerf);if(isNaN(kerf))kerf=4;var trim=parseFloat(S.set.trim);if(isNaN(trim))trim=10;var rot=+S.set.rot===1;
+  var UL=L-2*trim,UW=W-2*trim,items=[],bad=[],sheets=[];
+  parts.forEach(function(p){for(var i=0;i<p.qty;i++)items.push({a:p.a,b:p.b,n:p.name})});
+  var ok=[];
+  items.forEach(function(it){
+    if(rot&&it.b>it.a&&it.b<=UL&&it.a<=UW){var t=it.a;it.a=it.b;it.b=t}
+    if(it.a<=UL&&it.b<=UW)ok.push(it);
+    else if(it.b<=UL&&it.a<=UW&&rot){var t2=it.a;it.a=it.b;it.b=t2;ok.push(it)}
+    else bad.push(it);
+  });
+  ok.sort(function(x,y){return y.b-x.b||y.a-x.a});
+  ok.forEach(function(it){
+    var w=it.a+kerf,h=it.b+kerf,done=false,i,j;
+    for(i=0;i<sheets.length&&!done;i++){
+      var sh=sheets[i];
+      for(j=0;j<sh.shelves.length;j++){var sv=sh.shelves[j];
+        if(sv.h>=h&&sv.used+w<=UL+kerf){sh.items.push({x:trim+sv.used,y:trim+sv.y,w:it.a,h:it.b});sv.used+=w;done=true;break}}
+      if(!done&&sh.y+h<=UW+kerf){var nv={y:sh.y,h:h,used:w};sh.shelves.push(nv);sh.items.push({x:trim,y:trim+sh.y,w:it.a,h:it.b});sh.y+=h;done=true}
+    }
+    if(!done){var ns={shelves:[{y:0,h:h,used:w}],items:[{x:trim,y:trim,w:it.a,h:it.b}],y:h};sheets.push(ns)}
+  });
+  return {sheets:sheets,bad:bad};
+}
+function rkHTML(a){
+  var by={};a.parts.forEach(function(p){(by[p.mat]=by[p.mat]||[]).push(p)});
+  var h='';
+  Object.keys(by).forEach(function(id){
+    var x=M(id);if(!x||x.cat!=='plita')return;
+    var pk=packSheets(by[id],x.L,x.W),area=by[id].reduce(function(s,p){return s+p.qty*p.a*p.b/1e6},0),sa=x.L*x.W/1e6,n=pk.sheets.length;
+    h+='<div class="sub-h">'+esc(x.name)+' · '+x.L+'×'+x.W+' mm</div><p class="hint" style="margin:0 0 6px">'+n+' list · foydalanish '+(n?Math.round(area/(n*sa)*100):0)+'% · chiqindi '+(n?Math.round(100-area/(n*sa)*100):0)+'%</p>';
+    if(pk.bad.length)h+='<div class="warn" style="margin-bottom:8px"><b>Diqqat</b> · '+pk.bad.length+' ta detal listga sig\'maydi: '+esc(pk.bad.slice(0,3).map(function(b){return b.n+' '+b.a+'×'+b.b}).join(', '))+'</div>';
+    h+='<div class="rkgrid">';
+    pk.sheets.forEach(function(sh,i){
+      var fs=x.L/58,sv='<svg viewBox="0 0 '+x.L+' '+x.W+'" style="width:100%;height:auto;background:var(--field);border:1px solid var(--line)" role="img" aria-label="'+esc(x.name)+' '+(i+1)+'-list">';
+      sh.items.forEach(function(r){
+        sv+='<rect x="'+r.x+'" y="'+r.y+'" width="'+r.w+'" height="'+r.h+'" fill="var(--accent-soft)" stroke="var(--ink)" stroke-width="1" vector-effect="non-scaling-stroke"/>';
+        if(r.w>fs*5&&r.h>fs*1.7)sv+='<text x="'+(r.x+r.w/2)+'" y="'+(r.y+r.h/2)+'" font-size="'+fs+'" text-anchor="middle" dominant-baseline="middle" fill="var(--ink)" style="font-family:var(--font-mono)">'+Math.round(r.w)+'×'+Math.round(r.h)+'</text>';
+      });
+      h+='<div><div class="hint" style="margin-bottom:3px">'+(i+1)+'-list</div>'+sv+'</svg></div>';
+    });
+    h+='</div>';
+  });
+  return h||'<p class="hint" style="margin:0">Plitali detal yo\'q.</p>';
+}
+function bom(c,mode){
+  var rows=[],tot={mat:0,krm:0,fur:0,oth:0,tex:0},e=S.set.eff/100;
+  for(var id in c.area){var x=M(id);if(!x)continue;
+    var sa=x.L*x.W/1e6,sheets=c.area[id]/(sa*e),shown,spec=x.th+' mm · '+x.L+'×'+x.W,cutOk=false;
+    if(mode==='part'&&c.parts){
+      var kf=parseFloat(S.set.kerf);if(isNaN(kf))kf=4;
+      var pa=c.parts.filter(function(p){return p.mat===id}).reduce(function(a,p){return a+p.qty*(p.a+kf)*(p.b+kf)/1e6},0);
+      shown=pa/sa;cutOk=true;spec+=' · detallar bo\'yicha';
+    }else if(mode==='cut'&&c.parts){var pk=packSheets(c.parts.filter(function(p){return p.mat===id}),x.L,x.W);
+      if(pk.sheets.length){shown=pk.sheets.length;cutOk=true;spec+=' · foydalanish '+Math.round(c.area[id]/(shown*sa)*100)+'%'+(pk.bad.length?' · sig\'maydigan detal: '+pk.bad.length:'')}}
+    if(!cutOk)shown=(mode==='sheet'||mode==='cut')?Math.ceil(sheets-1e-9):sheets;
+    var sum=shown*x.price;tot.mat+=sum;
+    rows.push({g:'plita',name:x.name,spec:spec,use:f2(c.area[id])+' m²',qty:((mode==='sheet'||mode==='cut')?String(shown):f2(shown))+' list',sum:sum});}
+  for(var id2 in c.kr){var k=M(id2);if(!k)continue;var m2=c.kr[id2]*(1+S.set.kz/100),s2=m2*k.price;tot.krm+=s2;
+    rows.push({g:'kromka',name:k.name,spec:k.th+' mm · '+k.width+' mm',use:f2(c.kr[id2])+' m',qty:f2(m2)+' m',sum:s2});}
+  for(var id3 in c.fu){var u=M(id3);if(!u)continue;var s3=c.fu[id3]*u.price;tot.fur+=s3;
+    rows.push({g:'furn',name:u.name,spec:fmt(u.price)+' / '+(u.unit||'dona'),use:'',qty:fmt(c.fu[id3])+' '+(u.unit||'dona'),sum:s3});}
+  var L={},order=[];
+  c.lines.forEach(function(l){if(!L[l.key]){L[l.key]=Object.assign({},l,{q:0});order.push(l.key)}L[l.key].q+=l.q});
+  ['qoplama','texnika'].forEach(function(g){order.forEach(function(key){var l=L[key];if(l.g!==g)return;var s=l.q*l.price;
+    if(g==='qoplama')tot.oth+=s;else tot.tex+=s;
+    rows.push({g:g,name:l.name,spec:l.spec,use:'',qty:(l.unit==='dona'?fmt(l.q):f2(l.q))+' '+l.unit,sum:s})})});
+  return {rows:rows,tot:tot};
+}
+function totals(t){var base=t.mat+t.krm+t.fur,labor=base*S.set.labor/100,cost=base+labor+t.oth,profit=cost*S.set.margin/100;return {base:base,labor:labor,oth:t.oth,tex:t.tex,cost:cost,profit:profit,sell:cost+profit+t.tex}}
+function sellOf(m){return totals(bom(calc(m),'part').tot).sell}
+
+function bomHTML(b){
+  if(!b.rows.length)return '<div class="empty" style="padding:14px">Hisoblanadigan sarf yo\'q. Texnika narxga qo\'shilmagan bo\'lishi mumkin.</div>';
+  var G={plita:'Plitali materiallar',kromka:'Kromka',furn:'Furnitura',qoplama:'Stoleshnitsa va kafel',texnika:'Texnika (sotib olinadigan)'},
+  h='<table class="tbl"><thead><tr><th>Nomi</th><th>Tavsif</th><th class="n">Sof sarf</th><th class="n">Hisobda</th><th class="n">Narx, so\'m</th></tr></thead><tbody>',last='';
+  b.rows.forEach(function(r){if(r.g!==last){h+='<tr class="grp"><td colspan="5">'+G[r.g]+'</td></tr>';last=r.g}
+    h+='<tr><td>'+esc(r.name)+'</td><td class="mono" style="font-family:var(--font-mono);font-size:12px;color:var(--muted)">'+esc(r.spec)+'</td><td class="n">'+r.use+'</td><td class="n">'+r.qty+'</td><td class="n">'+fmt(r.sum)+'</td></tr>'});
+  return h+'</tbody></table>';
+}
+function sumHTML(t,label){
+  var T=totals(t),h='<table class="tbl" style="margin-top:6px"><tbody>'+
+  '<tr><td>Materiallar</td><td class="n">'+fmt(t.mat)+'</td></tr><tr><td>Kromka</td><td class="n">'+fmt(t.krm)+'</td></tr><tr><td>Furnitura</td><td class="n">'+fmt(t.fur)+'</td></tr>';
+  if(t.oth>0)h+='<tr><td>Stoleshnitsa va kafel</td><td class="n">'+fmt(t.oth)+'</td></tr>';
+  h+='<tr><td>Ish haqi ('+S.set.labor+'%)</td><td class="n">'+fmt(T.labor)+'</td></tr><tr class="tot"><td>Tannarx</td><td class="n">'+fmt(T.cost)+'</td></tr><tr><td>Foyda ('+S.set.margin+'%)</td><td class="n">'+fmt(T.profit)+'</td></tr>';
+  if(t.tex>0)h+='<tr><td>Texnika (o\'tkazma narx)</td><td class="n">'+fmt(t.tex)+'</td></tr>';
+  return h+'</tbody></table><div class="sell-box"><span style="font:600 13px var(--font-display);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">'+label+'</span><span class="sell">'+fmt(T.sell)+'<small>so\'m</small></span></div>';
+}
+function partsHTML(parts,withMod){
+  if(!parts.length)return '<div class="empty" style="padding:14px">Bu blokda kesiladigan detal yo\'q.</div>';
+  var h='<table class="tbl"><thead><tr>'+(withMod?'<th>Blok</th>':'')+'<th>Detal</th><th class="n">Soni</th><th class="n">Uzunlik</th><th class="n">Eni</th><th>Material</th><th class="n">Kromka, m</th></tr></thead><tbody>';
+  parts.forEach(function(p){var x=M(p.mat),km=p.k?p.qty*(p.la*p.a+p.lb*p.b)/1000:0;
+    h+='<tr>'+(withMod?'<td>'+esc(p.mod)+'</td>':'')+'<td>'+esc(p.name)+'</td><td class="n">'+p.qty+'</td><td class="n">'+p.a+'</td><td class="n">'+p.b+'</td><td>'+esc(x?x.name:'—')+'</td><td class="n">'+(km?f2(km):'—')+'</td></tr>'});
+  return h+'</tbody></table>';
+}
+
+/* ---------- Joylashtirish ---------- */
+function wallLen(w){return (w==='A'||w==='C')?S.room.W:S.room.L}
+function effElev(m){return TYPES[m.type].elev?(m.elev||0):0}
+function rectOf(it){
+  var m=it.m,x=it.x,w=m.W,d=TYPES[m.type].corner?(m.W2||m.D):m.D,R=S.room,e=effElev(m),o=it.off||0,r={y0:e,y1:e+m.H};
+  if(it.wall==='A'){r.x0=x;r.x1=x+w;r.z0=o;r.z1=o+d}
+  else if(it.wall==='B'){r.x1=R.W-o;r.x0=r.x1-d;r.z0=x;r.z1=x+w}
+  else if(it.wall==='C'){r.x0=R.W-x-w;r.x1=R.W-x;r.z1=R.L-o;r.z0=r.z1-d}
+  else{r.x0=o;r.x1=o+d;r.z0=R.L-x-w;r.z1=R.L-x}
+  return r;
+}
+function autoX(m,wall,exceptId){
+  var T=TYPES[m.type],items=S.project.filter(function(p){return p.wall===wall&&p.id!==exceptId});
+  if(T.row==='free'){var xs=items.filter(function(p){return TYPES[p.m.type].row==='floor'}).map(function(p){return p.x});return xs.length?Math.min.apply(null,xs):0}
+  var end=0;items.forEach(function(p){if(TYPES[p.m.type].row===T.row)end=Math.max(end,p.x+p.m.W)});return end;
+}
+function placementIssues(){
+  var out=[],R=S.room,P=S.project;
+  P.forEach(function(it){
+    var T=TYPES[it.m.type],len=wallLen(it.wall);
+    if(it.x<0||it.x+it.m.W>len+1)out.push('«'+it.m.name+'» '+it.wall+' devordan chiqib ketgan ('+Math.round(it.x+it.m.W)+' mm, devor '+len+' mm).');
+    if(effElev(it.m)+it.m.H>R.H+1)out.push('«'+it.m.name+'» shiftdan baland ('+Math.round(effElev(it.m)+it.m.H)+' mm, shift '+R.H+' mm).');
+  });
+  for(var i=0;i<P.length;i++)for(var j=i+1;j<P.length;j++){
+    if(P[i].m.type==='fartuk'||P[j].m.type==='fartuk')continue;
+    var a=rectOf(P[i]),b=rectOf(P[j]),o=function(p,q,r,s){return Math.min(q,s)-Math.max(p,r)>1};
+    if(o(a.x0,a.x1,b.x0,b.x1)&&o(a.z0,a.z1,b.z0,b.z1)&&o(a.y0,a.y1,b.y0,b.y1))out.push('«'+P[i].m.name+'» va «'+P[j].m.name+'» bir-biriga kesishadi.');
+  }
+  var gap=S.room.pipeGap||0;
+  if(gap>0)S.pipes.forEach(function(p){S.project.forEach(function(it){
+    var T=TYPES[it.m.type],e=effElev(it.m);
+    if(it.wall!==p.wall||T.row==='free'||T.cls==='app')return;
+    if(p.x>=it.x&&p.x<=it.x+it.m.W&&p.y>=e&&p.y<=e+it.m.H&&(it.off||0)<gap-0.5)
+      out.push('«'+it.m.name+'» orqasida '+KINDS[p.kind].toLowerCase()+' chiqishi bor ('+p.wall+' devor, '+Math.round(p.x)+' mm, balandligi '+Math.round(p.y)+' mm). Devordan masofa '+Math.round(it.off||0)+' mm, kamida '+gap+' mm kerak.');
+  })});
+  return out;
+}
+
+/* ---------- 3D ---------- */
+var A={t:0,target:0,play:false,hold:0};
+var EV,RV,CV;
+function makeViewer(host,grid){
+  var V={ok:false,az:0.65,el:0.38,dist:3,min:0.3,max:30,dirty:true,host:host,anims:[],onPick:null};
+  try{
+    if(!window.THREE)throw new Error('three');
+    var r=new THREE.WebGLRenderer({antialias:true,alpha:true});
+    r.setPixelRatio(Math.min(window.devicePixelRatio||1,2));host.appendChild(r.domElement);
+    V.r=r;V.scene=new THREE.Scene();V.cam=new THREE.PerspectiveCamera(32,1,0.05,80);
+    V.scene.add(new THREE.AmbientLight(0xffffff,0.78));
+    var d1=new THREE.DirectionalLight(0xffffff,0.55);d1.position.set(2,3,4);V.scene.add(d1);
+    var d2=new THREE.DirectionalLight(0xffffff,0.22);d2.position.set(-3,1,-2);V.scene.add(d2);
+    V.group=new THREE.Group();V.scene.add(V.group);
+    if(grid){var gr=new THREE.GridHelper(4,40,0x808a86,0x808a86);gr.material.transparent=true;gr.material.opacity=0.28;V.scene.add(gr)}
+    V.target=new THREE.Vector3(0,0.4,0);
+    var ptrs={},pinch=0,dn=null;
+    function doPick(e){
+      if(!V.onPick)return;
+      var rc=host.getBoundingClientRect(),mouse=new THREE.Vector2(((e.clientX-rc.left)/rc.width)*2-1,-((e.clientY-rc.top)/rc.height)*2+1);
+      var ray=new THREE.Raycaster();ray.setFromCamera(mouse,V.cam);
+      var hits=ray.intersectObjects(V.group.children,true);
+      for(var i=0;i<hits.length;i++){var o=hits[i].object;while(o&&!(o.userData&&o.userData.pid))o=o.parent;if(o){V.onPick(o.userData.pid);return}}
+    }
+    host.addEventListener('pointerdown',function(e){host.setPointerCapture(e.pointerId);ptrs[e.pointerId]={x:e.clientX,y:e.clientY};host.style.cursor='grabbing';dn=Object.keys(ptrs).length===1?{x:e.clientX,y:e.clientY,moved:false}:null});
+    host.addEventListener('pointerup',function(e){var one=Object.keys(ptrs).length===1;delete ptrs[e.pointerId];pinch=0;host.style.cursor='grab';if(one&&dn&&!dn.moved)doPick(e);dn=null});
+    host.addEventListener('pointercancel',function(e){delete ptrs[e.pointerId];pinch=0;dn=null});
+    host.addEventListener('pointermove',function(e){
+      var p=ptrs[e.pointerId];if(!p)return;var ids=Object.keys(ptrs);
+      if(dn&&(Math.abs(e.clientX-dn.x)>5||Math.abs(e.clientY-dn.y)>5))dn.moved=true;
+      if(ids.length===1){V.az-=(e.clientX-p.x)*0.008;V.el=Math.max(-0.2,Math.min(1.5,V.el+(e.clientY-p.y)*0.006))}
+      p.x=e.clientX;p.y=e.clientY;
+      if(ids.length===2){dn=null;var a=ptrs[ids[0]],b=ptrs[ids[1]],d=Math.hypot(a.x-b.x,a.y-b.y);if(pinch)V.dist=Math.max(V.min,Math.min(V.max,V.dist*pinch/d));pinch=d}
+      V.dirty=true;
+    });
+    host.addEventListener('wheel',function(e){e.preventDefault();V.dist=Math.max(V.min,Math.min(V.max,V.dist*(1+e.deltaY*0.001)));V.dirty=true},{passive:false});
+    new ResizeObserver(function(){var w=host.clientWidth,h=host.clientHeight;if(w&&h){r.setSize(w,h,false);V.cam.aspect=w/h;V.cam.updateProjectionMatrix();V.dirty=true}}).observe(host);
+    (function loop(){requestAnimationFrame(loop);if(!V.dirty)return;V.dirty=false;
+      var c=V.cam,t=V.target;c.position.set(t.x+V.dist*Math.cos(V.el)*Math.sin(V.az),t.y+V.dist*Math.sin(V.el),t.z+V.dist*Math.cos(V.el)*Math.cos(V.az));c.lookAt(t);r.render(V.scene,c)})();
+    V.ok=true;
+  }catch(e){host.innerHTML='<div class="empty"><b>3D ko\'rinish ochilmadi</b>Brauzer WebGL ni qo\'llamayapti. Jadval va hisob ishlayveradi.</div>'}
+  V.clear=function(){V.anims=[];if(!V.ok)return;while(V.group.children.length){var o=V.group.children.pop();o.traverse(function(n){if(n.geometry)n.geometry.dispose();if(n.material){if(n.material.map)n.material.map.dispose();n.material.dispose()}})}};
+  return V;
+}
+function applyAnim(V){
+  if(!V||!V.ok)return;
+  V.anims.forEach(function(a){
+    if(a.k==='door')a.o.rotation.y=(a.side==='L'?-1:1)*A.t*1.75;
+    else a.o.position.z=A.t*a.len*0.7*0.001;
+  });
+  V.dirty=true;
+}
+function applyAnimAll(){[EV,RV,CV].forEach(applyAnim);syncAnimUI()}
+function syncAnimUI(){
+  $$('[data-anim]').forEach(function(el){if(document.activeElement!==el)el.value=Math.round(A.t*100)});
+  $$('[data-play]').forEach(function(b){b.textContent=A.play?"■ To'xtatish":'▶ Ochish / yopish';b.classList.toggle('on',A.play)});
+}
+(function anLoop(){
+  requestAnimationFrame(anLoop);
+  var now=Date.now(),d=A.target-A.t;
+  if(A.play&&Math.abs(d)<0.003){if(!A.hold)A.hold=now+800;else if(now>A.hold){A.target=A.target?0:1;A.hold=0}}
+  if(Math.abs(d)>0.001){A.t+=Math.sign(d)*Math.min(Math.abs(d),Math.max(0.012,Math.abs(d)*0.09));applyAnimAll()}
+})();
+
+/* Blok detallarini quti va silindrlar ro'yxatiga aylantiradi.
+   mode: solid (oddiy), nofront (fasadsiz), glass (shaffof, furnitura bilan). Koordinata: x devor bo'ylab, y balandlik, z devordan chiqish. */
+function sinkRect(m){var sw=Math.min(m.W-160,560),sd=Math.min(m.D-200,440);return {x0:(m.W-sw)/2,x1:(m.W+sw)/2,z0:m.D/2-sd/2,z1:m.D/2+sd/2}}
+function counterHoles(it){
+  if(it.m.type!=='stoleshnitsa')return null;var hs=[];
+  S.project.forEach(function(o){
+    if(o===it||o.wall!==it.wall||o.m.type!=='moyka')return;
+    if(o.x+o.m.W<=it.x||o.x>=it.x+it.m.W)return;
+    var sr=sinkRect(o.m),dx=o.x-it.x,dz=(o.off||0)-(it.off||0);
+    hs.push({x0:dx+sr.x0,x1:dx+sr.x1,z0:dz+sr.z0,z1:dz+sr.z1});
+  });
+  return hs;
+}
+function boxes3d(m,mode,holes){
+  var T=TYPES[m.type],W=m.W,H=m.H,D=m.D,out=[],cyl=[],doors=[],drawers=[],nf=mode==='nofront',hw=mode==='glass',cm=!!(T.corner&&m.cornerEnd);
+  var res=function(){return {boxes:out,cyl:cyl,doors:doors,drawers:drawers}};
+  var B=function(x0,x1,ya,yb,z0,z1,k,tg){var a=cm?W-x1:x0,b=cm?W-x0:x1;(tg||out).push({x0:a,x1:b,y0:ya,y1:yb,z0:z0,z1:z1,k:k})};
+  var Cy=function(ax,x,y,z,r,len,k,tg){(tg||cyl).push({ax:ax,x:cm?W-x:x,y:y,z:z,r:r,len:len,k:k||'m'})};
+  if(T.cls==='surf'){
+    if(holes&&holes.length){
+      var xs=[0,W];holes.forEach(function(h){xs.push(Math.max(0,Math.min(W,h.x0)),Math.max(0,Math.min(W,h.x1)))});
+      xs=xs.filter(function(v,i,a){return a.indexOf(v)===i}).sort(function(a,b){return a-b});
+      for(var xi=0;xi<xs.length-1;xi++){
+        var xa=xs[xi],xb=xs[xi+1];if(xb-xa<0.5)continue;
+        var cov=holes.filter(function(h){return h.x0<=xa+0.5&&h.x1>=xb-0.5}).sort(function(a,b){return a.z0-b.z0}),z=0;
+        cov.forEach(function(h){var z0=Math.max(0,h.z0);if(z0>z)B(xa,xb,0,H,z,z0,'s');z=Math.max(z,Math.min(D,h.z1))});
+        if(z<D)B(xa,xb,0,H,z,D,'s');
+      }
+    }else B(0,W,0,H,0,D,m.type==='fartuk'?'t':'s');
+    return res();
+  }
+  if(T.cls==='app'){
+    if(m.type==='plita'){
+      B(0,W,0,H-6,0,D,'a');B(0,W,H-6,H,0,D,'g');
+      B(40,W-40,110,H-170,D,D+6,'g');
+      B(70,82,H-166,H-146,D+6,D+36,'m');B(W-82,W-70,H-166,H-146,D+6,D+36,'m');B(70,W-70,H-166,H-152,D+30,D+40,'m');
+      for(var kn=0;kn<5;kn++)Cy('z',W*(0.12+0.19*kn),H-70,D+10,17,20,'m');
+      B(30,W-30,0,40,D-10,D,'g');
+      var rb=Math.min(W,D)*0.085;
+      [[.28,.3],[.72,.3],[.28,.7],[.72,.7]].forEach(function(p){
+        var px=W*p[0],pz=D*p[1];
+        Cy('y',px,H+2,pz,rb,3);Cy('y',px,H+5,pz,rb*0.45,6,'g');
+        B(px-rb*1.5,px+rb*1.5,H+8,H+12,pz-3,pz+3,'g');B(px-3,px+3,H+8,H+12,pz-rb*1.5,pz+rb*1.5,'g');
+      });
+    }else if(m.type==='xolodilnik'){
+      var sp=H*0.36;B(0,W,0,sp-2,0,D,'a');B(0,W,sp+2,H,0,D,'a');
+      B(W-50,W-38,sp+80,sp+520,D,D+28,'m');B(W-50,W-38,sp-460,sp-80,D,D+28,'m');
+    }else if(m.type==='mashina'){
+      B(0,W,0,H,0,D,'a');B(20,W-20,H-120,H-20,D,D+4,'g');B(60,W-60,H-150,H-140,D+4,D+30,'m');
+    }else if(m.type==='vityazhka'){
+      var bh=Math.min(160,H*0.3),cw=Math.min(300,W-120);
+      B(0,W,0,bh,0,D,'a');B(30,W-30,-3,0,D*0.35,D-20,'g');B((W-cw)/2,(W+cw)/2,bh,H,0,Math.min(D,260),'a');B(W-110,W-60,bh/2-6,bh/2+6,D,D+4,'m');
+    }else B(0,W,0,H,0,D,'a');
+    return res();
+  }
+  var c=calc(m),t=c.t,tb=c.tb,ft=c.ft,leg=c.leg,Hk=c.Hk,y0=leg,n=c.shelves,g=(Hk-2*t-n*t)/(n+1);
+  function mkDoor(x0,x1,ya,yb,side,pz,hy,plate){
+    var d={px:side==='L'?x0:x1,pz:pz,side:side,boxes:[],cyl:[]};
+    B(x0,x1,ya,yb,pz,pz+ft,'f',d.boxes);
+    var hx=side==='L'?x1-26:x0+16;B(hx,hx+10,hy-70,hy+70,pz+ft,pz+ft+14,'m',d.boxes);
+    if(hw){
+      var fhh=yb-ya,k=hingesFor(fhh),cx=side==='L'?x0+22:x1-22;
+      for(var i=0;i<k;i++){
+        var yy=k===1?(ya+yb)/2:ya+100+i*(fhh-200)/(k-1);
+        Cy('z',cx,yy,pz+6,17.5,12,'h',d.cyl);
+        if(plate){var px0=side==='L'?t:W-t-3;B(px0,px0+3,yy-22,yy+22,pz-50,pz-10,'h')}
+      }
+    }
+    if(cm){d.px=W-d.px;d.side=side==='L'?'R':'L'}
+    doors.push(d);
+  }
+  var hy0=T.hang?y0+120:(m.type==='pastki'||m.type==='moyka'||T.corner)?H-140:Math.min(1000,H/2);
+  if(T.custom&&(m.cparts||[]).length){
+    var yb0=m.leg||0,L={s:[],g:[],u:[],p:[],o:[],e:[],t:[],k:[]},tot=0;
+    m.cparts.forEach(function(p){var o=p.o||partType(p.n);if(!L[o]||!(p.q>0)||!(p.a>0)||!(p.b>0))return;var th=(M(p.mat)||{th:16}).th;for(var i=0;i<p.q;i++){L[o].push({a:p.a,b:p.b,th:th});tot++}});
+    if(tot){
+      var sn=L.s.length,pn=L.p.length,en=L.e.length;
+      L.s.forEach(function(q,i){var x0=sn<2?(i?W-q.th:0):i*(W-q.th)/(sn-1);B(x0,x0+q.th,yb0,Math.min(H,yb0+q.a),0,q.b,'b')});
+      L.g.forEach(function(q){B((W-q.a)/2,(W+q.a)/2,yb0,yb0+q.th,0,q.b,'b')});
+      L.u.forEach(function(q,i,arr){var zz=(arr.length>1&&i%2)?D-q.b:0;B((W-q.a)/2,(W+q.a)/2,H-q.th,H,zz,zz+q.b,'b')});
+      L.p.forEach(function(q,i){var yy=yb0+(H-yb0)*(i+1)/(pn+1)-q.th/2;B((W-q.a)/2,(W+q.a)/2,yy,yy+q.th,0,q.b,'b')});
+      L.o.forEach(function(q){B((W-q.b)/2,(W+q.b)/2,yb0,Math.min(H,yb0+q.a),-q.th,0,'k')});
+      L.k.forEach(function(q){B((W-q.a)/2,(W+q.a)/2,0,Math.max(10,q.b),D-60-q.th,D-60,'b')});
+      if(!nf){
+        var ccx=Math.max(1.5,(W-L.e.reduce(function(a,q){return a+q.b+3},0))/2);
+        L.e.forEach(function(q,i){ft=q.th;var side=en===1?'L':(i<en/2?'L':'R');mkDoor(ccx,ccx+q.b,yb0+1.5,Math.min(H,yb0+1.5+q.a),side,D,hy0,(i===0&&side==='L')||(i===en-1&&side==='R'));ccx+=q.b+3});
+        L.t.forEach(function(q,i){var ya=yb0+1.5+i*(q.a+3);B(1.5,1.5+q.b,ya,ya+q.a,D,D+q.th,'f');B(W/2-70,W/2+70,ya+q.a/2-5,ya+q.a/2+5,D+q.th,D+q.th+14,'m')});
+      }
+      if(hw&&(L.g.length||L.u.length))[yb0+8,H-8].forEach(function(yy){[50,D-50].forEach(function(z){Cy('x',25,yy,z,4,50,'c');Cy('x',W-25,yy,z,4,50,'c')})});
+      return res();
+    }
+  }
+  if(T.corner){
+    var W2=m.W2||W;
+    B(0,D,y0,H,W2-t,W2,'b');B(D-t,D,y0,H,D,W2-t,'b');B(W-t,W,y0,H,0,D,'b');
+    B(0,W,y0,y0+t,0,D,'b');B(0,D,y0,y0+t,D,W2,'b');
+    B(0,W,H-t,H,0,D,'b');B(0,D,H-t,H,D,W2,'b');
+    for(var i=1;i<=n;i++){var yb=y0+t+i*g+(i-1)*t;B(0,W-t,yb,yb+t,0,D-20,'b');B(0,D-t,yb,yb+t,D-20,W2-t,'b');
+      if(hw){Cy('x',W-t-4,yb-5,60,2.5,8,'p');Cy('x',W-t-4,yb-5,D-60,2.5,8,'p');Cy('z',60,yb-5,W2-t-4,2.5,8,'p');Cy('z',D-t-60,yb-5,W2-t-4,2.5,8,'p')}}
+    B(0,W,y0,H,-tb,0,'k');B(-tb,0,y0,H,0,W2,'k');
+    if(leg>0)[[45,45],[W-45,45],[45,W2-45],[D-45,W2-45],[W-45,D-45]].forEach(function(p){Cy('y',p[0],leg/2,p[1],20,leg)});
+    if(!nf)mkDoor(D,W,y0+1.5,H-1.5,'R',D,hy0,true);
+    if(hw)[y0+t/2,H-t/2].forEach(function(yy){
+      [50,D-50].forEach(function(z){Cy('x',W-25,yy,z,4,50,'c')});
+      [50,D-50].forEach(function(x){Cy('z',x,yy,W2-25,4,50,'c')});
+      Cy('x',D-25,yy,(D+W2-t)/2,4,50,'c');
+    });
+    return res();
+  }
+  B(0,t,y0,H,0,D,'b');B(W-t,W,y0,H,0,D,'b');B(t,W-t,y0,y0+t,0,D,'b');
+  if(T.base){B(t,W-t,H-t,H,0,100,'b');B(t,W-t,H-t,H,D-100,D,'b')}else B(t,W-t,H-t,H,0,D,'b');
+  for(var i2=1;i2<=n;i2++){var yb2=y0+t+i2*g+(i2-1)*t;B(t,W-t,yb2,yb2+t,0,D-20,'b');
+    if(hw)[[t+4,60],[t+4,D-80],[W-t-4,60],[W-t-4,D-80]].forEach(function(p){Cy('x',p[0],yb2-5,p[1],2.5,8,'p')})}
+  B(0,W,y0,H,-tb,0,'k');
+  if(m.plinth&&leg>0)B(0,W,0,leg-5,D-60-t,D-60,'b');
+  if(leg>0&&!m.plinth)[[45,45],[W-45,45],[45,D-45],[W-45,D-45]].forEach(function(p){Cy('y',p[0],leg/2,p[1],20,leg)});
+  if(m.rod&&m.type==='shkaf')Cy('x',W/2,H-t-60,D/2,12,W-2*t);
+  if(m.type==='moyka'){
+    var sr=sinkRect(m),rim=H+38,bt=H-190,cx=(sr.x0+sr.x1)/2;
+    B(sr.x0-25,sr.x1+25,rim,rim+4,sr.z0-25,sr.z0,'m');B(sr.x0-25,sr.x1+25,rim,rim+4,sr.z1,sr.z1+25,'m');
+    B(sr.x0-25,sr.x0,rim,rim+4,sr.z0,sr.z1,'m');B(sr.x1,sr.x1+25,rim,rim+4,sr.z0,sr.z1,'m');
+    B(sr.x0,sr.x0+3,bt,rim,sr.z0,sr.z1,'m');B(sr.x1-3,sr.x1,bt,rim,sr.z0,sr.z1,'m');
+    B(sr.x0,sr.x1,bt,rim,sr.z0,sr.z0+3,'m');B(sr.x0,sr.x1,bt,rim,sr.z1-3,sr.z1,'m');B(sr.x0,sr.x1,bt,bt+3,sr.z0,sr.z1,'m');
+    Cy('y',cx,bt+4,(sr.z0+sr.z1)/2,28,2,'g');
+    var fz=Math.max(20,sr.z0-55);
+    Cy('y',cx,rim+20,fz,20,40,'m');Cy('y',cx,rim+160,fz,10,240,'m');Cy('z',cx,rim+275,fz+65,9,130,'m');
+  }
+  if(m.frontType==='door'&&!nf){
+    var dn=m.frontCount,fw=(W-3-(dn-1)*3)/dn;
+    for(var d=0;d<dn;d++){
+      var x0=1.5+d*(fw+3),side=dn===1?'L':(d<dn/2?'L':'R'),outer=(d===0&&side==='L')||(d===dn-1&&side==='R');
+      mkDoor(x0,x0+fw,y0+1.5,H-1.5,side,D,hy0,outer);
+    }
+  }
+  if(m.frontType==='drawer'){
+    var dr=m.frontCount,fh=(Hk-3*(dr+1))/dr,bd=c.bd||Math.max(250,Math.floor((D-50)/50)*50),hb=Math.max(80,Math.min(150,Math.round(fh-50)));
+    for(var q=0;q<dr;q++){
+      var ya=y0+3+q*(fh+3),yx=ya+20,z1=D,z0=D-bd,xa=t+13,xb=W-t-13,dd={len:bd,boxes:[],cyl:[]};
+      drawers.push(dd);
+      B(xa,xa+t,yx,yx+hb,z0,z1,'b',dd.boxes);B(xb-t,xb,yx,yx+hb,z0,z1,'b',dd.boxes);B(xa+t,xb-t,yx,yx+hb,z0,z0+t,'b',dd.boxes);B(xa+t,xb-t,yx,yx+hb,z1-t,z1,'b',dd.boxes);B(xa+t,xb-t,yx,yx+3,z0,z1,'k',dd.boxes);
+      if(!nf){B(1.5,W-1.5,ya,ya+fh,D,D+ft,'f',dd.boxes);B(W/2-70,W/2+70,ya+fh/2-5,ya+fh/2+5,D+ft,D+ft+14,'m',dd.boxes)}
+      if(hw){B(t,t+13,yx+hb/2-5,yx+hb/2+5,z0,z1,'h');B(W-t-13,W-t,yx+hb/2-5,yx+hb/2+5,z0,z1,'h')}
+    }
+  }
+  if(hw){
+    var zs=T.base?[50,D-50]:[50,D/2,D-50];
+    [y0+t/2,H-t/2].forEach(function(yy){zs.forEach(function(z){Cy('x',25,yy,z,4,50,'c');Cy('x',W-25,yy,z,4,50,'c')})});
+  }
+  return res();
+}
+function colorsFor(m){
+  var sm=M(m.surfMat);
+  return {b:TYPES[m.type].custom?(m.color||'#c9b48a'):((M(m.korpus)||{}).color||'#cdb892'),f:(M(m.front)||{}).color||'#eceae3',k:(M(m.back)||{}).color||'#a08c70',m:'#8c969b',a:'#e4e7e9',g:'#2c3135',s:(sm&&sm.color)||'#4d5258',t:(sm&&sm.color)||'#a9c7cf',
+    h:'#aeb4ba',c:'#d9a521',p:'#2f7fc4',x:m.color||'#c9b48a'};
+}
+function buildGroup(m,mode,sel,V,holes){
+  var s=0.001,g=new THREE.Group(),data=boxes3d(m,mode,holes),col=colorsFor(m),glass=mode==='glass',HW={m:1,h:1,c:1,p:1};
+  var edge=new THREE.LineBasicMaterial({color:sel?0xb0551a:0x222222,transparent:true,opacity:sel?1:(glass?0.75:0.5)});
+  function mat(k){var o={color:col[k]||'#999999'};if(glass&&!HW[k]){o.transparent=true;o.opacity=k==='a'?0.3:0.16;o.depthWrite=false}return new THREE.MeshLambertMaterial(o)}
+  function addBox(b,par,ox,oz){
+    var geo=new THREE.BoxGeometry((b.x1-b.x0)*s,(b.y1-b.y0)*s,(b.z1-b.z0)*s),mesh=new THREE.Mesh(geo,mat(b.k));
+    mesh.position.set(((b.x0+b.x1)/2-ox)*s,(b.y0+b.y1)/2*s,((b.z0+b.z1)/2-oz)*s);par.add(mesh);
+    if(!HW[b.k]){var ln=new THREE.LineSegments(new THREE.EdgesGeometry(geo),edge);ln.position.copy(mesh.position);par.add(ln)}
+  }
+  function addCyl(c,par,ox,oz){
+    var geo=new THREE.CylinderGeometry(c.r*s,c.r*s,c.len*s,16),mesh=new THREE.Mesh(geo,mat(c.k||'m'));
+    if(c.ax==='x')mesh.rotation.z=Math.PI/2;else if(c.ax==='z')mesh.rotation.x=Math.PI/2;
+    mesh.position.set((c.x-ox)*s,c.y*s,(c.z-oz)*s);par.add(mesh);
+  }
+  data.boxes.forEach(function(b){addBox(b,g,0,0)});
+  data.cyl.forEach(function(c){addCyl(c,g,0,0)});
+  data.doors.forEach(function(d){
+    var pv=new THREE.Group();pv.position.set(d.px*s,0,d.pz*s);g.add(pv);
+    d.boxes.forEach(function(b){addBox(b,pv,d.px,d.pz)});d.cyl.forEach(function(c){addCyl(c,pv,d.px,d.pz)});
+    if(V)V.anims.push({o:pv,k:'door',side:d.side});
+  });
+  data.drawers.forEach(function(d){
+    var pv=new THREE.Group();g.add(pv);
+    d.boxes.forEach(function(b){addBox(b,pv,0,0)});
+    if(V)V.anims.push({o:pv,k:'drawer',len:d.len});
+  });
+  return g;
+}
+function makeLabel(text,sel){
+  var cv=document.createElement('canvas');cv.width=320;cv.height=80;var cx=cv.getContext('2d');
+  cx.fillStyle='rgba(255,255,255,0.93)';cx.fillRect(0,0,320,80);cx.strokeStyle=sel?'#b0551a':'#555';cx.lineWidth=sel?6:3;cx.strokeRect(2,2,316,76);
+  cx.fillStyle='#1b2220';cx.font='600 30px sans-serif';cx.textAlign='center';cx.textBaseline='middle';cx.fillText(text,160,42);
+  var sp=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(cv),depthTest:false,transparent:true}));
+  sp.scale.set(0.36,0.09,1);sp.renderOrder=10;return sp;
+}
+function rebuildEditor(fit){
+  if(!EV||!EV.ok)return;
+  var m=S.cur,s=0.001;EV.clear();
+  var g=buildGroup(m,S.view,false,EV);
+  var fw=m.W,fd=TYPES[m.type].corner?(m.W2||m.D):m.D;
+  g.position.set(-fw*s/2,0,-fd*s/2);EV.group.add(g);
+  var mx=Math.max(fw,m.H,fd)*s;EV.target.set(0,m.H*s/2,0);EV.min=mx*1.2;EV.max=mx*6;
+  if(fit)EV.dist=mx*2.9;EV.dist=Math.max(EV.min,Math.min(EV.max,EV.dist));applyAnim(EV);
+}
+function buildRoomScene(V,fit,selId){
+  if(!V||!V.ok)return;
+  var R=S.room,s=0.001;V.clear();
+  var root=new THREE.Group();root.position.set(-R.W*s/2,0,-R.L*s/2);V.group.add(root);
+  var floor=new THREE.Mesh(new THREE.PlaneGeometry(R.W*s,R.L*s),new THREE.MeshLambertMaterial({color:0xc9cfcc,side:THREE.DoubleSide}));
+  floor.rotation.x=-Math.PI/2;floor.position.set(R.W*s/2,-0.002,R.L*s/2);root.add(floor);
+  var wm=new THREE.MeshBasicMaterial({color:0x9aa6a1,transparent:true,opacity:0.1,side:THREE.DoubleSide,depthWrite:false}),
+      wl=new THREE.LineBasicMaterial({color:0x56635e,transparent:true,opacity:0.7});
+  [[R.W,R.H,R.W/2,R.H/2,0,0],[R.W,R.H,R.W/2,R.H/2,R.L,0],[R.L,R.H,0,R.H/2,R.L/2,Math.PI/2],[R.L,R.H,R.W,R.H/2,R.L/2,Math.PI/2]].forEach(function(w){
+    var geo=new THREE.PlaneGeometry(w[0]*s,w[1]*s),p=new THREE.Mesh(geo,wm);p.position.set(w[2]*s,w[3]*s,w[4]*s);p.rotation.y=w[5];root.add(p);
+    var ln=new THREE.LineSegments(new THREE.EdgesGeometry(geo),wl);ln.position.copy(p.position);ln.rotation.y=w[5];root.add(ln)});
+  S.project.forEach(function(it){
+    var g=buildGroup(it.m,S.view,it.id===selId,V,counterHoles(it)),x=it.x,e=effElev(it.m),f=it.off||0;
+    var o={A:[x,0,f],B:[R.W-f,0,x],C:[R.W-x,0,R.L-f],D:[f,0,R.L-x]}[it.wall],rot={A:0,B:-Math.PI/2,C:Math.PI,D:Math.PI/2}[it.wall];
+    g.position.set(o[0]*s,e*s,o[2]*s);g.rotation.y=rot;g.userData.pid=it.id;
+    if(S.showDims&&TYPES[it.m.type].row!=='free'){var sp=makeLabel(it.m.W+' × '+it.m.H+' × '+it.m.D,it.id===selId);sp.position.set(it.m.W/2*s,(it.m.H+90)*s,it.m.D/2*s);g.add(sp)}
+    root.add(g);
+  });
+  S.pipes.forEach(function(p){
+    var col={water:0x2f7fc4,sewer:0x8a7458,gas:0xe0b020,other:0x8c969b}[p.kind]||0x8c969b;
+    var mesh=new THREE.Mesh(new THREE.CylinderGeometry(22*s,22*s,100*s,14),new THREE.MeshLambertMaterial({color:col}));
+    var pos={A:[p.x,p.y,50],B:[R.W-50,p.y,p.x],C:[R.W-p.x,p.y,R.L-50],D:[50,p.y,R.L-p.x]}[p.wall];
+    if(p.wall==='A'||p.wall==='C')mesh.rotation.x=Math.PI/2;else mesh.rotation.z=Math.PI/2;
+    mesh.position.set(pos[0]*s,pos[1]*s,pos[2]*s);root.add(mesh);
+  });
+  var mx=Math.max(R.W,R.L,R.H)*s;V.target.set(0,R.H*s*0.3,0);V.min=mx*0.4;V.max=mx*5;
+  if(fit){V.az=0.55;V.el=0.55;V.dist=mx*1.9}
+  V.dist=Math.max(V.min,Math.min(V.max,V.dist));applyAnim(V);
+}
+function rebuildRoom(fit){buildRoomScene(RV,fit,S.selected)}
+function rebuildClient(fit){buildRoomScene(CV,fit,S.selected)}
+function setView(v){
+  S.view=v;rebuildEditor(false);rebuildRoom(false);rebuildClient(false);
+  $$('[data-vm]').forEach(function(b){b.classList.toggle('on',b.dataset.vm===v)});
+}
+function vmHTML(){return '<button class="btn sm" data-vm="solid">Oddiy</button><button class="btn sm" data-vm="nofront">Fasadsiz</button><button class="btn sm" data-vm="glass">Shaffof</button><span class="sp"></span><button class="btn sm" data-play>▶ Ochish / yopish</button><input type="range" min="0" max="100" value="0" data-anim aria-label="Eshik va tortmalarni ochish">'}
+document.addEventListener('click',function(e){
+  var b=e.target.closest('button');if(!b)return;
+  if(b.dataset.vm){setView(b.dataset.vm);return}
+  if(b.hasAttribute('data-play')){
+    if(!A.play){A.play=true;A.target=1;A.hold=0}else{A.play=false;A.target=0}
+    syncAnimUI();
+  }
+});
+document.addEventListener('input',function(e){
+  var el=e.target;if(!el.hasAttribute||!el.hasAttribute('data-anim'))return;
+  A.play=false;A.hold=0;A.t=A.target=(+el.value)/100;applyAnimAll();
+});
+
+/* ---------- Modul formasi ---------- */
+function fillSel(sel,list,val,lab){sel.innerHTML=list.map(function(x){return '<option value="'+x.id+'">'+esc(lab?lab(x):x.name)+'</option>'}).join('');if(list.some(function(x){return x.id===val}))sel.value=val}
+function optLabel(x){return x.cat==='plita'?x.name+' · '+x.L+'×'+x.W:x.name}
+function fillSelects(){
+  ensureRefs(S.cur);
+  var pl=ofCat('plita'),kr=ofCat('kromka'),fu=ofCat('furn');
+  fillSel($('#f-korpus'),pl,S.cur.korpus,optLabel);fillSel($('#f-back'),pl,S.cur.back,optLabel);fillSel($('#f-front'),pl,S.cur.front,optLabel);
+  fillSel($('#f-kK'),kr,S.cur.kK);fillSel($('#f-kF'),kr,S.cur.kF);
+  var u=surfUnit(S.cur.type);fillSel($('#f-surfMat'),ofCat('qoplama').filter(function(x){return x.unit===u}),S.cur.surfMat,function(x){return x.name+' · '+fmt(x.price)+' / '+x.unit});
+  var xs=$('#x-sel'),old=xs.value;xs.innerHTML=fu.map(function(x){return '<option value="'+x.id+'">'+esc(x.name)+'</option>'}).join('');if(old)xs.value=old;
+  renderCParts();renderTpl();
+}
+function syncForm(){
+  var c=S.cur,T=TYPES[c.type],cls=T.cls;
+  $$('[data-k]').forEach(function(el){var v=c[el.dataset.k];if(el.type==='checkbox')el.checked=!!v;else if(document.activeElement!==el)el.value=v});
+  $$('[data-for]').forEach(function(el){el.hidden=el.dataset.for.split(' ').indexOf(cls)<0});
+  $('#w-leg').hidden=cls!=='cab'||!!T.hang;
+  $('#w-shelves').hidden=cls!=='cab';
+  $('#w-elev').hidden=!T.elev;
+  $('#w-plinth').hidden=cls!=='cab'||!!T.hang||c.leg<=0;
+  $('#w-rod').hidden=c.type!=='shkaf';
+  $('#w-sink').hidden=c.type!=='moyka';
+  $('#b-fetchw').hidden=cls!=='surf';
+  $('#f-shelves').disabled=c.frontType==='drawer';
+  $('#w-count').hidden=c.frontType==='open';
+  $('#countLbl').textContent=c.frontType==='drawer'?'Tortmalar soni':'Eshiklar soni';
+  $('#lb-W').textContent=cls==='surf'?'Uzunligi, mm':'Eni, mm';
+  $('#lb-H').textContent=c.type==='stoleshnitsa'?'Qalinligi, mm':c.type==='fartuk'?"Bo'yi (balandligi), mm":"Bo'yi, mm";
+  $('#lb-D').textContent=c.type==='fartuk'?'Qalinligi, mm':c.type==='stoleshnitsa'?'Chuqurligi (eni), mm':'Chuqurligi, mm';
+  $('#partsPanel').hidden=cls!=='cab';
+  $('#w-corner').hidden=!T.corner;
+  $('#pFront').hidden=cls!=='cab'||!!T.corner;
+  $('#pCustom').hidden=!T.custom;
+  $('#w-shelves').hidden=cls!=='cab';
+  $('#w-plinth').hidden=cls!=='cab'||!!T.hang||c.leg<=0||!!T.corner;
+  $('#w-leg').hidden=cls!=='cab'||(!!T.hang&&!T.custom);
+  if(T.corner)$('#lb-W').textContent='Eni (1-devor bo\'ylab), mm';
+  $('#editTag').hidden=!S.editing;$('#b-add').textContent=S.editing?'Saqlash':"Xonaga qo'shish";$('#b-cancel').hidden=!S.editing;
+  $('#pl-wall').value=S.curPlace.wall;if(document.activeElement!==$('#pl-x'))$('#pl-x').value=S.curPlace.x==null?'':S.curPlace.x;
+  if(document.activeElement!==$('#pl-off'))$('#pl-off').value=S.curPlace.off||'';updateFree();
+  $('#x-list').innerHTML=(c.extras||[]).map(function(e,i){var x=M(e.id);return '<span class="chip">'+esc(x.name)+' × '+e.qty+'<button data-xdel="'+i+'" aria-label="O\'chirish">×</button></span>'}).join('')||'<span class="hint">Qo\'shilmagan</span>';
+}
+var OT=[['s','Yon (tik)'],['g','Tub'],['u','Usti'],['p','Polka'],['o','Orqa devor'],['e','Eshik'],['t','Tortma old paneli'],['k','Tsokol'],['x','3D da chizilmasin']];
+function partType(n){n=String(n||'').toLowerCase();
+  if(n.indexOf('tortma old')===0)return 't';if(n.indexOf('tortma')===0)return 'x';if(n.indexOf('yon')===0)return 's';if(n.indexOf('tub')===0)return 'g';
+  if(n.indexOf('usti')===0)return 'u';if(n.indexOf('polka')===0)return 'p';if(n.indexOf('orqa')===0)return 'o';if(n.indexOf('eshik')===0)return 'e';if(n.indexOf('tsokol')===0)return 'k';return 'x'}
+function stdParts(c){
+  var tmp=Object.assign(newCur('pastki'),{W:c.W,H:c.H,D:c.D,leg:c.leg||0,korpus:c.korpus,back:c.back,front:c.front,kK:c.kK,kF:c.kF,shelves:c.shelves||0,frontType:c.frontType==='drawer'?'drawer':'door',frontCount:c.frontCount||2,plinth:!!c.plinth,extras:[]});
+  return calc(tmp).parts.map(function(p){return {n:p.name,o:partType(p.name),q:p.qty,a:p.a,b:p.b,mat:p.mat,la:p.la,lb:p.lb}});
+}
+function renderCParts(){
+  var el=$('#cp-list');if(!el)return;
+  if(!TYPES[S.cur.type].custom){el.innerHTML='';return}
+  var pl=ofCat('plita'),cp=S.cur.cparts||[];
+  var h='<table class="tbl"><thead><tr><th>Nomi</th><th>Turi (3D)</th><th class="n">Soni</th><th class="n">Uzunlik</th><th class="n">Eni</th><th>Material</th><th class="n">Kr. uzun</th><th class="n">Kr. qisqa</th><th></th></tr></thead><tbody>';
+  cp.forEach(function(p,i){
+    var f=function(k,t,cls,ex){return '<td class="in"><input class="'+cls+'" data-cp="'+i+'" data-cf="'+k+'" type="'+t+'" value="'+esc(p[k]==null?'':p[k])+'" '+(ex||'')+'></td>'};
+    h+='<tr>'+f('n','text','')+'<td class="in"><select data-cp="'+i+'" data-cf="o">'+OT.map(function(o){return '<option value="'+o[0]+'"'+((p.o||partType(p.n))===o[0]?' selected':'')+'>'+o[1]+'</option>'}).join('')+'</select></td>'+f('q','number','w-num','min="1" step="1"')+f('a','number','w-num','min="1"')+f('b','number','w-num','min="1"')+
+      '<td class="in"><select data-cp="'+i+'" data-cf="mat">'+pl.map(function(x){return '<option value="'+x.id+'"'+(x.id===p.mat?' selected':'')+'>'+esc(x.name)+'</option>'}).join('')+'</select></td>'+
+      f('la','number','w-num','min="0" max="2" step="1"')+f('lb','number','w-num','min="0" max="2" step="1"')+'<td class="in"><button class="btn sm danger" data-cpdel="'+i+'" aria-label="Detalni o\'chirish">×</button></td></tr>';
+  });
+  if(!cp.length)h+='<tr><td colspan="9" class="hint">Detal yo\'q. «Detal qo\'shish» yoki «Standart shkafdan detallarni olish» ni bosing.</td></tr>';
+  el.innerHTML=h+'</tbody></table>';
+}
+function renderTpl(){
+  var sel=$('#tpl-sel');if(!sel)return;var old=sel.value;
+  sel.innerHTML=S.templates.length?S.templates.map(function(t){return '<option value="'+t.id+'">'+esc(t.name)+' · '+esc((TYPES[t.m.type]||{label:'?'}).label)+'</option>'}).join(''):'<option value="">Hali shablon yo\'q</option>';
+  if(old&&S.templates.some(function(t){return t.id===old}))sel.value=old;
+  $('#tpl-hint').textContent=S.templates.length?'':'Blokni sozlab, «Joriy blokni shablon qilib saqlash» ni bosing. Keyingi loyihalarda tayyor holda chaqirasiz.';
+}
+function warnings(m,c){
+  var w=[],T=TYPES[m.type];
+  if(T.cls==='cab'){
+    var t=c.t;
+    if(m.H-c.leg<2*t+60)w.push("Bo'yi juda kichik, ichki bo'shliq qolmaydi.");
+    if(c.shelves>0&&!T.corner&&!T.custom&&m.W-2*t>800)w.push('Polka uzunligi '+(m.W-2*t)+' mm. 16 mm LDSP 800 mm dan uzun oraliqda egiladi, o\'rtasiga tik tayanch qo\'ying yoki eni kamaytiring.');
+    if(c.doors>0&&!T.custom){var fw=T.corner?(m.W-m.D-3):(m.W-3-(c.doors-1)*3)/c.doors;if(fw>600)w.push('Eshik eni '+Math.round(fw)+' mm. 600 mm dan keng eshiklar egilib, yopilmay qolishi mumkin.');if(c.fh>2100)w.push("Eshik balandligi "+Math.round(c.fh)+" mm. Ikki bo'lakka bo'lishni ko'rib chiqing.")}
+    if(m.frontType==='drawer'&&m.D<300)w.push("Chuqurlik 300 mm dan kam, tortma yo'naltirgichi sig'maydi.");
+    if(m.type==='moyka'&&m.W<600)w.push('Moyka shkafi eni 600 mm dan kam bo\'lsa, standart moyka sig\'maydi.');
+  }
+  if(T.cls==='surf'&&!M(m.surfMat))w.push("Qoplama materiali tanlanmagan. «Materiallar» bo'limida qo'shing.");
+  $('#warns').innerHTML=w.map(function(x){return '<div class="warn"><b>Diqqat</b> · '+esc(x)+'</div>'}).join('');
+}
+function refreshModule(){
+  var m=S.cur,c=calc(m),b=bom(c,'part');
+  $('#cap').textContent=m.W+' × '+m.H+' × '+m.D+' mm';
+  $('#bomMod').innerHTML=bomHTML(b);$('#sumMod').innerHTML=sumHTML(b.tot,'Bitta blok narxi');
+  $('#partsMod').innerHTML=partsHTML(c.parts,false);
+  $('#costHint').textContent="Bitta blokning detallari bo'yicha (listlar raskroyi «Hisob» bo'limida)";
+  warnings(m,c);rebuildEditor(false);syncForm();
+}
+
+/* ---------- Materiallar ---------- */
+function inUse(id){return [S.cur].concat(S.project.map(function(p){return p.m})).some(function(m){return ['korpus','back','front','kK','kF','surfMat'].some(function(k){return m[k]===id})||(m.extras||[]).some(function(e){return e.id===id})})}
+function matTable(cat){
+  var rows=ofCat(cat),h='<table class="tbl"><thead><tr><th class="w-name">Nomi</th>';
+  if(cat==='plita')h+='<th class="n">Qalinlik, mm</th><th class="n">Uzunlik, mm</th><th class="n">Eni, mm</th><th class="n">Narx / list</th><th>Rang</th>';
+  if(cat==='qoplama')h+='<th>Birlik</th><th class="n">Narx / birlik</th><th>Rang</th>';
+  if(cat==='kromka')h+='<th class="n">Qalinlik, mm</th><th class="n">Eni, mm</th><th class="n">Narx / metr</th>';
+  if(cat==='furn')h+='<th>Birlik</th><th class="n">Narx</th><th>Hisobda</th>';
+  h+='<th></th></tr></thead><tbody>';
+  var roleNames={hinge:'Eshik petlyasi',handle:'Tutqich',slider:'Tortma',shelfpin:'Polka',foot:'Oyoq',confirmat:'Biriktirish',rod:'Shtanga',rodholder:'Shtanga',hanger:'Osma shkaf',sink:'Moyka shkafi',mixer:'Moyka shkafi'};
+  rows.forEach(function(x){
+    var inp=function(f,t,cls,extra){return '<td class="in"><input class="'+(cls||'')+'" data-mid="'+x.id+'" data-f="'+f+'" type="'+t+'" value="'+esc(x[f]==null?'':x[f])+'" '+(extra||'')+'></td>'};
+    var color='<td class="in"><input data-mid="'+x.id+'" data-f="color" type="color" value="'+(x.color||'#cccccc')+'"></td>';
+    h+='<tr>'+inp('name','text','');
+    if(cat==='plita')h+=inp('th','number','w-num','min="0" step="0.1"')+inp('L','number','w-num','min="1" step="10"')+inp('W','number','w-num','min="1" step="10"')+inp('price','number','w-num','min="0" step="1000"')+color;
+    if(cat==='qoplama')h+='<td class="in"><select data-mid="'+x.id+'" data-f="unit"><option value="m"'+(x.unit==='m'?' selected':'')+'>m (pogon metr)</option><option value="m²"'+(x.unit==='m²'?' selected':'')+'>m² (kvadrat metr)</option></select></td>'+inp('price','number','w-num','min="0" step="1000"')+color;
+    if(cat==='kromka')h+=inp('th','number','w-num','min="0" step="0.1"')+inp('width','number','w-num','min="1" step="1"')+inp('price','number','w-num','min="0" step="100"');
+    if(cat==='furn')h+=inp('unit','text','w-num')+inp('price','number','w-num','min="0" step="100"')+'<td class="hint">'+(x.role?roleNames[x.role]:"Qo'lda")+'</td>';
+    h+='<td class="in"><button class="btn sm danger" data-mdel="'+x.id+'" '+((x.role||inUse(x.id))?'disabled title="'+(x.role?'Hisobda ishlatiladi':'Blokda ishlatilmoqda')+'"':'')+'>O\'chirish</button></td></tr>';
+  });
+  return h+'</tbody></table>';
+}
+function renderMats(){['plita','qoplama','kromka','furn'].forEach(function(c){$('#t-'+c).innerHTML=matTable(c)});$$('[data-s]').forEach(function(el){el.value=S.set[el.dataset.s]})}
+
+/* ---------- Xona bo'limi ---------- */
+var armedId=null,armedT;
+function floorRow(it){return TYPES[it.m.type].row==='floor'}
+function dimPt(w,pos,c){var R=S.room;return w==='A'?[pos,-c]:w==='B'?[R.W+c,pos]:w==='C'?[R.W-pos,R.L+c]:[-c,R.L-pos]}
+function planSVG(){
+  var R=S.room,pad=Math.max(R.W,R.L)*0.14,vw=R.W+2*pad,vh=R.L+2*pad,fs=Math.max(R.W,R.L)/60;
+  var h='<svg viewBox="'+(-pad)+' '+(-pad)+' '+vw+' '+vh+'" role="img" aria-label="Xona rejasi">';
+  h+='<rect class="p-room" x="0" y="0" width="'+R.W+'" height="'+R.L+'"/>';
+  var lf=fs*1.1;
+  h+='<text class="w" font-size="'+lf+'" x="'+R.W/2+'" y="'+(-pad*0.85)+'">A · '+R.W+' mm</text>';
+  h+='<text class="w" font-size="'+lf+'" x="'+R.W/2+'" y="'+(R.L+pad*0.85)+'">C · '+R.W+' mm</text>';
+  h+='<text class="w" font-size="'+lf+'" transform="translate('+(R.W+pad*0.85)+' '+R.L/2+') rotate(90)">B · '+R.L+' mm</text>';
+  h+='<text class="w" font-size="'+lf+'" transform="translate('+(-pad*0.85)+' '+R.L/2+') rotate(-90)">D · '+R.L+' mm</text>';
+  if(S.showDims)['A','B','C','D'].forEach(function(w){
+    var len=wallLen(w),its=S.project.filter(function(p){return p.wall===w&&TYPES[p.m.type].row==='floor'}).sort(function(a,b){return a.x-b.x});
+    if(!its.length)return;
+    var pos=0,segs=[];
+    its.forEach(function(it){if(it.x>pos+0.5)segs.push({a:pos,b:it.x,t:'g'});segs.push({a:it.x,b:it.x+it.m.W,t:'i'});pos=Math.max(pos,it.x+it.m.W)});
+    if(len>pos+0.5)segs.push({a:pos,b:len,t:'g'});else if(pos>len+0.5)segs.push({a:len,b:pos,t:'n'});
+    var c=pad*0.32,rot=w==='B'?90:w==='D'?-90:0,tk=fs*0.45;
+    segs.forEach(function(sg){
+      var p1=dimPt(w,sg.a,c),p2=dimPt(w,sg.b,c),pm=dimPt(w,(sg.a+sg.b)/2,c+fs*1.0),horiz=(w==='A'||w==='C');
+      h+='<g class="p-dim"><line x1="'+p1[0]+'" y1="'+p1[1]+'" x2="'+p2[0]+'" y2="'+p2[1]+'"/>';
+      [p1,p2].forEach(function(q){h+=horiz?'<line x1="'+q[0]+'" y1="'+(q[1]-tk)+'" x2="'+q[0]+'" y2="'+(q[1]+tk)+'"/>':'<line x1="'+(q[0]-tk)+'" y1="'+q[1]+'" x2="'+(q[0]+tk)+'" y2="'+q[1]+'"/>'});
+      if(sg.b-sg.a>fs*2.2)h+='<text class="'+(sg.t==='g'?'g':sg.t==='n'?'neg':'')+'" font-size="'+fs*0.85+'" x="'+pm[0]+'" y="'+pm[1]+'" text-anchor="middle"'+(rot?' transform="rotate('+rot+' '+pm[0]+' '+pm[1]+')"':'')+'>'+Math.round(sg.b-sg.a)+'</text>';
+      h+='</g>';
+    });
+  });
+  var order={floor:0,free:1,hang:2},items=S.project.slice().sort(function(a,b){return order[TYPES[a.m.type].row]-order[TYPES[b.m.type].row]});
+  items.forEach(function(it){
+    if(TYPES[it.m.type].row!=='floor'||!(it.off>0))return;
+    var r=rectOf(it),o=it.off,gx0=r.x0,gx1=r.x1,gz0=r.z0,gz1=r.z1;
+    if(it.wall==='A'){gz0=0;gz1=o}else if(it.wall==='B'){gx0=R.W-o;gx1=R.W}else if(it.wall==='C'){gz0=R.L-o;gz1=R.L}else{gx0=0;gx1=o}
+    h+='<rect class="p-gap" x="'+gx0+'" y="'+gz0+'" width="'+(gx1-gx0)+'" height="'+(gz1-gz0)+'"/>';
+  });
+  items.forEach(function(it){
+    var T=TYPES[it.m.type],r=rectOf(it),w=r.x1-r.x0,hh=r.z1-r.z0,sel=it.id===S.selected;
+    var cls=T.row==='hang'?'p-hang':it.m.type==='fartuk'?'p-fartuk':it.m.type==='stoleshnitsa'?'p-counter':T.cls==='app'?'p-app':T.tall?'p-tall':'p-floor';
+    if(it.m.type==='fartuk'){var th=Math.max(hh,fs*0.5);h+='<g data-pid="'+it.id+'"><rect class="p-it '+cls+(sel?' p-sel':'')+'" x="'+r.x0+'" y="'+r.z0+'" width="'+w+'" height="'+th+'"/></g>';return}
+    h+='<g data-pid="'+it.id+'"><rect class="p-it '+cls+(sel?' p-sel':'')+'" x="'+r.x0+'" y="'+r.z0+'" width="'+w+'" height="'+hh+'"/>';
+    if(it.m.type!=='stoleshnitsa'){
+      var cx=(r.x0+r.x1)/2,cy=(r.z0+r.z1)/2,vert=hh>w*1.25,len=vert?hh:w,lab=it.m.name,mc=Math.max(3,Math.floor(len/(fs*0.6))),two=S.showDims&&Math.min(w,hh)>fs*2.4;
+      if(lab.length>mc)lab=lab.slice(0,Math.max(2,mc-1))+'…';
+      var y1=cy,y2=cy,rt=vert?' transform="rotate(-90 '+cx+' '+cy+')"':'';
+      if(two){y1=cy-fs*0.6;y2=cy+fs*0.6}
+      if(!vert&&hh>fs*5&&(it.wall==='A'||it.wall==='C')){
+        var top=(it.wall==='A')===(T.row==='hang');
+        if(top){y1=r.z0+fs*1.1;y2=r.z0+fs*2.2}else{y1=r.z1-(two?fs*2.2:fs*1.1);y2=r.z1-fs*1.0}
+      }
+      if(len>fs*3){
+        h+='<text font-size="'+fs+'" x="'+cx+'" y="'+y1+'"'+rt+'>'+esc(lab)+'</text>';
+        if(two)h+='<text class="o" font-size="'+fs*0.85+'" x="'+cx+'" y="'+y2+'"'+rt+'>'+it.m.W+'×'+it.m.D+'</text>';
+      }
+    }
+    h+='</g>';
+  });
+  S.pipes.forEach(function(p){
+    var q=dimPt(p.wall,p.x,0),k=KINDS[p.kind]||'Boshqa';
+    h+='<g><circle class="pipe pipe-'+p.kind+'" cx="'+q[0]+'" cy="'+q[1]+'" r="'+fs*0.6+'"><title>'+k+', '+Math.round(p.x)+' mm, balandligi '+Math.round(p.y)+' mm</title></circle><text class="pt" font-size="'+fs*0.75+'" x="'+q[0]+'" y="'+q[1]+'">'+k.charAt(0)+'</text></g>';
+  });
+  return h+'</svg>';
+}
+function renderWalls(){
+  var h='<table class="tbl"><thead><tr><th>Devor</th><th class="n">Uzunligi</th><th class="n">Pol qatori</th><th class="n">Osma</th><th class="n">Bo\'sh</th></tr></thead><tbody>';
+  ['A','B','C','D'].forEach(function(w){
+    var len=wallLen(w),fl=0,hg=0;
+    S.project.forEach(function(it){if(it.wall!==w)return;var r=TYPES[it.m.type].row;if(r==='floor')fl+=it.m.W;else if(r==='hang')hg+=it.m.W});
+    var free=len-fl;h+='<tr><td>'+w+'</td><td class="n">'+len+'</td><td class="n">'+fl+'</td><td class="n">'+hg+'</td><td class="n'+(free<0?' neg':'')+'">'+free+'</td></tr>';
+  });
+  $('#wallTbl').innerHTML=h+'</tbody></table>';
+}
+function renderRoomWarns(){$('#roomWarns').innerHTML=placementIssues().map(function(x){return '<div class="warn"><b>Diqqat</b> · '+esc(x)+'</div>'}).join('')}
+function renderRoomTotals(){
+  if(!S.project.length){$('#roomTotals').innerHTML='';return}
+  var b=bom(agg(S.project),S.set.mode);
+  $('#roomTotals').innerHTML='<div class="sell-box" style="margin-top:0"><span style="font:600 13px var(--font-display);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">'+S.project.length+' blok · umumiy sotuv narxi</span><span class="sell">'+fmt(totals(b.tot).sell)+'<small>so\'m</small></span></div>'+(S.set.mode==='cut'?'<p class="hint" style="margin:6px 0 0">Umumiy narx raskroy bo\'yicha butun listlardan hisoblanadi, shuning uchun alohida blok narxlari yig\'indisidan farq qilishi mumkin.</p>':'');
+}
+function renderRoomList(){
+  var el=$('#roomList');
+  if(!S.project.length){
+    el.innerHTML='<div class="empty"><b>Xona bo\'sh</b>«Modul» bo\'limida blok yarating va «Xonaga qo\'shish» ni bosing. Yoki tayyor namuna oshxonani yuklab, ustida ishlang.<div class="btns"><button class="btn pri" id="b-newblock2">Blok yaratish</button><button class="btn" id="b-sample">Namuna oshxonani yuklash</button></div></div>';
+    return;
+  }
+  var h='<table class="tbl"><thead><tr><th class="w-name">Nomi</th><th>Turi</th><th>Devor</th><th class="n">Burchakdan, mm</th><th class="n">Devordan, mm</th><th class="n">Eni × bo\'yi × ch.</th><th class="n">Polda balandligi</th><th class="n">Narx, so\'m</th><th></th></tr></thead><tbody>';
+  S.project.forEach(function(it){
+    var m=it.m,T=TYPES[m.type],armed=armedId===it.id;
+    h+='<tr data-row="'+it.id+'"'+(it.id===S.selected?' class="sel"':'')+'><td class="in"><input data-iname="'+it.id+'" type="text" value="'+esc(m.name)+'"></td><td>'+T.label+'</td>'+
+    '<td class="in"><select data-iwall="'+it.id+'" style="width:auto">'+['A','B','C','D'].map(function(w){return '<option value="'+w+'"'+(w===it.wall?' selected':'')+'>'+w+'</option>'}).join('')+'</select></td>'+
+    '<td class="in"><input class="w-num" data-ix="'+it.id+'" type="number" step="10" value="'+Math.round(it.x)+'"></td><td class="in"><input class="w-num" data-ioff="'+it.id+'" type="number" min="0" step="10" value="'+Math.round(it.off||0)+'"></td>'+
+    '<td class="n">'+m.W+'×'+m.H+'×'+m.D+'</td><td class="n">'+(T.elev?Math.round(m.elev):'—')+'</td>'+
+    '<td class="n">'+(T.cls==='app'&&!m.incl?'<span class="hint" style="font-family:var(--font-body)">narxga kirmaydi</span>':fmt(sellOf(m)))+'</td>'+
+    '<td class="in"><div class="btns" style="flex-wrap:nowrap"><button class="btn sm" data-iedit="'+it.id+'">Tahrirlash</button><button class="btn sm" data-idup="'+it.id+'">Nusxa</button><button class="btn sm danger'+(armed?' armed':'')+'" data-idel="'+it.id+'">'+(armed?'Aniq o\'chirilsinmi?':'O\'chirish')+'</button></div></td></tr>';
+  });
+  el.innerHTML=h+'</tbody></table>';
+}
+function renderSel(){
+  var el=$('#selCard'),it=S.project.find(function(x){return x.id===S.selected});
+  if(!it){el.innerHTML='<p class="hint" style="margin:0">Rejadan, 3D ko\'rinishdan yoki ro\'yxatdan blokni tanlang. Bu yerda uning o\'lchamlari, qo\'shnilar bilan oraliq, surish va kattalashtirish tugmalari chiqadi.</p>';return}
+  var m=it.m,T=TYPES[m.type],len=wallLen(it.wall),CORN={A:['A–D burchagi','A–B burchagi'],B:['B–A burchagi','B–C burchagi'],C:['C–B burchagi','C–D burchagi'],D:['D–C burchagi','D–A burchagi']}[it.wall];
+  var gl='—',gr='—';
+  if(T.row!=='free'){
+    var prev=0,next=len;
+    S.project.forEach(function(o){if(o.id===it.id||o.wall!==it.wall||TYPES[o.m.type].row!==T.row)return;
+      if(o.x+o.m.W<=it.x+1)prev=Math.max(prev,o.x+o.m.W);
+      if(o.x>=it.x+m.W-1)next=Math.min(next,o.x);});
+    gl=Math.round(it.x-prev)+' mm';gr=Math.round(next-(it.x+m.W))+' mm';
+  }
+  var st=nudgeStep,c0=CORN[0].replace(' burchagi',''),c1=CORN[1].replace(' burchagi',''),canDown=!!T.elev&&T.cls!=='surf',isCab=T.cls==='cab'&&!T.custom&&m.frontType!=='drawer';
+  var num=function(k,l){return '<label class="f">'+l+'<input data-dim="'+k+'" type="number" min="10" step="10" value="'+Math.round(m[k])+'"></label>'};
+  el.innerHTML='<dl class="kv"><dt>Nomi</dt><dd>'+esc(m.name)+'</dd><dt>Turi</dt><dd>'+T.label+'</dd>'+
+   '<dt>Devor</dt><dd>'+WALLS[it.wall]+'</dd>'+
+   '<dt>'+CORN[0]+'dan</dt><dd>'+Math.round(it.x)+' mm</dd>'+
+   '<dt>Devordan masofa</dt><dd>'+Math.round(it.off||0)+' mm</dd>'+
+   (T.elev?'<dt>Poldan balandligi</dt><dd>'+Math.round(m.elev)+' mm</dd>':'')+
+   '<dt>Qo\'shni oralig\'i ('+c0+' tomon)</dt><dd>'+gl+'</dd>'+
+   '<dt>Qo\'shni oralig\'i ('+c1+' tomon)</dt><dd>'+gr+'</dd></dl>'+
+   '<div class="sub-h">O\'lchami, mm</div><div class="numrow">'+num('W','Eni')+num('H',"Bo'yi")+num('D','Chuq.')+(T.corner?num('W2','2-tomon'):'')+'</div>'+
+   '<label class="f" style="margin:8px 0">Qadam, mm<select id="nudge-step">'+[10,20,50,100].map(function(v){return '<option value="'+v+'"'+(v===st?' selected':'')+'>'+v+'</option>'}).join('')+'</select></label>'+
+   '<div class="sub-h">Kattalashtirish / kichraytirish</div><div class="nudge">'+
+   '<button class="btn sm" data-op="hup">▲ Tepaga kattalashtirish</button><button class="btn sm" data-op="hup-">▼ Tepadan kichraytirish</button>'+
+   (canDown?'<button class="btn sm" data-op="hdn">▼ Pastga kattalashtirish</button><button class="btn sm" data-op="hdn-">▲ Pastdan kichraytirish</button>':'')+
+   '<button class="btn sm" data-op="ws">◀ '+c0+' tomonga kengaytirish</button><button class="btn sm" data-op="ws-">'+c0+' tomondan qisqartirish</button>'+
+   '<button class="btn sm" data-op="we">'+c1+' tomonga kengaytirish ▶</button><button class="btn sm" data-op="we-">'+c1+' tomondan qisqartirish</button>'+
+   '<button class="btn sm" data-op="d+">Chuqurroq</button><button class="btn sm" data-op="d-">Sayozroq</button>'+
+   (isCab?'<button class="btn sm" data-op="sh+">+ Polka</button><button class="btn sm" data-op="sh-">− Polka</button>':'')+
+   (T.corner?'<button class="btn sm" data-op="cflip">Burchak tomonini almashtirish</button>':'')+'</div>'+
+   (T.cls==='cab'?'<p class="hint" style="margin:8px 0 0">Korpus materiali qalinligi o\'zgarmaydi. Balandlik oshsa, eshik petlyalari soni va joyi boshqa bloklardagi qoidaga ko\'ra o\'zi hisoblanadi (900 mm gacha 2, 1600 gacha 3, 2200 gacha 4 ta).</p>':'')+
+   '<div class="sub-h">Surish</div>'+
+   '<div class="nudge"><button class="btn sm" data-nudge="x-">◀ '+c0+' tomon</button><button class="btn sm" data-nudge="x+">'+c1+' tomon ▶</button>'+
+   '<button class="btn sm" data-nudge="o-">▲ Devorga yaqin</button><button class="btn sm" data-nudge="o+">▼ Devordan uzoq</button></div>'+
+   '<div class="sub-h">Devordan masofa</div><div class="btns"><button class="btn sm" data-setoff="0">0</button><button class="btn sm" data-setoff="50">50</button><button class="btn sm" data-setoff="100">100</button><button class="btn sm" data-setoff="150">150</button></div>';
+}
+function applyOp(it,op,st){
+  var m=it.m,T=TYPES[m.type];
+  var g=function(k,v,mn){m[k]=Math.max(mn,m[k]+v)};
+  if(op==='hup')g('H',st,50);
+  else if(op==='hup-')g('H',-st,50);
+  else if(op==='hdn'){var k=Math.min(st,m.elev||0);m.H+=k;m.elev=(m.elev||0)-k}
+  else if(op==='hdn-'){var k2=Math.min(st,m.H-50);m.H-=k2;m.elev=(m.elev||0)+k2}
+  else if(op==='ws'){m.W+=st;it.x-=st}
+  else if(op==='ws-'){var k3=Math.min(st,m.W-100);m.W-=k3;it.x+=k3}
+  else if(op==='we')m.W+=st;
+  else if(op==='we-')m.W=Math.max(100,m.W-st);
+  else if(op==='d+')g('D',st,10);
+  else if(op==='d-')g('D',-st,10);
+  else if(op==='sh+')m.shelves=Math.min(10,(m.shelves||0)+1);
+  else if(op==='sh-')m.shelves=Math.max(0,(m.shelves||0)-1);
+  else if(op==='cflip')m.cornerEnd=!m.cornerEnd;
+}
+var nudgeStep=10;
+function renderPipes(){
+  var el=$('#pipeList');
+  if(!S.pipes.length){el.innerHTML='<p class="hint" style="margin:0 0 4px">Hali kiritilmagan.</p>';return}
+  var h='<table class="tbl"><thead><tr><th>Turi</th><th>Devor</th><th class="n">Burchakdan</th><th class="n">Balandligi</th><th></th></tr></thead><tbody>';
+  S.pipes.forEach(function(p){
+    h+='<tr><td class="in"><select data-pp="'+p.id+'" data-pf="kind" style="width:auto">'+Object.keys(KINDS).map(function(k){return '<option value="'+k+'"'+(k===p.kind?' selected':'')+'>'+KINDS[k]+'</option>'}).join('')+'</select></td>'+
+    '<td class="in"><select data-pp="'+p.id+'" data-pf="wall" style="width:auto">'+['A','B','C','D'].map(function(w){return '<option value="'+w+'"'+(w===p.wall?' selected':'')+'>'+w+'</option>'}).join('')+'</select></td>'+
+    '<td class="in"><input class="w-num" data-pp="'+p.id+'" data-pf="x" type="number" step="10" value="'+Math.round(p.x)+'"></td>'+
+    '<td class="in"><input class="w-num" data-pp="'+p.id+'" data-pf="y" type="number" min="0" step="10" value="'+Math.round(p.y)+'"></td>'+
+    '<td class="in"><button class="btn sm danger" data-ppdel="'+p.id+'">O\'chirish</button></td></tr>'});
+  el.innerHTML=h+'</tbody></table>';
+}
+function updDimBtns(){var t=S.showDims?"O'lchamlarni yashirish":"O'lchamlarni ko'rsatish";var a=$('#b-dims1'),b=$('#b-dims2');if(a)a.textContent=t;if(b)b.textContent=S.showDims?"O'lchamlar ✓":"O'lchamlar";}
+function updateFree(){
+  var c=S.cur,T=TYPES[c.type],el=$('#pl-free'),w=S.curPlace.wall;
+  if(T.row==='free'){el.innerHTML="Qoplama devor bo'ylab joylashadi. Uzunlikni moslash uchun yuqoridagi «Uzunlikni devordagi pastki modullardan olish» tugmasidan foydalaning.";return}
+  var len=wallLen(w),used=0;
+  S.project.forEach(function(p){if(p.wall===w&&TYPES[p.m.type].row===T.row&&p.id!==S.editing)used+=p.m.W});
+  var free=len-used,after=free-c.W;
+  el.innerHTML='<b>'+WALLS[w]+'</b>: devor '+len+' mm. '+(T.row==='hang'?'Osma':'Pol')+' qatorida band '+used+' mm, bo\'sh <b>'+free+' mm</b>.<br>Bu blok '+c.W+' mm. Qo\'ygandan keyin: <b class="'+(after<0?'neg':'ok')+'">'+(after<0?('sig\'maydi, '+(-after)+' mm yetishmaydi'):(after+' mm bo\'sh qoladi'))+'</b>.';
+}
+function refreshRoomLight(skipSel){
+  $('#planBox').innerHTML=planSVG();renderWalls();renderRoomWarns();renderRoomTotals();if(skipSel!==true)renderSel();rebuildRoom(false);
+  var it=S.project.find(function(x){return x.id===S.selected});
+  $('#rcap').textContent=S.room.W+' × '+S.room.L+' × '+S.room.H+' mm'+(it?'  ·  '+it.m.name+': '+it.m.W+' × '+it.m.H+' × '+it.m.D:'');
+  $('#pcount').textContent=S.project.length;updDimBtns();
+}
+function renderRoomAll(){
+  ['W','L','H','pipeGap'].forEach(function(k){var el=$('#r-'+k);if(document.activeElement!==el)el.value=S.room[k]});
+  renderRoomList();renderPipes();refreshRoomLight();$('#b-undo').hidden=!S.undo;
+}
+function selectItem(id){
+  S.selected=id;$$('#roomList tr[data-row]').forEach(function(tr){tr.classList.toggle('sel',tr.dataset.row===id)});
+  refreshRoomLight();
+}
+function loadSample(){
+  S.room=Object.assign(S.room,{W:3400,L:2800,H:2700});S.project=[];
+  function mk(type,x,wall,o,off){var m=Object.assign(newCur(type),o||{});S.project.push({id:uid(),m:m,wall:wall||'A',x:x,off:off||0})}
+  mk('xolodilnik',0);
+  mk('antresol',0,'A',{name:'Antresol (xolodilnik usti)',W:600,H:500,D:620,elev:2200,frontCount:1});
+  mk('pastki',600,'A',{name:'Pastki shkaf 800'},60);
+  mk('moyka',1400,'A',{name:'Moyka shkafi 800'},80);
+  mk('plita',2200);
+  mk('stoleshnitsa',600,'A',{W:1600,name:'Stoleshnitsa (pastki + moyka)'});
+  mk('fartuk',600,'A',{W:2200,name:'Kafel fartuk'});
+  mk('yuqori',600,'A',{name:'Yuqori shkaf 800'});
+  mk('yuqori',1400,'A',{name:'Yuqori shkaf 800'});
+  mk('vityazhka',2200,'A',{name:'Vityajka 600'});
+  S.pipes=[{id:uid(),kind:'water',wall:'A',x:1700,y:550},{id:uid(),kind:'sewer',wall:'A',x:1760,y:250},{id:uid(),kind:'gas',wall:'A',x:2500,y:450}];
+  S.selected=null;S.undo=null;S.lastWall='A';save();renderRoomAll();rebuildRoom(true);
+}
+
+/* ---------- Hisob bo'limi ---------- */
+function renderProject(){
+  if(!S.project.length){
+    $('#projEmpty').hidden=false;$('#projBody').hidden=true;
+    $('#projEmpty').innerHTML='<div class="empty"><b>Hisoblanadigan narsa yo\'q</b>Xonaga kamida bitta blok qo\'shing.</div>';return;
+  }
+  $('#projEmpty').hidden=true;$('#projBody').hidden=false;
+  var a=agg(S.project),b=bom(a,S.set.mode);
+  $('#bomProj').innerHTML=bomHTML(b);$('#sumProj').innerHTML=sumHTML(b.tot,'Loyiha sotuv narxi');
+  $('#projHint').textContent=S.project.length+' blok · '+(S.set.mode==='cut'?'raskroy bo\'yicha':S.set.mode==='sheet'?'butun listlar bo\'yicha':'ishlatilgan maydon bo\'yicha');
+  $('#rkProj').innerHTML=rkHTML(a);
+  var sorted=a.parts.slice().sort(function(x,y){return x.mat<y.mat?-1:x.mat>y.mat?1:0});
+  $('#cutProj').innerHTML=partsHTML(sorted,true);
+}
+
+/* ---------- Voqealar ---------- */
+function setTab(t){
+  S.tab=t;['module','room','mats','project','saved'].forEach(function(k){$('#p-'+k).hidden=k!==t;$('#tab-'+k).setAttribute('aria-selected',k===t)});
+  if(t==='saved')renderSaved();if(t==='mats')renderMats();if(t==='project')renderProject();if(t==='room')renderRoomAll();
+  if(t==='module'&&EV&&EV.ok)EV.dirty=true;if(t==='room'&&RV&&RV.ok){RV.dirty=true;rebuildRoom(false)}
+  window.scrollTo(0,0);
+}
+$$('[data-tab]').forEach(function(b){b.addEventListener('click',function(){setTab(b.dataset.tab)})});
+
+var rebuildFit=false;
+$$('[data-k]').forEach(function(el){el.addEventListener('input',function(){
+  var k=el.dataset.k,c=S.cur;
+  if(el.type==='checkbox')c[k]=el.checked;else if(el.type==='number'){var n=parseFloat(el.value);if(isNaN(n))return;c[k]=n}else c[k]=el.value;
+  if(k==='type'){var d=TYPES[c.type],keep=c.extras;Object.assign(c,{W2:d.W2||d.W,cornerEnd:false,W:d.W,H:d.H,D:d.D,leg:d.leg||0,shelves:d.shelves||0,frontType:d.frontType||'door',frontCount:d.frontCount||2,plinth:!!d.plinth,rod:!!d.rod,elev:d.e0||0,price:d.price||0,incl:false,name:d.label+' '+d.W});
+    if(c.type==='antresol')c.elev=Math.max(0,S.room.H-d.H);c.extras=keep;ensureRefs(c);if(c.type==='maxsus'&&!(c.cparts||[]).length)c.cparts=stdParts(c);rebuildFit=true;fillSelects()}
+  save();refreshModule();if(rebuildFit){rebuildEditor(true);rebuildFit=false}
+})});
+$('#pl-wall').addEventListener('input',function(e){S.curPlace.wall=e.target.value;save();updateFree()});
+$('#pl-x').addEventListener('input',function(e){var n=parseFloat(e.target.value);S.curPlace.x=isNaN(n)?null:n;save()});
+$('#pl-off').addEventListener('input',function(e){var n=parseFloat(e.target.value);S.curPlace.off=isNaN(n)||n<0?0:n;save()});
+$('#p-module').addEventListener('click',function(e){var b=e.target.closest('button[data-off]');if(!b)return;S.curPlace.off=+b.dataset.off;$('#pl-off').value=S.curPlace.off||'';save()});
+$('#cp-list').addEventListener('input',function(e){
+  var el=e.target,i=el.dataset.cp;if(i==null)return;var p=(S.cur.cparts||[])[+i],f=el.dataset.cf;if(!p)return;
+  if(el.type==='number'){var n=parseFloat(el.value);p[f]=isNaN(n)?0:n}else p[f]=el.value;save();refreshModule();
+});
+$('#cp-list').addEventListener('click',function(e){var b=e.target.closest('button[data-cpdel]');if(!b)return;S.cur.cparts.splice(+b.dataset.cpdel,1);save();renderCParts();refreshModule()});
+$('#cp-add').addEventListener('click',function(){var pl=ofCat('plita');(S.cur.cparts=S.cur.cparts||[]).push({n:'Polka',o:'p',q:1,a:568,b:480,mat:pl.length?pl[0].id:'',la:1,lb:0});save();renderCParts();refreshModule()});
+$('#cp-std').addEventListener('click',function(){S.cur.cparts=stdParts(S.cur);save();renderCParts();refreshModule()});
+var tplArm=false,tplT;
+$('#tpl-save').addEventListener('click',function(){S.templates.push({id:uid(),name:String(S.cur.name||'Shablon'),m:JSON.parse(JSON.stringify(S.cur))});save();renderTpl();$('#tpl-sel').value=S.templates[S.templates.length-1].id;$('#tpl-hint').textContent='Shablon saqlandi.'});
+$('#tpl-load').addEventListener('click',function(){
+  var t=S.templates.find(function(x){return x.id===$('#tpl-sel').value});if(!t||!TYPES[t.m.type])return;
+  S.cur=Object.assign(newCur(t.m.type),JSON.parse(JSON.stringify(t.m)));S.editing=null;ensureRefs(S.cur);S.curPlace={wall:S.lastWall,x:null,off:0};save();fillSelects();refreshModule();rebuildEditor(true);
+});
+$('#tpl-del').addEventListener('click',function(e){
+  var id=$('#tpl-sel').value;if(!id)return;
+  if(!tplArm){tplArm=true;e.target.textContent='Aniqmi?';tplT=setTimeout(function(){tplArm=false;e.target.textContent="O'chirish"},3000);return}
+  clearTimeout(tplT);tplArm=false;e.target.textContent="O'chirish";S.templates=S.templates.filter(function(x){return x.id!==id});save();renderTpl();
+});
+$('#x-add').addEventListener('click',function(){var id=$('#x-sel').value,q=Math.max(1,parseInt($('#x-qty').value)||1);if(!id)return;
+  var ex=S.cur.extras.find(function(e){return e.id===id});if(ex)ex.qty+=q;else S.cur.extras.push({id:id,qty:q});save();refreshModule()});
+$('#x-list').addEventListener('click',function(e){var i=e.target.dataset.xdel;if(i==null)return;S.cur.extras.splice(+i,1);save();refreshModule()});
+$('#b-fetch').addEventListener('click',function(){
+  var w=S.curPlace.wall,its=S.project.filter(function(p){return p.wall===w&&['pastki','moyka','tumba','mashina'].indexOf(p.m.type)>=0&&p.id!==S.editing});
+  if(!its.length){$('#warns').innerHTML='<div class="warn"><b>Diqqat</b> · '+w+' devorda pastki modul yo\'q. Avval pastki shkaflarni xonaga qo\'shing.</div>';return}
+  var x0=Math.min.apply(null,its.map(function(p){return p.x})),x1=Math.max.apply(null,its.map(function(p){return p.x+p.m.W}));
+  S.cur.W=x1-x0;S.curPlace.x=x0;S.curPlace.off=Math.min.apply(null,its.map(function(p){return p.off||0}));save();refreshModule();
+});
+$('#b-add').addEventListener('click',function(){
+  var m=JSON.parse(JSON.stringify(S.cur)),pl=S.curPlace;if(!String(m.name).trim())m.name=TYPES[m.type].label;
+  if(S.editing){var it=S.project.find(function(x){return x.id===S.editing});if(it){it.m=m;it.wall=pl.wall;it.off=pl.off||0;if(pl.x!=null)it.x=pl.x;S.selected=it.id}S.editing=null}
+  else{var x=pl.x!=null?pl.x:autoX(m,pl.wall,null),id=uid();S.project.push({id:id,m:m,wall:pl.wall,x:x,off:pl.off||0});S.selected=id}
+  S.lastWall=pl.wall;S.curPlace={wall:pl.wall,x:null,off:pl.off||0};S.undo=null;S.cur=freshCur(S.cur);save();setTab('room');fillSelects();refreshModule();rebuildEditor(true);rebuildRoom(false);
+});
+function freshCur(prev){
+  var c=newCur(prev.type);
+  ['korpus','back','front','kK','kF'].forEach(function(k){if(M(prev[k]))c[k]=prev[k]});
+  if(TYPES[c.type].cls==='surf'&&M(prev.surfMat)&&M(prev.surfMat).unit===surfUnit(c.type))c.surfMat=prev.surfMat;
+  c.color=prev.color||c.color;ensureRefs(c);if(c.type==='maxsus')c.cparts=stdParts(c);return c;
+}
+$('#b-new-mod').addEventListener('click',function(){newBlock()});
+function leaveEdit(){S.editing=null;S.cur=freshCur(S.cur);S.curPlace={wall:S.lastWall,x:null,off:0};save();fillSelects();refreshModule();rebuildEditor(true)}
+$('#b-cancel').addEventListener('click',function(){leaveEdit();setTab('room')});
+function newBlock(){if(S.editing){S.editing=null}S.cur=freshCur(S.cur);S.curPlace={wall:S.lastWall,x:null,off:S.curPlace.off||0};save();fillSelects();refreshModule();rebuildEditor(true);setTab('module')}
+
+// Materiallar
+$('#p-mats').addEventListener('input',function(e){
+  var el=e.target;
+  if(el.dataset.mid){var x=M(el.dataset.mid);if(!x)return;var f=el.dataset.f;
+    if(el.type==='number'){var n=parseFloat(el.value);x[f]=isNaN(n)?0:n}else x[f]=el.value;
+    save();fillSelects();refreshModule();}
+  if(el.dataset.s){var k=el.dataset.s;if(el.type==='number'){var v=parseFloat(el.value);if(isNaN(v))return;S.set[k]=v}else S.set[k]=el.value;save();refreshModule()}
+});
+$('#p-mats').addEventListener('change',function(){DB.flush()});
+function toast(t,bad){
+  var el=$('#toast');if(!el){el=document.createElement('div');el.id='toast';el.setAttribute('role','status');document.body.appendChild(el)}
+  el.textContent=t;el.className='toast'+(bad?' bad':'');el.hidden=false;clearTimeout(el._t);el._t=setTimeout(function(){el.hidden=true},3500);
+}
+function addMat(cat){
+  try{
+    var base={plita:{name:'Yangi material',th:16,L:2800,W:2070,price:0,color:'#cdb892'},qoplama:{name:'Yangi qoplama',unit:'m',th:38,price:0,color:'#777777'},kromka:{name:'Yangi kromka',th:0.4,width:22,price:0},furn:{name:'Yangi furnitura',unit:'dona',price:0}}[cat];
+    if(!base)return;
+    var nm=Object.assign({id:uid(),cat:cat},base);S.mats.push(nm);
+    try{save();DB.flush()}catch(e1){}
+    renderMats();
+    try{fillSelects()}catch(e2){}
+    toast("Qo'shildi: pastdagi yangi qatorda nomini va narxini yozing");
+    var ni=document.querySelector('[data-mid="'+nm.id+'"][data-f="name"]');
+    if(ni){try{ni.scrollIntoView({block:'center'})}catch(x){}try{ni.focus();ni.select()}catch(x2){}}
+  }catch(err){toast('Qo\'shib bo\'lmadi: '+(err&&err.message||err),true)}
+}
+$$('[data-addcat]').forEach(function(b){b.addEventListener('click',function(e){e.preventDefault();addMat(b.dataset.addcat)})});
+$('#p-mats').addEventListener('click',function(e){
+  var b=e.target.closest?e.target.closest('button[data-mdel]'):null;if(!b)return;
+  var del=b.dataset.mdel;
+  try{S.mats=S.mats.filter(function(x){return x.id!==del});save();DB.flush();renderMats();fillSelects();refreshModule();toast("O'chirildi")}catch(err){toast("O'chirib bo'lmadi: "+(err&&err.message||err),true)}
+});
+var armed=false,armT;
+$('#b-reset').addEventListener('click',function(e){
+  if(!armed){armed=true;e.target.textContent='Aniq tiklaymi? Qayta bosing';armT=setTimeout(function(){armed=false;e.target.textContent="Namuna ro'yxatni qayta tiklash"},4000);return}
+  clearTimeout(armT);armed=false;e.target.textContent="Namuna ro'yxatni qayta tiklash";
+  S.mats=defMats();S.set=Object.assign(S.set,{eff:85,kz:10,labor:20,margin:30,mode:'cut',kerf:4,trim:10,rot:0,v:2});S.project.forEach(function(p){ensureRefs(p.m)});save();renderMats();fillSelects();refreshModule();
+});
+
+// Xona
+$('#p-room').addEventListener('input',function(e){
+  var el=e.target;
+  if(el.dataset.r){var n=parseFloat(el.value);if(isNaN(n)||n<0||(n===0&&el.dataset.r!=='pipeGap'))return;S.room[el.dataset.r]=n;save();refreshRoomLight();rebuildRoom(false)}
+  if(el.dataset.iname){var it=S.project.find(function(x){return x.id===el.dataset.iname});if(it){it.m.name=el.value;save();$('#planBox').innerHTML=planSVG()}}
+  if(el.dataset.ix){var it2=S.project.find(function(x){return x.id===el.dataset.ix}),n2=parseFloat(el.value);if(it2&&!isNaN(n2)){it2.x=n2;S.undo=null;$('#b-undo').hidden=true;save();refreshRoomLight()}}
+  if(el.dataset.ioff){var it4=S.project.find(function(x){return x.id===el.dataset.ioff}),n4=parseFloat(el.value);if(it4){it4.off=isNaN(n4)||n4<0?0:n4;save();refreshRoomLight()}}
+  if(el.dataset.pp){var pp=S.pipes.find(function(x){return x.id===el.dataset.pp});if(pp){var f=el.dataset.pf;if(el.type==='number'){var nn=parseFloat(el.value);if(isNaN(nn))return;pp[f]=nn}else pp[f]=el.value;save();refreshRoomLight()}}
+  if(el.id==='nudge-step'){nudgeStep=+el.value||10}
+  if(el.dataset.dim){var itd=S.project.find(function(x){return x.id===S.selected}),vd=parseFloat(el.value);if(itd&&!isNaN(vd)&&vd>=10){itd.m[el.dataset.dim]=vd;S.undo=null;save();renderRoomList();refreshRoomLight(true)}}
+  if(el.dataset.iwall){var it3=S.project.find(function(x){return x.id===el.dataset.iwall});if(it3){it3.wall=el.value;S.lastWall=el.value;S.undo=null;save();refreshRoomLight()}}
+});
+$('#p-room').addEventListener('click',function(e){
+  var t=e.target,btn=t.closest('button'),d=btn?btn.dataset:{};
+  if(d.cam&&RV&&RV.ok){var mx=Math.max(S.room.W,S.room.L,S.room.H)*0.001;
+    if(d.cam==='front'){RV.az=0;RV.el=0.25;RV.dist=mx*1.9}
+    if(d.cam==='iso'){RV.az=0.55;RV.el=0.55;RV.dist=mx*1.9}
+    if(d.cam==='top'){RV.az=0;RV.el=1.5;RV.dist=mx*1.8}
+    RV.dirty=true;return}
+  if(btn&&(btn.id==='b-newblock'||btn.id==='b-newblock2'))return newBlock();
+  if(btn&&btn.id==='b-sample')return loadSample();
+  if(btn&&btn.hasAttribute('data-dims')){S.showDims=!S.showDims;save();refreshRoomLight();return}
+  if(btn&&btn.id==='b-pipe'){S.pipes.push({id:uid(),kind:'water',wall:S.lastWall||'A',x:600,y:550});save();renderPipes();refreshRoomLight();return}
+  if(d.ppdel){S.pipes=S.pipes.filter(function(x){return x.id!==d.ppdel});save();renderPipes();refreshRoomLight();return}
+  if(d.op){var so=S.project.find(function(x){return x.id===S.selected});if(!so)return;applyOp(so,d.op,nudgeStep);S.undo=null;save();renderRoomList();refreshRoomLight();return}
+  if(d.nudge||d.setoff!==undefined){
+    var sel=S.project.find(function(x){return x.id===S.selected});if(!sel)return;
+    var step=nudgeStep;
+    if(d.nudge==='x-')sel.x=sel.x-step;if(d.nudge==='x+')sel.x=sel.x+step;
+    if(d.nudge==='o-')sel.off=Math.max(0,(sel.off||0)-step);if(d.nudge==='o+')sel.off=(sel.off||0)+step;
+    if(d.setoff!==undefined)sel.off=+d.setoff;
+    S.undo=null;save();renderRoomList();refreshRoomLight();return}
+  if(btn&&btn.id==='b-pack'){
+    S.undo=S.project.map(function(p){return {id:p.id,x:p.x}});var ends={};
+    S.project.slice().sort(function(a,b){return a.x-b.x}).forEach(function(it){var r=TYPES[it.m.type].row;if(r==='free')return;var k=it.wall+r;it.x=ends[k]||0;ends[k]=it.x+it.m.W});
+    save();renderRoomAll();return}
+  if(btn&&btn.id==='b-undo'){if(S.undo){S.undo.forEach(function(u){var it=S.project.find(function(p){return p.id===u.id});if(it)it.x=u.x});S.undo=null;save();renderRoomAll()}return}
+  if(d.iedit){var it=S.project.find(function(p){return p.id===d.iedit});if(!it)return;
+    S.cur=Object.assign(newCur(it.m.type),JSON.parse(JSON.stringify(it.m)));ensureRefs(S.cur);S.editing=it.id;S.selected=it.id;S.curPlace={wall:it.wall,x:it.x,off:it.off||0};save();setTab('module');fillSelects();refreshModule();rebuildEditor(true);return}
+  if(d.idup){var src=S.project.find(function(p){return p.id===d.idup});if(!src)return;
+    var m=JSON.parse(JSON.stringify(src.m));m.name=m.name+' (nusxa)';var nid=uid();
+    S.project.push({id:nid,m:m,wall:src.wall,x:autoX(m,src.wall,null),off:src.off||0});S.selected=nid;S.undo=null;save();renderRoomAll();return}
+  if(d.idel){
+    if(armedId!==d.idel){armedId=d.idel;clearTimeout(armedT);armedT=setTimeout(function(){armedId=null;if(S.tab==='room')renderRoomList()},3500);renderRoomList();return}
+    clearTimeout(armedT);armedId=null;S.project=S.project.filter(function(p){return p.id!==d.idel});if(S.editing===d.idel){S.editing=null}if(S.selected===d.idel)S.selected=null;S.undo=null;save();renderRoomAll();return}
+  var g=t.closest('[data-pid]');if(g){selectItem(g.dataset.pid);var row=$('#roomList tr[data-row="'+g.dataset.pid+'"]');if(row&&row.scrollIntoView)row.scrollIntoView({block:'nearest'});return}
+  var tr=t.closest('tr[data-row]');if(tr&&!t.closest('input,select,button'))selectItem(tr.dataset.row);
+});
+
+$('#b-copy').addEventListener('click',function(){
+  var a=agg(S.project),lines=['Blok\tDetal\tSoni\tUzunlik\tEni\tMaterial\tKromka, m'];
+  a.parts.forEach(function(p){var x=M(p.mat);lines.push([p.mod,p.name,p.qty,p.a,p.b,x?x.name:'',p.k?f2(p.qty*(p.la*p.a+p.lb*p.b)/1000):''].join('\t'))});
+  var txt=lines.join('\n'),msg=$('#copyMsg');
+  function done(ok){msg.textContent=ok?"Nusxa olindi. Excel yoki Google Sheets ga qo'ying.":"Nusxa olinmadi. Jadvalni qo'lda belgilab nusxalang."}
+  try{navigator.clipboard.writeText(txt).then(function(){done(true)},function(){done(false)})}catch(err){done(false)}
+});
+
+/* ---------- Loyihalar va mijoz havolasi ---------- */
+var BASE='https://claude.ai/artifact/TVzNvZS8K5ZgTPKAyEEbYo',SITE='https://jok-mebelloyiha.github.io/';
+var AB='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-';
+function b63e(bytes){
+  var out='';
+  for(var i=0;i<bytes.length;i+=5){
+    var n=0,k,d='',j;for(k=0;k<5;k++)n=n*256+(i+k<bytes.length?bytes[i+k]:0);
+    for(j=0;j<7;j++){d=AB.charAt(n%63)+d;n=Math.floor(n/63)}
+    out+=d;
+  }
+  return out;
+}
+function b63d(str,len){
+  var out=new Uint8Array(Math.ceil(len/5)*5);
+  for(var i=0,o=0;i<str.length;i+=7,o+=5){
+    var n=0,j,k;
+    for(j=0;j<7;j++){var v=AB.indexOf(str.charAt(i+j));if(v<0)throw new Error('bad');n=n*63+v}
+    for(k=4;k>=0;k--){out[o+k]=n%256;n=Math.floor(n/256)}
+  }
+  return out.slice(0,len);
+}
+async function pipeBytes(bytes,ts){return new Uint8Array(await new Response(new Blob([bytes]).stream().pipeThrough(ts)).arrayBuffer())}
+async function encodeShare(obj){
+  var raw=new TextEncoder().encode(JSON.stringify(obj)),bytes=raw,mode='0';
+  if(window.CompressionStream){try{bytes=await pipeBytes(raw,new CompressionStream('deflate-raw'));mode='1'}catch(e){bytes=raw;mode='0'}}
+  return 'mijoz'+mode+'-'+String(bytes.length).padStart(6,'0')+b63e(bytes);
+}
+async function decodeShare(h){
+  var mm=/^#?mijoz([01])-(\d{6})([0-9A-Za-z-]+)$/.exec(h);if(!mm)return null;
+  var bytes=b63d(mm[3],+mm[2]);
+  if(mm[1]==='1'){if(!window.DecompressionStream)throw new Error('decompress');bytes=await pipeBytes(bytes,new DecompressionStream('deflate-raw'))}
+  return JSON.parse(new TextDecoder().decode(bytes));
+}
+function clone(o){return JSON.parse(JSON.stringify(o))}
+function usedMatIds(project){
+  var u={};
+  project.forEach(function(it){var m=it.m;['korpus','back','front','surfMat','kK','kF'].forEach(function(k){if(m[k])u[m[k]]=1});(m.extras||[]).forEach(function(e){u[e.id]=1});(m.cparts||[]).forEach(function(p){if(p.mat)u[p.mat]=1})});
+  return u;
+}
+function curRecord(){
+  var u=usedMatIds(S.project);
+  return {name:(S.pname||'').trim()||'Nomsiz loyiha',room:clone(S.room),project:clone(S.project),pipes:clone(S.pipes),mats:clone(S.mats.filter(function(x){return u[x.id]}))};
+}
+/* Mijozga: narx, furnitura va qo'shimcha hisob-kitob yo'q */
+function sharePayload(rec){
+  var used={};
+  var items=rec.project.map(function(it){
+    var m=clone(it.m);delete m.extras;delete m.price;delete m.incl;delete m.sinkIncl;
+    ['korpus','back','front','surfMat'].forEach(function(k){if(m[k])used[m[k]]=1});(m.cparts||[]).forEach(function(p){if(p.mat)used[p.mat]=1});
+    return {id:it.id,m:m,wall:it.wall,x:it.x,off:it.off||0};
+  });
+  var src=(rec.mats&&rec.mats.length)?rec.mats:S.mats;
+  var mats=src.filter(function(x){return used[x.id]}).map(function(x){return {id:x.id,cat:x.cat,name:x.name,th:x.th,L:x.L,W:x.W,unit:x.unit,color:x.color,price:0}});
+  return {v:1,n:rec.name,r:{W:rec.room.W,L:rec.room.L,H:rec.room.H},i:items,p:rec.pipes||[],m:mats};
+}
+function pjMsg(t,bad){var el=$('#pjMsg');el.textContent=t;el.style.color=bad?'var(--bad)':''}
+async function saveProject(){
+  S.pname=$('#pj-name').value.trim()||'Nomsiz loyiha';
+  if(!S.project.length){pjMsg("Xona bo'sh. Avval bloklarni qo'shing.",true);return}
+  await PJ.load();
+  var rec=curRecord(),ex=PJ.list.find(function(x){return x.name===rec.name});
+  rec.id=ex?ex.id:uid();rec.ts=Date.now();S.pid=rec.id;
+  try{await PJ.put(rec);save();pjMsg((ex?'Yangilandi: ':'Saqlandi: ')+rec.name);renderSaved()}
+  catch(e){pjMsg("Saqlab bo'lmadi. Qayta urinib ko'ring.",true)}
+}
+function openProject(id){
+  var r=PJ.list.find(function(x){return x.id===id});if(!r)return;
+  (r.mats||[]).forEach(function(x){if(!M(x.id))S.mats.push(x)});
+  S.room=Object.assign({pipeGap:50},r.room);S.project=migrate(r.project);S.pipes=r.pipes||[];S.pname=r.name;S.pid=r.id;
+  S.selected=null;S.undo=null;S.editing=null;save();setTab('room');rebuildRoom(true);
+}
+var lastCode='',pjArm=null,pjArmT,newArm=false,newArmT,lastShare=null;
+async function renderSaved(){
+  if(document.activeElement!==$('#pj-name'))$('#pj-name').value=S.pname||'';
+  await PJ.load();
+  var h='';
+  if(!PJ.list.length)h='<div class="empty" style="padding:18px">Hali saqlangan loyiha yo\'q.<br>Xonani tayyorlab, nom yozing va «Saqlash» ni bosing.</div>';
+  else{
+    h='<table class="tbl"><thead><tr><th>Nomi</th><th class="n">Bloklar</th><th>Sana</th><th></th></tr></thead><tbody>';
+    PJ.list.forEach(function(r){
+      var arm=pjArm===r.id,dt=r.ts?new Date(r.ts).toLocaleDateString('ru-RU'):'';
+      h+='<tr class="pj-row"'+(r.id===S.pid?' style="background:var(--accent-soft)"':'')+'><td>'+esc(r.name)+'</td><td class="n">'+(r.project||[]).length+'</td><td>'+dt+'</td><td class="in"><div class="btns" style="flex-wrap:nowrap"><button class="btn sm" data-pjopen="'+r.id+'">Ochish</button><button class="btn sm" data-pjshare="'+r.id+'">Mijoz havolasi</button><button class="btn sm danger'+(arm?' armed':'')+'" data-pjdel="'+r.id+'">'+(arm?'Aniqmi?':"O'chirish")+'</button></div></td></tr>';
+    });
+    h+='</tbody></table>';
+  }
+  $('#pj-list').innerHTML=h;
+  $('#pjCount').textContent=DB.ok?'Akkauntingizda saqlanadi':"Faqat shu brauzerda saqlanadi";
+}
+async function showShare(rec){
+  var p=sharePayload(rec);lastShare=p;
+  var code=await encodeShare(p);
+  $('#pj-link').value=SITE+'#'+code;lastCode=code;$('#pj-sharebox').hidden=false;
+  $('#pj-tg').href='https://t.me/share/url?url='+encodeURIComponent(SITE+'#'+code)+'&text='+encodeURIComponent(rec.name||'Mebel loyihasi');
+  $('#pj-linkmsg').textContent='Tayyor. Havolani Telegramda yuboring yoki «Nusxa» ni bosing.';
+}
+$('#pj-save').addEventListener('click',saveProject);
+$('#pj-name').addEventListener('input',function(e){S.pname=e.target.value;save()});
+$('#pj-share').addEventListener('click',function(){if(!S.project.length){pjMsg("Xona bo'sh.",true);return}S.pname=$('#pj-name').value.trim();showShare(curRecord())});
+$('#pj-new').addEventListener('click',function(e){
+  if(!newArm){newArm=true;e.target.textContent='Aniqmi? Xona tozalanadi';newArmT=setTimeout(function(){newArm=false;e.target.textContent='Yangi loyiha'},3500);return}
+  clearTimeout(newArmT);newArm=false;e.target.textContent='Yangi loyiha';
+  S.project=[];S.pipes=[];S.pname='';S.pid=null;S.selected=null;S.undo=null;S.editing=null;save();$('#pj-name').value='';pjMsg('Yangi loyiha boshlandi.');renderSaved();
+});
+$('#pj-list').addEventListener('click',function(e){
+  var b=e.target.closest('button');if(!b)return;var d=b.dataset;
+  if(d.pjopen)openProject(d.pjopen);
+  else if(d.pjshare){var r=PJ.list.find(function(x){return x.id===d.pjshare});if(r)showShare(r)}
+  else if(d.pjdel){
+    if(pjArm!==d.pjdel){pjArm=d.pjdel;clearTimeout(pjArmT);pjArmT=setTimeout(function(){pjArm=null;renderSaved()},3500);renderSaved();return}
+    clearTimeout(pjArmT);pjArm=null;PJ.del(d.pjdel).then(function(){if(S.pid===d.pjdel){S.pid=null;save()}renderSaved()});
+  }
+});
+$('#pj-copy').addEventListener('click',function(){
+  var el=$('#pj-link');el.focus();el.select();
+  var ok=false;try{ok=document.execCommand('copy')}catch(e){}
+  if(!ok&&navigator.clipboard){try{navigator.clipboard.writeText(el.value);ok=true}catch(e2){}}
+  $('#pj-linkmsg').textContent=ok?'Havola nusxalandi.':'Nusxa olinmadi. Maydonni bosib, qo\'lda nusxalang.';
+});
+async function pageSource(){
+  try{var r=await fetch(location.href.split('#')[0]);var t=await r.text();if(t.indexOf('window.__CH||location.hash')>0)return t}catch(e){}
+  return '<!doctype html>\n'+document.documentElement.outerHTML.replace(/<canvas[^>]*><\/canvas>/g,'').replace(/<div id="toast"[^>]*>[^<]*<\/div>/,'');
+}
+$('#pj-file').addEventListener('click',async function(){
+  var msg=$('#pj-linkmsg');
+  try{
+    if(!lastCode){msg.textContent='Avval «Mijozga havola» ni bosing.';return}
+    var dl=window.claude&&claude.use?await claude.use('downloads'):null;
+    if(!dl){msg.textContent='Bu ko\'rinishda fayl saqlab bo\'lmaydi. Havola usulidan foydalaning.';return}
+    var src=await pageSource(),inj='<script>window.__CH='+JSON.stringify('#'+lastCode)+'<\/script>';
+    var doc=/<head[^>]*>/i.test(src)?src.replace(/<head[^>]*>/i,function(m){return m+'<meta name="viewport" content="width=device-width,initial-scale=1">'+inj}):'<!doctype html><html lang="uz"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'+inj+'</head><body>'+src+'</body></html>';
+    var nm=(S.pname||'Loyiha').replace(/[^A-Za-z0-9]+/g,'-').replace(/^-|-$/g,'')||'Loyiha';
+    await dl.save({filename:'Loyiha-'+nm+'.html',data:new Blob([doc],{type:'text/html'})});
+    msg.textContent='Fayl tayyor. Kompyuter brauzerida ochiladi (telefon Telegramida ishlamaydi).';
+  }catch(e){msg.textContent=(e&&e.code==='declined')?'Bekor qilindi.':'Fayl saqlanmadi: '+((e&&e.message)||e)}
+});
+/* ---------- PDF (Telegram uchun) ---------- */
+function pdfText(s){
+  return String(s==null?'':s).replace(/[‘’ʻʼ`´]/g,"'").replace(/[“”«»]/g,'"').replace(/[^\x20-\x7e\xa0-\xff]/g,'?').replace(/\\/g,'\\\\').replace(/\(/g,'\\(').replace(/\)/g,'\\)');
+}
+function b64bytes(u){var b=atob(u.split(',')[1]),a=new Uint8Array(b.length);for(var i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a}
+function buildPdf(d,imgs){
+  var R=d.r||{},items=(d.i||[]).filter(function(it){return it&&it.m&&TYPES[it.m.type]});
+  var pages=[],pg=null,IW=900,IH=600,w=515,h=Math.round(515*IH/IW);
+  function np(){pg={c:'',im:{}};pages.push(pg);return pg}
+  function tx(x,y,s,sz,b){pg.c+='BT /F'+(b?2:1)+' '+sz+' Tf '+x+' '+y+' Td ('+pdfText(s)+') Tj ET\n'}
+  function im(i,x,y){pg.im[i]=1;pg.c+='q '+w+' 0 0 '+h+' '+x+' '+y+' cm /Im'+i+' Do Q\n'}
+  var cap=['Umumiy ko\'rinish','Oldidan','Tepadan (reja)','Shaffof (ichki tuzilishi)','Eshiklar ochiq'];
+  np();tx(40,800,d.n||'Loyiha',22,true);
+  tx(40,780,'Xona: '+R.W+' x '+R.L+' x '+R.H+' mm   |   Bloklar: '+items.length,11,false);
+  var y=752;
+  imgs.forEach(function(_,i){
+    var top=(i<2)?(i===0?752:752-h-26):(i%2===0?790:790-h-26);
+    if(i>=2&&i%2===0)np();
+    if(i===2||i===4){y=790}
+    var yy=i<2?(i===0?752-h:752-h-26-h):(i%2===0?790-h:790-h-26-h);
+    tx(40,yy+h+6,cap[i]||'',9,false);im(i,40,yy);
+  });
+  if(!imgs.length)np();
+  // bloklar jadvali
+  var ly=800;if(imgs.length)np();else ly=740;
+  tx(40,ly,'Bloklar',13,true);ly-=20;
+  items.forEach(function(it,n){
+    if(ly<60){np();ly=800}
+    var m=it.m,sz=Math.round(m.W)+' x '+Math.round(m.H)+' x '+Math.round(m.D);
+    tx(40,ly,(n+1)+'. '+String(m.name||'').slice(0,40),9,false);tx(300,ly,TYPES[m.type].label.slice(0,30),9,false);tx(440,ly,'Devor '+it.wall+'   '+sz,9,false);ly-=14;
+  });
+  ly-=14;if(ly<120){np();ly=800}
+  tx(40,ly,'Materiallar',13,true);ly-=20;
+  (d.m||[]).forEach(function(x){
+    if(ly<60){np();ly=800}
+    tx(40,ly,String(x.name||'').slice(0,50),9,false);tx(330,ly,(x.th!=null?x.th+' mm':''),9,false);tx(400,ly,(x.L&&x.W?x.L+' x '+x.W+' mm':''),9,false);ly-=14;
+  });
+  // assemble
+  var parts=[],len=0,offs=[];
+  function put(x){if(typeof x==='string'){var u=new Uint8Array(x.length);for(var i=0;i<x.length;i++)u[i]=x.charCodeAt(i)&255;x=u}parts.push(x);len+=x.length}
+  function obj(id,fn){offs[id]=len;put(id+' 0 obj\n');fn();put('\nendobj\n')}
+  var nImg=imgs.length,base=5+nImg,total=4+nImg+pages.length*2;
+  put('%PDF-1.4\n');
+  obj(1,function(){put('<< /Type /Catalog /Pages 2 0 R >>')});
+  obj(2,function(){var k=[];pages.forEach(function(_,p){k.push((base+2*p+1)+' 0 R')});put('<< /Type /Pages /Kids ['+k.join(' ')+'] /Count '+pages.length+' >>')});
+  obj(3,function(){put('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>')});
+  obj(4,function(){put('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>')});
+  imgs.forEach(function(u,i){var b=b64bytes(u);obj(5+i,function(){put('<< /Type /XObject /Subtype /Image /Width '+IW+' /Height '+IH+' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length '+b.length+' >>\nstream\n');put(b);put('\nendstream')})});
+  pages.forEach(function(p,i){
+    var cid=base+2*i,pid=cid+1,xo=Object.keys(p.im).map(function(k){return '/Im'+k+' '+(5+(+k))+' 0 R'}).join(' ');
+    obj(cid,function(){put('<< /Length '+p.c.length+' >>\nstream\n'+p.c+'endstream')});
+    obj(pid,function(){put('<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents '+cid+' 0 R /Resources << /Font << /F1 3 0 R /F2 4 0 R >> /XObject << '+xo+' >> >> >>')});
+  });
+  var xr=len;put('xref\n0 '+(total+1)+'\n0000000000 65535 f \n');
+  for(var i=1;i<=total;i++)put(String(offs[i]).padStart(10,'0')+' 00000 n \n');
+  put('trailer\n<< /Size '+(total+1)+' /Root 1 0 R >>\nstartxref\n'+xr+'\n%%EOF');
+  var out=new Uint8Array(len),o=0;parts.forEach(function(p){out.set(p,o);o+=p.length});
+  return out;
+}
+function snapshots(d){
+  var out=[],host=document.createElement('div');
+  host.style.cssText='position:fixed;left:-10000px;top:0;width:900px;height:600px;pointer-events:none';document.body.appendChild(host);
+  var TV=makeViewer(host,false);
+  if(!TV.ok){host.remove();return out}
+  var bak={mats:S.mats,room:S.room,project:S.project,pipes:S.pipes,showDims:S.showDims,selected:S.selected,view:S.view,t:A.t};
+  try{
+    S.mats=d.m||[];S.room=Object.assign({W:3400,L:2800,H:2700,pipeGap:0},d.r);
+    S.project=(d.i||[]).filter(function(it){return it&&it.m&&TYPES[it.m.type]});S.pipes=d.p||[];S.showDims=true;S.selected=null;
+    TV.r.setSize(900,600,false);TV.cam.aspect=1.5;TV.cam.updateProjectionMatrix();TV.scene.background=new THREE.Color(0xe6e9e7);
+    var mx=Math.max(S.room.W,S.room.L,S.room.H)*0.001;
+    [['solid',0.55,0.5,1.9,0],['solid',0,0.25,1.9,0],['solid',0,1.5,1.8,0],['glass',0.55,0.5,1.9,0],['solid',0.55,0.5,1.9,1]].forEach(function(v){
+      S.view=v[0];A.t=v[4];buildRoomScene(TV,false,null);
+      TV.az=v[1];TV.el=v[2];TV.dist=mx*v[3];
+      var c=TV.cam,t=TV.target;
+      c.position.set(t.x+TV.dist*Math.cos(TV.el)*Math.sin(TV.az),t.y+TV.dist*Math.sin(TV.el),t.z+TV.dist*Math.cos(TV.el)*Math.cos(TV.az));c.lookAt(t);
+      TV.r.render(TV.scene,c);out.push(TV.r.domElement.toDataURL('image/jpeg',0.88));
+    });
+  }finally{
+    S.mats=bak.mats;S.room=bak.room;S.project=bak.project;S.pipes=bak.pipes;S.showDims=bak.showDims;S.selected=bak.selected;S.view=bak.view;A.t=bak.t;
+    try{TV.clear();TV.r.dispose()}catch(e){}host.remove();
+  }
+  return out;
+}
+$('#pj-pdf').addEventListener('click',async function(){
+  var msg=$('#pj-linkmsg');
+  try{
+    if(!lastShare){msg.textContent='Avval «Mijozga havola» ni bosing.';return}
+    var dl=window.claude&&claude.use?await claude.use('downloads'):null;
+    if(!dl){msg.textContent="Bu ko'rinishda fayl saqlab bo'lmaydi.";return}
+    msg.textContent='PDF tayyorlanmoqda…';await new Promise(function(r){setTimeout(r,50)});
+    var imgs=[];try{imgs=snapshots(lastShare)}catch(e){imgs=[]}
+    var bytes=buildPdf(lastShare,imgs),nm=(S.pname||'Loyiha').replace(/[^A-Za-z0-9]+/g,'-').replace(/^-|-$/g,'')||'Loyiha';
+    await dl.save({filename:'Loyiha-'+nm+'.pdf',data:new Blob([bytes],{type:'application/pdf'})});
+    msg.textContent=imgs.length?'PDF tayyor. Telegramda mijozga yuboring.':"PDF tayyor, lekin 3D rasmlar olinmadi (qurilma WebGL ni qo'llamadi). Bloklar va materiallar ro'yxati bor.";
+  }catch(e){msg.textContent=(e&&e.code==='declined')?'Bekor qilindi.':'PDF saqlanmadi: '+((e&&e.message)||e)}
+});
+if(window.__TEST)window.__pdf={buildPdf:buildPdf};
+$('#pj-view').addEventListener('click',function(){if(lastShare)enterClient(lastShare,true)});
+
+/* ---------- Mijoz ko'rinishi ---------- */
+var OWNER_BAK=null;
+function enterClient(d,fromOwner){
+  if(fromOwner)OWNER_BAK={mats:S.mats,room:S.room,project:S.project,pipes:S.pipes,pname:S.pname,showDims:S.showDims,selected:S.selected,tab:S.tab};
+  S.client=true;S.mats=d.m||[];S.room=Object.assign({W:3400,L:2800,H:2700,pipeGap:0},d.r);
+  S.project=(d.i||[]).filter(function(it){return it&&it.m&&TYPES[it.m.type]});S.pipes=d.p||[];S.selected=null;S.showDims=true;S.pname=d.n||'';
+  document.body.classList.add('cl-mode');
+  ['module','room','mats','project','saved'].forEach(function(k){$('#p-'+k).hidden=true});
+  $('#p-client').hidden=false;$('#cl-exit').hidden=!fromOwner;
+  renderClient(true);window.scrollTo(0,0);
+}
+function exitClient(){
+  if(!OWNER_BAK)return;var b=OWNER_BAK;OWNER_BAK=null;
+  S.client=false;S.mats=b.mats;S.room=b.room;S.project=b.project;S.pipes=b.pipes;S.pname=b.pname;S.showDims=b.showDims;S.selected=b.selected;
+  document.body.classList.remove('cl-mode');$('#p-client').hidden=true;setTab(b.tab||'saved');
+}
+function renderClient(fit){
+  var R=S.room,sel=S.project.find(function(x){return x.id===S.selected});
+  $('#cl-title').textContent=S.pname||'Loyiha';
+  $('#cl-sub').textContent='Xona '+R.W+' × '+R.L+' × '+R.H+' mm · '+S.project.length+' ta blok. 3D ko\'rinishni barmoq bilan aylantiring, ikki barmoq bilan yaqinlashtiring.';
+  $('#cplan').innerHTML=planSVG();
+  $('#ccap').textContent=sel?sel.m.name+': '+sel.m.W+' × '+sel.m.H+' × '+sel.m.D+' mm':R.W+' × '+R.L+' × '+R.H+' mm';
+  var h='<table class="tbl"><thead><tr><th>Nomi</th><th>Turi</th><th>Devor</th><th class="n">Eni × bo\'yi × ch., mm</th></tr></thead><tbody>';
+  S.project.forEach(function(it){var m=it.m;h+='<tr data-row="'+it.id+'"'+(it.id===S.selected?' class="sel"':'')+'><td>'+esc(m.name)+'</td><td>'+esc(TYPES[m.type].label)+'</td><td>'+it.wall+'</td><td class="n">'+Math.round(m.W)+'×'+Math.round(m.H)+'×'+Math.round(m.D)+'</td></tr>'});
+  $('#cblocks').innerHTML=h+'</tbody></table>';
+  var mh='<table class="tbl"><thead><tr><th>Material</th><th class="n">Qalinligi, mm</th><th class="n">List, mm</th></tr></thead><tbody>';
+  S.mats.forEach(function(x){mh+='<tr><td><span class="swatch" style="background:'+esc(x.color||'#ccc')+'"></span>'+esc(x.name)+'</td><td class="n">'+(x.th!=null?x.th:'')+'</td><td class="n">'+(x.L&&x.W?x.L+'×'+x.W:'')+'</td></tr>'});
+  $('#cmats').innerHTML=mh+'</tbody></table>';
+  rebuildClient(!!fit);
+}
+$('#cl-exit').addEventListener('click',exitClient);
+$('#p-client').addEventListener('click',function(e){
+  var b=e.target.closest('button[data-ccam]');
+  if(b&&CV&&CV.ok){var mx=Math.max(S.room.W,S.room.L,S.room.H)*0.001,c=b.dataset.ccam;
+    if(c==='front'){CV.az=0;CV.el=0.25;CV.dist=mx*1.9}if(c==='iso'){CV.az=0.55;CV.el=0.55;CV.dist=mx*1.9}if(c==='top'){CV.az=0;CV.el=1.5;CV.dist=mx*1.8}
+    CV.dirty=true;return}
+  var g=e.target.closest('[data-pid]'),tr=e.target.closest('tr[data-row]'),id=g?g.dataset.pid:tr?tr.dataset.row:null;
+  if(id){S.selected=S.selected===id?null:id;renderClient(false)}
+});
+
+/* ---------- Boshlash ---------- */
+var CH=window.__CH||location.hash;var isClient=/^#?mijoz[01]-/.test(CH);
+function refreshAll(){
+  fillSelects();refreshModule();rebuildEditor(true);renderRoomAll();renderMats();
+  $('#pj-name').value=S.pname||'';$('#pcount').textContent=S.project.length;updDimBtns();
+}
+$$('.vm').forEach(function(el){el.innerHTML=vmHTML()});
+CV=makeViewer($('#cview'),false);
+CV.onPick=function(id){S.selected=S.selected===id?null:id;renderClient(false)};
+if(isClient){
+  document.body.classList.add('cl-mode');setState('');
+  decodeShare(CH).then(function(d){
+    if(!d||!d.i)throw new Error('bad');enterClient(d,false);setView('solid');
+  }).catch(function(){
+    ['module','room','mats','project','saved'].forEach(function(k){$('#p-'+k).hidden=true});$('#p-client').hidden=false;
+    $('#cl-title').textContent='Havolani ochib bo\'lmadi';$('#cl-sub').textContent='Havola buzilgan yoki brauzeringiz uni qo\'llamaydi. Loyiha egasidan havolani qaytadan yuborishni so\'rang.';
+    $('#cview').parentNode.hidden=true;$('#cplan').parentNode.hidden=true;$('#cblocks').parentNode.hidden=true;$('#cmats').parentNode.hidden=true;
+  });
+}else{
+  EV=makeViewer($('#view'),true);RV=makeViewer($('#rview'),false);
+  RV.onPick=function(id){selectItem(id);var row=$('#roomList tr[data-row="'+id+'"]');if(row&&row.scrollIntoView)row.scrollIntoView({block:'nearest'})};
+  fillSelects();refreshModule();rebuildEditor(true);
+  $('#pcount').textContent=S.project.length;
+  updDimBtns();setView('solid');
+  if(S.project.length)setTab('room');
+  DB.init().then(function(ok){
+    if(!ok)return;
+    var first=S.tab==='module'||S.tab==='room';
+    refreshAll();
+    if(first&&S.tab==='module'&&S.project.length)setTab('room');
+    DB.sched();
+  });
+}
+syncAnimUI();
+})();
+</script>
+
+</body></html>
