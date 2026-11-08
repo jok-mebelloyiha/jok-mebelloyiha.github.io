@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="uz"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
-<script>if(!/^#mijoz/.test(location.hash))document.documentElement.className="nolink"</script><style>html.nolink body>*{display:none!important}html.nolink body:before{content:"Loyiha havolasi to'liq emas. Iltimos, yuborilgan havolani to'liq oching.";display:block;padding:40px 20px;font:16px sans-serif;text-align:center}</style>
+<script>if(!/^#mijoz/.test(location.hash))document.documentElement.className="nolink"</script><style>html.nolink body>*{display:none!important}html.nolink body:before{content:"Loyiha havolasi to'liq emas. Iltimos, yuborilgan havolani to'liq oching.";display:block;padding:40px 20px;font:16px sans-serif;text-align:center}html.qmode body>*:not(#qbox){display:none!important}html.qmode body{background:#f4f6f5}</style>
 </head><body>
 <title>Mebel loyihasi</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -489,7 +489,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
     <div class="sec-h"><h2>Mijozga yuborish</h2><span class="hint">Narxlar va sarflar yo'q</span></div>
     <p class="hint" style="margin:0 0 8px"><b>Asosiy usul:</b> havola (jok-mebelloyiha.github.io). Mijoz bosadi, akkauntsiz ochiladi, 3D ni aylantirib, eshiklarni ochib ko'radi. Narx yo'q. <b>Zaxira:</b> «PDF» (3D rasmlar va ro'yxat).</p>
     <div class="linkbox"><input id="pj-link" type="text" readonly><button class="btn sm" id="pj-copy" style="height:36px">Nusxa</button></div>
-    <div class="btns" style="margin-top:8px"><a class="btn pri" id="pj-tg" target="_blank" rel="noopener">Telegramda havola yuborish</a><button class="btn sm" id="pj-pdf">PDF tayyorlash (Telegram uchun)</button><button class="btn sm" id="pj-file">Interaktiv fayl (kompyuter uchun)</button><button class="btn sm" id="pj-view">Mijoz ko'rinishini ochish</button></div>
+    <div class="btns" style="margin-top:8px"><a class="btn pri" id="pj-short" target="_blank" rel="noopener">Qisqa havola olish</a><a class="btn sm" id="pj-tg" target="_blank" rel="noopener">Telegramda havola yuborish</a><button class="btn sm" id="pj-pdf">PDF tayyorlash (Telegram uchun)</button><button class="btn sm" id="pj-file">Interaktiv fayl (kompyuter uchun)</button><button class="btn sm" id="pj-view">Mijoz ko'rinishini ochish</button></div>
     
     <p class="hint" style="margin:8px 0 0" id="pj-linkmsg">Havolani mijozga yuboring. Mijoz telefonida loyihani 3D ko'rinishda aylantirib ko'radi, narxsiz. Mijoz ochishi uchun sahifani «Share» (ulashish) orqali ochiq qiling.</p>
   </div>
@@ -1831,9 +1831,10 @@ async function renderSaved(){
 async function showShare(rec){
   var p=sharePayload(rec);lastShare=p;
   var code=await encodeShare(p);
-  $('#pj-link').value=SITE+'#'+code;lastCode=code;$('#pj-sharebox').hidden=false;
+  $('#pj-link').value=SITE+'#'+code;lastCode=code;lastName=(rec.name||'Mebel loyihasi')+" — loyihani ko'rish";$('#pj-sharebox').hidden=false;
   $('#pj-tg').href='https://t.me/share/url?url='+encodeURIComponent(SITE+'#'+code)+'&text='+encodeURIComponent(rec.name||'Mebel loyihasi');
-  $('#pj-linkmsg').textContent='Tayyor. Havolani Telegramda yuboring yoki «Nusxa» ni bosing.';
+  $('#pj-short').href=SITE+'?q=1&n='+encodeURIComponent(rec.name||'')+'#'+code;
+  $('#pj-linkmsg').textContent='Tayyor. «Qisqa havola olish» ni bosing: yangi oynada qisqa havola chiqadi, o\'sha yerdan Telegramga yuborasiz.';
 }
 $('#pj-save').addEventListener('click',saveProject);
 $('#pj-name').addEventListener('input',function(e){S.pname=e.target.value;save()});
@@ -1852,6 +1853,14 @@ $('#pj-list').addEventListener('click',function(e){
     clearTimeout(pjArmT);pjArm=null;PJ.del(d.pjdel).then(function(){if(S.pid===d.pjdel){S.pid=null;save()}renderSaved()});
   }
 });
+var lastName='';
+async function copyRich(url,name){
+  var html='<a href="'+url.replace(/"/g,'&quot;')+'">'+name.replace(/</g,'&lt;')+'</a>';
+  try{if(navigator.clipboard&&window.ClipboardItem){await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([html],{type:'text/html'}),'text/plain':new Blob([url],{type:'text/plain'})})]);return true}}catch(e){}
+  var box=document.createElement('div');box.contentEditable='true';box.style.cssText='position:fixed;left:-9999px;top:0';box.innerHTML=html;document.body.appendChild(box);
+  var r=document.createRange();r.selectNodeContents(box);var sel=getSelection();sel.removeAllRanges();sel.addRange(r);
+  var ok=false;try{ok=document.execCommand('copy')}catch(e){}sel.removeAllRanges();box.remove();return ok;
+}
 $('#pj-copy').addEventListener('click',function(){
   var el=$('#pj-link');el.focus();el.select();
   var ok=false;try{ok=document.execCommand('copy')}catch(e){}
@@ -2048,6 +2057,51 @@ if(isClient){
   });
 }
 syncAnimUI();
+})();
+</script>
+
+<div id="qbox" hidden style="max-width:520px;margin:40px auto;padding:20px;font:16px/1.45 -apple-system,system-ui,sans-serif;color:#1d2321">
+<h2 style="margin:0 0 6px;font-size:22px">Mijozga yuborish</h2>
+<p id="q-name" style="margin:0 0 16px;color:#556"></p>
+<p id="q-msg" style="margin:0 0 12px">Qisqa havola tayyorlanmoqda…</p>
+<input id="q-url" readonly style="width:100%;box-sizing:border-box;font:15px monospace;padding:12px;border:1px solid #bbb;border-radius:8px;margin-bottom:12px" hidden>
+<div style="display:flex;flex-direction:column;gap:10px">
+<a id="q-tg" hidden style="display:block;text-align:center;background:#2a9d5c;color:#fff;padding:14px;border-radius:10px;text-decoration:none;font-weight:600">Telegramga yuborish</a>
+<button id="q-copy" hidden style="padding:14px;border-radius:10px;border:1px solid #2a9d5c;background:#fff;color:#2a9d5c;font:600 16px system-ui">Nusxa olish</button>
+<a id="q-view" style="text-align:center;color:#2a6;padding:8px">Loyihani o'zim ko'rib chiqay</a>
+</div></div>
+<script>
+(function(){
+  if(!/[?&]q=1/.test(location.search)||!/^#mijoz/.test(location.hash))return;
+  var full=location.origin+location.pathname+location.hash,box=document.getElementById('qbox');
+  document.documentElement.classList.add('qmode');box.hidden=false;
+  document.getElementById('q-view').href=full;
+  var nm='';try{nm=decodeURIComponent((location.search.match(/[?&]n=([^&]*)/)||[])[1]||'')}catch(e){}
+  document.getElementById('q-name').textContent=nm||'Mebel loyihasi';
+  function done(u){
+    var short=!!u;u=u||full;
+    var i=document.getElementById('q-url');i.value=u;i.hidden=false;
+    var t=document.getElementById('q-tg');t.href='https://t.me/share/url?url='+encodeURIComponent(u)+'&text='+encodeURIComponent((nm||'Mebel loyihasi')+" — loyihani ko'rish");t.hidden=false;
+    document.getElementById('q-copy').hidden=false;
+    document.getElementById('q-msg').textContent=short?'Qisqa havola tayyor:':"Qisqa havola olinmadi (internetni tekshiring). To'liq havola:";
+  }
+  document.getElementById('q-copy').onclick=function(){
+    var i=document.getElementById('q-url'),ok=false;
+    try{navigator.clipboard.writeText(i.value);ok=true}catch(e){}
+    if(!ok){i.focus();i.select();try{ok=document.execCommand('copy')}catch(e){}}
+    document.getElementById('q-msg').textContent=ok?'Nusxalandi.':"Maydonni bosib, qo'lda nusxalang.";
+  };
+  var srv=['https://is.gd/create.php','https://v.gd/create.php'],k=0,fin=false;
+  function tryOne(){
+    if(k>=srv.length){fin=true;done(null);return}
+    var cb='__qs'+k,s=document.createElement('script'),to=setTimeout(function(){cleanup();k++;tryOne()},8000);
+    function cleanup(){clearTimeout(to);try{delete window[cb]}catch(e){window[cb]=undefined}s.remove()}
+    window[cb]=function(r){cleanup();if(fin)return;if(r&&r.shorturl){fin=true;done(r.shorturl)}else{k++;tryOne()}};
+    s.onerror=function(){cleanup();k++;tryOne()};
+    s.src=srv[k]+'?format=json&callback='+cb+'&url='+encodeURIComponent(full);
+    document.head.appendChild(s);
+  }
+  tryOne();
 })();
 </script>
 
