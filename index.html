@@ -2145,7 +2145,7 @@ function buildGroup(m,mode,sel,V,holes){
   var fwood=!/mdf|emal|glyan|akril|bo'yoq/i.test(((M(m.front)||{}).name)||'');
   function mat(k){var o={color:col[k]||'#999999'};if(k==='gl'){o.transparent=true;o.opacity=glass?0.12:0.32;o.depthWrite=false}else if(glass&&!HW[k]){o.transparent=true;o.opacity=k==='a'?0.3:0.16;o.depthWrite=false}
     if(!HQ)return new THREE.MeshLambertMaterial(o);
-    var q=PBR[k]||[0.6,0,0];o.roughness=q[0];o.metalness=q[1];o.envMapIntensity=k==='gl'?1:0.55;
+    var q=PBR[k]||[0.6,0,0];o.roughness=q[0];o.metalness=q[1];o.envMapIntensity=k==='gl'?0.8:0.35;
     if((q[2]||(k==='f'&&fwood))&&!glass){o.map=grainTex();if(k==='f')o.roughness=0.6}
     return new THREE.MeshStandardMaterial(o)}
   function addBox(b,par,ox,oz){
@@ -2277,10 +2277,15 @@ function floorTex(t){
   var tx=new THREE.CanvasTexture(cv);tx.wrapS=tx.wrapT=THREE.RepeatWrapping;return tx;
 }
 var HQ=true;try{HQ=localStorage.getItem('mebel-hq')!=='0'}catch(e){}
+var HQB=0.85;try{var _hb=parseFloat(localStorage.getItem('mebel-hqb'));if(_hb>=0.3&&_hb<=1.6)HQB=_hb}catch(e){}
+function hqLight(V){if(!V||!V.r)return;var k=HQ?HQB:1;
+  try{if(HQ){V.r.toneMapping=THREE.ACESFilmicToneMapping;V.r.toneMappingExposure=0.95*k}else{V.r.toneMapping=THREE.NoToneMapping;V.r.toneMappingExposure=1}}catch(e){}
+  V.amb.intensity=HQ?0.36*k:0.78;V.d1.intensity=HQ?0.62*k:0.55;V.d2.intensity=HQ?0.12*k:0.22;V.dirty=true;
+  try{V.scene.traverse(function(o){var ms=o.material?(Array.isArray(o.material)?o.material:[o.material]):[];ms.forEach(function(mm){mm.needsUpdate=true})})}catch(e){}}
 function setHQ(V){
-  if(!V||!V.r||V.hq===HQ)return;V.hq=HQ;
+  if(!V||!V.r)return;if(V.hq===HQ){hqLight(V);return}V.hq=HQ;
   try{V.r.shadowMap.enabled=HQ;V.r.shadowMap.needsUpdate=true}catch(e){}
-  V.d1.castShadow=HQ;V.amb.intensity=HQ?0.5:0.78;V.d1.intensity=HQ?0.75:0.55;V.d2.intensity=HQ?0.18:0.22;
+  V.d1.castShadow=HQ;hqLight(V);
   V.scene.environment=HQ?V.env:null;V.dirty=true;
 }
 function fitLight(V,cx,cz,mx){
@@ -2340,12 +2345,13 @@ function setView(v){
   S.view=v;rebuildEditor(false);rebuildRoom(false);rebuildClient(false);
   $$('[data-vm]').forEach(function(b){b.classList.toggle('on',b.dataset.vm===v)});
 }
-function vmHTML(){return '<button class="btn sm" data-vm="solid">Oddiy</button><button class="btn sm" data-vm="nofront">Fasadsiz</button><button class="btn sm" data-vm="glass">Shaffof</button><button class="btn sm'+(HQ?' on':'')+'" data-hq title="Realistik materiallar va soyalar">✨ Realistik</button><span class="sp"></span><button class="btn sm" data-play>▶ Ochish / yopish</button><input type="range" min="0" max="100" value="0" data-anim aria-label="Eshik va tortmalarni ochish">'}
+function vmHTML(){return '<button class="btn sm" data-vm="solid">Oddiy</button><button class="btn sm" data-vm="nofront">Fasadsiz</button><button class="btn sm" data-vm="glass">Shaffof</button><button class="btn sm'+(HQ?' on':'')+'" data-hq title="Realistik materiallar va soyalar">✨ Realistik</button><label class="hint" data-hqbw style="display:'+(HQ?'inline-flex':'none')+';align-items:center;gap:4px;margin-left:4px" title="Realistik ko\'rinish yorug\'ligi">☀<input type="range" min="40" max="150" value="'+Math.round(HQB*100)+'" data-hqb aria-label="Yorug\'lik" style="width:90px"></label><span class="sp"></span><button class="btn sm" data-play>▶ Ochish / yopish</button><input type="range" min="0" max="100" value="0" data-anim aria-label="Eshik va tortmalarni ochish">'}
+document.addEventListener('input',function(e){var el=e.target;if(!el||!el.hasAttribute||!el.hasAttribute('data-hqb'))return;HQB=Math.max(0.3,Math.min(1.6,(+el.value||85)/100));try{localStorage.setItem('mebel-hqb',String(HQB))}catch(_e){}$$('[data-hqb]').forEach(function(x){if(x!==el)x.value=el.value});[EV,RV,CV,typeof DV!=='undefined'?DV:null].forEach(hqLight)});
 document.addEventListener('click',function(e){
   var b=e.target.closest('button');if(!b)return;
   if(b.dataset.vm){setView(b.dataset.vm);return}
   if(b.hasAttribute('data-hq')){HQ=!HQ;try{localStorage.setItem('mebel-hq',HQ?'1':'0')}catch(e){}
-    $$('[data-hq]').forEach(function(x){x.classList.toggle('on',HQ)});[EV,RV,CV].forEach(setHQ);rebuildEditor(false);rebuildRoom(false);if(S.client)rebuildClient(false);return}
+    $$('[data-hq]').forEach(function(x){x.classList.toggle('on',HQ)});$$('[data-hqbw]').forEach(function(x){x.style.display=HQ?'inline-flex':'none'});[EV,RV,CV,typeof DV!=='undefined'?DV:null].forEach(setHQ);rebuildEditor(false);rebuildRoom(false);if(S.client)rebuildClient(false);return}
   if(b.hasAttribute('data-play')){
     if(!A.play){A.play=true;A.target=1;A.hold=0}else{A.play=false;A.target=0}
     syncAnimUI();
