@@ -4482,10 +4482,13 @@ async function encodeShare(obj){
   if(window.CompressionStream){try{bytes=await pipeBytes(raw,new CompressionStream('deflate-raw'));mode='1'}catch(e){bytes=raw;mode='0'}}
   return 'mijoz'+mode+'-'+String(bytes.length).padStart(6,'0')+b63e(bytes);
 }
+/* eski telefonlar uchun: brauzer o'zi ocha olmasa, pako kutubxonasi bilan ochiladi */
+function loadPako(){return new Promise(function(res,rej){if(window.pako)return res(window.pako);var sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako_inflate.min.js';sc.onload=function(){window.pako?res(window.pako):rej(new Error('pako'))};sc.onerror=function(){rej(new Error('pako'))};document.head.appendChild(sc)})}
+async function inflateRawAny(bytes){if(window.DecompressionStream){try{return await pipeBytes(bytes,new DecompressionStream('deflate-raw'))}catch(e){}}var pk=await loadPako();return pk.inflateRaw(bytes)}
 async function decodeShare(h){
   var mm=/^#?mijoz([01])-(\d{6})([0-9A-Za-z-]+)$/.exec(h);if(!mm)return null;
   var bytes=b63d(mm[3],+mm[2]);
-  if(mm[1]==='1'){if(!window.DecompressionStream)throw new Error('decompress');bytes=await pipeBytes(bytes,new DecompressionStream('deflate-raw'))}
+  if(mm[1]==='1')bytes=await inflateRawAny(bytes);
   return JSON.parse(new TextDecoder().decode(bytes));
 }
 function clone(o){return JSON.parse(JSON.stringify(o))}
@@ -4809,7 +4812,7 @@ $('#pj-pdf').addEventListener('click',async function(){
     msg.textContent=imgs.length?'PDF tayyor. Telegramda mijozga yuboring.':"PDF tayyor, lekin 3D rasmlar olinmadi (qurilma WebGL ni qo'llamadi). Bloklar va materiallar ro'yxati bor.";
   }catch(e){msg.textContent=(e&&e.code==='declined')?'Bekor qilindi.':'PDF saqlanmadi: '+((e&&e.message)||e)}
 });
-if(window.__TEST){window.__pdf={buildPdf:buildPdf};window.__dbg={sharePayload:sharePayload,enterClient:enterClient,counterHoles:counterHoles,rectOf:rectOf,rmFixItem:rmFixItem,rmResolve:rmResolve,rmSpanOf:rmSpanOf,dWork:dWork,applyWork:applyWork,dzRoomItems:dzRoomItems,boxes3d:boxes3d,calc:calc,newCur:newCur,S:S,DZ:DZ,packSheets:packSheets,bzPanels:bzPanels,blockToPanels:blockToPanels,kpOpenings:kpOpenings}}
+if(window.__TEST){window.__pdf={buildPdf:buildPdf};window.__dbg={encodeShare:encodeShare,decodeShare:decodeShare,sharePayload:sharePayload,enterClient:enterClient,counterHoles:counterHoles,rectOf:rectOf,rmFixItem:rmFixItem,rmResolve:rmResolve,rmSpanOf:rmSpanOf,dWork:dWork,applyWork:applyWork,dzRoomItems:dzRoomItems,boxes3d:boxes3d,calc:calc,newCur:newCur,S:S,DZ:DZ,packSheets:packSheets,bzPanels:bzPanels,blockToPanels:blockToPanels,kpOpenings:kpOpenings}}
 $('#pj-view').addEventListener('click',function(){if(lastShare)enterClient(lastShare,true)});
 
 /* ---------- Mijoz ko'rinishi ---------- */
@@ -4859,6 +4862,7 @@ function renderClient(fit){
   if(!S.clBak){S.clBak={wallC:S.room.wallC,its:S.project.map(function(it){return [it.m.cfF,it.m.cfB,it.m.cfS]})}}
   $('#cl-colors').innerHTML=clColorsHTML();
   rebuildClient(!!fit);
+  if(!CV||!CV.ok){try{$('#cplan').parentNode.style.display='';$('#cblocks').parentNode.style.display='';$('#cl-colors').style.display='none'}catch(e){}}
 }
 $('#cl-exit').addEventListener('click',exitClient);
 $('#p-client').addEventListener('input',function(e){var el=e.target;if(el.dataset&&el.dataset.ccolp){clApply(el.dataset.ccolp,el.value)}});
@@ -4890,7 +4894,7 @@ if(isClient){
     if(!d||!d.i)throw new Error('bad');enterClient(d,false);setView('solid');
   }).catch(function(){
     ['module','room','mats','project','saved'].forEach(function(k){$('#p-'+k).hidden=true});$('#p-client').hidden=false;
-    $('#cl-title').textContent='Havolani ochib bo\'lmadi';$('#cl-sub').textContent='Havola buzilgan yoki brauzeringiz uni qo\'llamaydi. Loyiha egasidan havolani qaytadan yuborishni so\'rang.';
+    $('#cl-title').textContent='Havolani ochib bo\'lmadi';$('#cl-sub').textContent='Internet ulanganini tekshiring va sahifani yangilang. Telegram ichida ochilmasa, «⋯» → «Brauzerda ochish» (Chrome yoki Safari) ni bosing. Baribir ochilmasa, havola to\'liq nusxalanmagan bo\'lishi mumkin — loyiha egasidan qaytadan yuborishni so\'rang.';
     $('#cview').parentNode.hidden=true;$('#cplan').parentNode.hidden=true;$('#cblocks').parentNode.hidden=true;$('#cmats').parentNode.hidden=true;
   });
 }else{
