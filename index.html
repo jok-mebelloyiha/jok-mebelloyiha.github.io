@@ -94,6 +94,9 @@
 .xyz-sp{width:1px;height:18px;background:var(--line)}
 .xyz-h{color:var(--muted)}
 @media (max-width:820px){.dz-left{display:none!important}.dz.bzc .g-draw>button[data-tool]{display:inline-flex}.dz.bzc .g-draw{display:flex!important}.xyz-cur{display:none}}
+.dz-side .seg label{display:inline-flex;align-items:center;gap:4px;margin-right:8px}.dz-side .seg input[type=radio]{width:auto;height:auto;margin:0}
+.cl-ad{margin-top:10px;padding:10px 14px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#7a3a12);color:#fff;display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px}.cl-ad:empty{display:none}.cl-ad b{font-size:15px;letter-spacing:.01em}.cl-ad a{color:#fff;font:600 15px var(--font-mono);text-decoration:none;background:rgba(255,255,255,.16);padding:4px 10px;border-radius:8px;white-space:nowrap}.cl-ad a:hover{background:rgba(255,255,255,.28)}
+.dz-wnav{display:flex;align-items:center;gap:4px}.dz-wnav[hidden]{display:none!important}.dz-wnav svg{display:block;position:static!important;width:30px!important;height:30px!important;inset:auto}.dz-wnav .wn-l{font:11px var(--font-mono);color:var(--muted);white-space:nowrap}.dz-wnav .wn-l b{color:var(--accent)}
 .dz-status{padding:4px 12px;font-family:var(--font-mono);font-size:11.5px;color:var(--muted);border-top:1px solid var(--line);background:var(--surface);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .dz-list{max-height:260px;overflow:auto;border:1px solid var(--line);border-radius:8px}
 .dz-li{display:flex;justify-content:space-between;gap:8px;padding:5px 8px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--line)}
@@ -621,6 +624,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
   <div class="panel" id="pj-sharebox" hidden>
     <div class="sec-h"><h2>Mijozga yuborish</h2><span class="hint">Narxlar va sarflar yo'q</span></div>
     <p class="hint" style="margin:0 0 8px"><b>Asosiy usul:</b> havola (jok-mebelloyiha.github.io). Mijoz bosadi, akkauntsiz ochiladi, 3D ni aylantirib, eshiklarni ochib ko'radi. Narx yo'q. <b>Zaxira:</b> «PDF» (3D rasmlar va ro'yxat).</p>
+    <div class="r2" style="margin:0 0 8px"><label class="f">Mijoz ko'radigan reklama yozuvi<input id="pj-adt" type="text" placeholder="Ishonchingizni oqlashga harakat qilamiz!"></label><label class="f">Telefon<input id="pj-adp" type="tel" placeholder="+998 93 208 88 88"></label></div>
     <div class="linkbox"><input id="pj-link" type="text" readonly><button class="btn sm" id="pj-copy" style="height:36px">Nusxa</button></div>
     <div class="btns" style="margin-top:8px"><a class="btn pri" id="pj-short" target="_blank" rel="noopener">Qisqa havola olish</a><a class="btn sm" id="pj-tg" target="_blank" rel="noopener">Telegramda havola yuborish</a><button class="btn sm" id="pj-pdf">PDF tayyorlash (Telegram uchun)</button><button class="btn sm" id="pj-file">Interaktiv fayl (kompyuter uchun)</button><button class="btn sm" id="pj-view">Mijoz ko'rinishini ochish</button></div>
     
@@ -644,6 +648,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
   <div class="panel">
     <div class="sec-h"><h2 id="cl-title">Loyiha</h2><button class="btn sm" id="cl-exit" hidden>Muharrirga qaytish</button></div>
     <div class="hint" id="cl-sub"></div>
+    <div class="cl-ad" id="cl-ad"></div>
   </div>
   <div class="view-wrap">
     <div class="view" id="cview" aria-label="Xonaning 3D ko'rinishi"></div>
@@ -677,22 +682,22 @@ table.tbl{width:100%;border-collapse:collapse;font-size:13px}
 <div class="dz bzc" id="dz" hidden role="dialog" aria-label="Chizish oynasi"><div id="dz-ctx" class="dz-ctx" hidden role="menu"></div>
   <div class="dz-top">
     <div class="grp"><span class="cap">Ko'rinish</span><button class="btn sm" data-dz="room" id="dz-roomb" title="Xona o'lchamlari va xonadagi boshqa bloklarni fon sifatida ko'rsatish (Bazis kabi)">🏠<span class="tx"> Xona</span></button><button class="btn sm" data-view="F">Old</button><button class="btn sm" data-view="S">Chap</button><button class="btn sm" data-view="R">O'ng</button><button class="btn sm" data-view="B">Orqa</button><button class="btn sm" data-view="T">Tepadan</button><button class="btn sm" data-view="3">3D</button></div>
-    <div class="grp g-draw"><span class="cap">Chizish</span><button class="btn sm" data-tool="H" id="dz-tH" title="Gorizontal panel (P)">+<span class="tx"> Polka</span></button><button class="btn sm" data-tool="V" id="dz-tV" title="Vertikal panel (S)">+<span class="tx"> Stoyka</span></button><button class="btn sm" data-tool="R" title="To'rtburchak tortib panel chizish (R)">▭<span class="tx"> Panel</span></button>
+    <div class="grp dz-wnav" id="dz-wnav" hidden></div><div class="grp g-draw"><span class="cap">Chizish</span><button class="btn sm" data-tool="H" id="dz-tH" title="Gorizontal panel (P)">+<span class="tx"> Polka</span></button><button class="btn sm" data-tool="V" id="dz-tV" title="Vertikal panel (S)">+<span class="tx"> Stoyka</span></button><button class="btn sm" data-tool="R" title="To'rtburchak tortib panel chizish (R)">▭<span class="tx"> Panel</span></button>
       <label class="hint" style="display:flex;gap:4px;align-items:center" id="dz-wposw" hidden title="Yangi chiziladigan panelning chuqurlik bo'yicha joyi"><span id="dz-wl">Z</span>=<input id="dz-wpos" type="number" value="0" step="1" style="width:72px"></label>
       <button class="btn sm" data-tool="B" id="dz-libb" title="Tayyor va saqlangan bloklarni chizmaga qo'yish (B)">📦<span class="tx"> Bloklar</span></button>
       <button class="btn sm" data-tool="J" title="Ikki panelni qotirish: avval teshik o'tadigan panelni, keyin chetiga buraladigan panelni bosing (J)">🔩<span class="tx"> Qotirish</span></button><select id="dz-jf" style="width:auto" hidden><option value="konf">Yevrovint</option><option value="ekc">Eksentrik + shkant</option><option value="ekc1">Eksentrik (shkantsiz)</option><option value="shkant">Shkant</option><option value="pin">Polka tayanchi</option><option value="none">Qotirmaslik</option></select></div>
-    <div class="grp"><span class="cap">Tahrir</span><button class="btn sm" data-dz="undo" title="Orqaga qaytarish (Ctrl+Z)">↶</button><button class="btn sm" data-dz="redo" title="Oldinga qaytarish (Ctrl+Y)">↷</button><button class="btn sm" data-dz="merge" title="Bloklarni birlashtirish: xonada bloklarni Shift bilan bosib yoki ramka bilan belgilang (yoki bitta blok — qo'shnisi bilan)">⊕<span class="tx"> Birlashtirish</span></button><button class="btn sm" data-dz="dup" title="Nusxa (Ctrl+D)">⧉</button><button class="btn sm" data-dz="mir" title="Belgilangan panellarni (yoki butun chizmani) zerkalo qilib yoniga nusxalash (M)">⇋</button><button class="btn sm" data-dz="dist" title="Belgilangan polka yoki stoykalarni ikki chegara orasida teng taqsimlash (T)">≡</button><button class="btn sm" data-dz="furn" title="Furniturani almashtirish: yevrovint ↔ eksentrik, rolik ↔ tandem">🔁 Furnitura</button><button class="btn sm" data-dz="grp" title="Belgilanganlarni guruhlash / guruhdan chiqarish (Ctrl+G)">⛓</button><button class="btn sm" data-dz="hide" title="Belgilangan panellarni vaqtincha yashirish (Y)">🙈</button><button class="btn sm" data-dz="unhide" id="dz-unhide" hidden title="Yashirilgan panellarni qaytarish (Shift+Y)">👁</button><button class="btn sm danger" data-dz="del" title="O'chirish (Delete)">✕</button></div>
+    <div class="grp"><span class="cap">Tahrir</span><button class="btn sm" data-dz="undo" title="Orqaga qaytarish (Ctrl+Z)">↶</button><button class="btn sm" data-dz="redo" title="Oldinga qaytarish (Ctrl+Y)">↷</button><button class="btn sm" data-dz="merge" title="Bloklarni birlashtirish: xonada bloklarni Shift bilan bosib yoki ramka bilan belgilang (yoki bitta blok — qo'shnisi bilan)">⊕<span class="tx"> Birlashtirish</span></button><button class="btn sm" data-dz="brot" title="Belgilangan blokni aylantirish (burchak bloki 90°, oddiy blok — teskari)">↻</button><button class="btn sm" data-dz="dup" title="Nusxa (Ctrl+D)">⧉</button><button class="btn sm" data-dz="mir" title="Belgilangan panellarni (yoki butun chizmani) zerkalo qilib yoniga nusxalash (M)">⇋</button><button class="btn sm" data-dz="dist" title="Belgilangan polka yoki stoykalarni ikki chegara orasida teng taqsimlash (T)">≡</button><button class="btn sm" data-dz="furn" title="Furniturani almashtirish: yevrovint ↔ eksentrik, rolik ↔ tandem">🔁 Furnitura</button><button class="btn sm" data-dz="grp" title="Belgilanganlarni guruhlash / guruhdan chiqarish (Ctrl+G)">⛓</button><button class="btn sm" data-dz="hide" title="Belgilangan panellarni vaqtincha yashirish (Y)">🙈</button><button class="btn sm" data-dz="unhide" id="dz-unhide" hidden title="Yashirilgan panellarni qaytarish (Shift+Y)">👁</button><button class="btn sm danger" data-dz="del" title="O'chirish (Delete)">✕</button><button class="btn sm" data-dz="gclr" title="Barcha yordamchi chiziqlarni tozalash (yangi loyiha uchun)">🧹</button></div>
     <div class="grp"><span class="cap">Chiqarish</span><button class="btn sm" data-dz="rk" title="Shu chizma detallarining listga joylanishi (raskroy)">▦<span class="tx"> Raskroy</span></button><button class="btn sm" data-dz="dt" title="Har detalning o'lcham, teshik va kromka chizmasi">📄<span class="tx"> Chizmalar</span></button></div>
-    <div class="grp" style="margin-left:auto;border-right:0"><button class="btn sm" data-dz-act="tpl" title="Bo'lim tanlab, bloklarim ro'yxatiga saqlash">💾<span class="tx"> Bloklarimga</span></button><button class="btn sm" data-dz-act="add">Xonaga qo'shish</button><button class="btn sm" data-dz="bzsub" id="dz-bzsub" title="Qo'shimcha sozlamalar qatori: masshtab, setka, ko'rsatish">⚙</button><button class="btn sm" data-dz="bzc" id="dz-bzcb" title="Ixcham (Bazis uslubi) / to'liq yozuvli panel">▤</button><button class="btn pri sm" data-dz="close">Tayyor</button></div>
+    <div class="grp" style="margin-left:auto;border-right:0"><button class="btn sm" data-dz-act="tpl" title="Bo'lim tanlab, bloklarim ro'yxatiga saqlash">💾<span class="tx"> Bloklarimga</span></button><button class="btn sm" data-dz-act="add">Xonaga qo'shish</button><button class="btn sm" data-play="t" title="Harakat: 3D da tortmalar birin-ketin, keyin eshiklar ochilib-yopiladi">▶</button><button class="btn sm" data-dz="bzsub" id="dz-bzsub" title="Qo'shimcha sozlamalar qatori: masshtab, setka, ko'rsatish">⚙</button><button class="btn sm" data-dz="bzc" id="dz-bzcb" title="Ixcham (Bazis uslubi) / to'liq yozuvli panel">▤</button><button class="btn pri sm" data-dz="close">Tayyor</button></div>
   </div>
   <div class="dz-top dz-sub">
     <div class="grp"><span class="cap">Masshtab</span><button class="btn sm" data-dz="zout" aria-label="Kichraytirish">−</button><button class="btn sm" data-dz="zin" aria-label="Kattalashtirish">+</button><button class="btn sm" data-dz="fit" title="F">Sig'dirish</button></div>
     <div class="grp"><label class="hint" style="display:flex;gap:4px;align-items:center">Setka<select id="dz-grid" style="width:auto"><option value="auto" selected>Avto</option><option value="1">1 mm</option><option value="5">5 mm</option><option value="10">10 mm</option><option value="20">20 mm</option><option value="50">50 mm</option><option value="100">100 mm</option></select></label>
       <label class="hint" style="display:flex;gap:4px;align-items:center">Qadam<select id="dz-step" style="width:auto"><option value="1" selected>1 mm</option><option value="5">5 mm</option><option value="10">10 mm</option><option value="50">50 mm</option></select></label></div>
-    <div class="grp"><span class="cap">Ko'rsatish</span><label class="hint" style="display:flex;gap:4px;align-items:center"><input type="checkbox" id="dz-showf" checked> Fasadlar</label><label class="hint" style="display:flex;gap:4px;align-items:center"><input type="checkbox" id="dz-showb"> Orqa devor</label><label class="hint" style="display:flex;gap:4px;align-items:center"><input type="checkbox" id="dz-showj" checked> Qotirishlar</label><label class="hint" style="display:flex;gap:4px;align-items:center"><input type="checkbox" id="dz-showk" checked> Kromka</label><label class="hint" style="display:flex;gap:4px;align-items:center"><input type="checkbox" id="dz-shows" checked> Ochilish belgisi</label><button class="btn sm on" data-dz="gtog" id="dz-gtog" title="Yordamchi chiziqlarni ko'rsatish / yashirish (Shift+G emas, ┆ tugmasi)">┆<span class="tx"> Chiziqlar</span></button><button class="btn sm" data-dz="clean" id="dz-cleanb" title="Teshik, kromka va ochilish belgilarini birdan yashirish — tabiiy ko'rinish (C)">✨<span class="tx"> Toza ko'rinish</span></button></div>
+    <div class="grp"><span class="cap">Ko'rsatish</span><label class="hint" style="display:flex;gap:4px;align-items:center"><input type="checkbox" id="dz-showf" checked> Fasadlar</label><label class="hint" style="display:flex;gap:4px;align-items:center"><input type="checkbox" id="dz-showb"> Orqa devor</label><label class="hint" style="display:flex;gap:4px;align-items:center"><input type="checkbox" id="dz-showj" checked> Qotirishlar</label><label class="hint" style="display:flex;gap:4px;align-items:center"><input type="checkbox" id="dz-showk" checked> Kromka</label><label class="hint" style="display:flex;gap:4px;align-items:center"><input type="checkbox" id="dz-shows" checked> Ochilish belgisi</label><button class="btn sm on" data-dz="gtog" id="dz-gtog" title="Yordamchi chiziqlarni ko'rsatish / yashirish (Shift+G emas, ┆ tugmasi)">┆<span class="tx"> Chiziqlar</span></button><button class="btn sm" data-dz="gclr" title="Barcha yordamchi chiziqlarni tozalash">🧹<span class="tx"> Tozalash</span></button><button class="btn sm" data-dz="clean" id="dz-cleanb" title="Teshik, kromka va ochilish belgilarini birdan yashirish — tabiiy ko'rinish (C)">✨<span class="tx"> Toza ko'rinish</span></button></div>
     <div class="grp" style="border-right:0"><span class="cap">3D</span><button class="btn sm" data-m3="solid">Oddiy</button><button class="btn sm" data-m3="glass">Shaffof</button><button class="btn sm" data-m3="nofront">Fasadsiz</button><button class="btn sm" data-m3="wire" title="Karkas: faqat qirralar, tanlangan panel ko'k">Karkas</button><label class="hint" style="display:flex;gap:4px;align-items:center" title="Chizayotganda burchakda kichik 3D oyna"><input type="checkbox" id="dz-pip" checked> Oynacha</label><button class="btn sm" data-play>▶<span class="tx"> Ochish / yopish</span></button></div>
   </div>
-  <div class="dz-main"><div class="dz-left" id="dz-left" role="toolbar" aria-label="Asboblar"><button data-tool="sel" title="Tanlash (Esc)">↖<span>Tanla</span></button><button data-tool="H" title="Gorizontal panel — polka (P)">▬<span>Polka</span></button><button data-tool="V" title="Vertikal panel — stoyka (S)">▮<span>Stoyka</span></button><button data-tool="R" title="To'rtburchak tortib panel chizish (R)">▭<span>Panel</span></button><button data-tool="B" title="Tayyor bloklar (B)">📦<span>Blok</span></button><button data-tool="J" title="Qotirish (J)">🔩<span>Qotir</span></button><hr><button data-dz="dup" title="Nusxa (Ctrl+D)">⧉<span>Nusxa</span></button><button data-dz="mir" title="Zerkalo nusxa (M)">⇋<span>Zerkalo</span></button><button data-dz="dist" title="Teng taqsimlash (T)">≡<span>Taqsim</span></button><button data-dz="merge" title="Bloklarni birlashtirish">⊕<span>Birlash</span></button><button data-dz="grp" title="Guruhlash (Ctrl+G)">⛓<span>Guruh</span></button><button data-dz="del" class="dl-x" title="O'chirish (Delete)">✕<span>O'chir</span></button><hr><button data-view="F" title="Old ko'rinish">▣<span>Old</span></button><button data-view="3" title="3D ko'rinish">◈<span>3D</span></button><button data-m3="wire" title="3D karkas: faqat qirralar, tanlangan panel ko'k">⬚<span>Karkas</span></button><button data-dz="fit" title="Sig'dirish (F)">⤢<span>Sig'dir</span></button></div><div class="dz-cv" id="dz-cv"><svg id="dz-svg" xmlns="http://www.w3.org/2000/svg"></svg><div id="dz-3d" class="dz-3d" hidden></div><div id="dz-sv" class="dz-mv" hidden style="flex-wrap:wrap;max-width:94%"><span>Nomi:</span><input id="dz-svn" type="text" placeholder="Masalan: Stol 1400" style="width:170px"><span>Bo'lim:</span><select id="dz-svc" style="width:auto"><option value="pastki">Pastki bloklar</option><option value="orta">O'rta (osma) bloklar</option><option value="antresol">Antresol bloklar</option><option value="yotoq">Yotoqxona bloklari</option><option value="buyurtma">Buyurtmalar</option></select><button class="btn pri sm" id="dz-svok">Saqlash</button><button class="btn sm" id="dz-svx" aria-label="Bekor">✕</button></div><div id="dz-mv" class="dz-mv" hidden><span id="dz-mvl"></span><input id="dz-mvv" type="number" step="any"><button class="btn pri sm" id="dz-mvok">Surish</button><button class="btn sm" id="dz-mvx" aria-label="Bekor">✕</button></div></div><div class="dz-side" id="dz-side"></div></div>
+  <div class="dz-main"><div class="dz-left" id="dz-left" role="toolbar" aria-label="Asboblar"><button data-tool="sel" title="Tanlash (Esc)">↖<span>Tanla</span></button><button data-tool="H" title="Gorizontal panel — polka (P)">▬<span>Polka</span></button><button data-tool="V" title="Vertikal panel — stoyka (S)">▮<span>Stoyka</span></button><button data-tool="R" title="To'rtburchak tortib panel chizish (R)">▭<span>Panel</span></button><button data-tool="B" title="Tayyor bloklar (B)">📦<span>Blok</span></button><button data-tool="J" title="Qotirish (J)">🔩<span>Qotir</span></button><hr><button data-dz="dup" title="Nusxa (Ctrl+D)">⧉<span>Nusxa</span></button><button data-dz="mir" title="Zerkalo nusxa (M)">⇋<span>Zerkalo</span></button><button data-dz="dist" title="Teng taqsimlash (T)">≡<span>Taqsim</span></button><button data-dz="merge" title="Bloklarni birlashtirish">⊕<span>Birlash</span></button><button data-dz="grp" title="Guruhlash (Ctrl+G)">⛓<span>Guruh</span></button><button data-dz="del" class="dl-x" title="O'chirish (Delete)">✕<span>O'chir</span></button><button data-dz="gclr" title="Barcha yordamchi chiziqlarni tozalash">🧹<span>Chiziq</span></button><hr><button data-dz="brot" title="Belgilangan blokni aylantirish: burchak bloki — 90° burish; oddiy blok — chap-o'ng teskari">↻<span>Aylantir</span></button><button data-dz="wallL" title="Chapdagi devorga burilish">↶<span>Chapga</span></button><button data-dz="wallR" title="O'ngdagi devorga burilish (burchakdan keyin davom etish)">↷<span>O'ngga</span></button><button data-view="F" title="Old ko'rinish">▣<span>Old</span></button><button data-view="3" title="3D ko'rinish">◈<span>3D</span></button><button data-m3="wire" title="3D karkas: faqat qirralar, tanlangan panel ko'k">⬚<span>Karkas</span></button><button data-play="i" title="3D da eshik va tortmalarni ochib-yopib ko'rsatish">▶<span>Harakat</span></button><button data-dz="fit" title="Sig'dirish (F)">⤢<span>Sig'dir</span></button></div><div class="dz-cv" id="dz-cv"><svg id="dz-svg" xmlns="http://www.w3.org/2000/svg"></svg><div id="dz-3d" class="dz-3d" hidden></div><div id="dz-sv" class="dz-mv" hidden style="flex-wrap:wrap;max-width:94%"><span>Nomi:</span><input id="dz-svn" type="text" placeholder="Masalan: Stol 1400" style="width:170px"><span>Bo'lim:</span><select id="dz-svc" style="width:auto"><option value="pastki">Pastki bloklar</option><option value="orta">O'rta (osma) bloklar</option><option value="antresol">Antresol bloklar</option><option value="yotoq">Yotoqxona bloklari</option><option value="buyurtma">Buyurtmalar</option></select><button class="btn pri sm" id="dz-svok">Saqlash</button><button class="btn sm" id="dz-svx" aria-label="Bekor">✕</button></div><div id="dz-mv" class="dz-mv" hidden><span id="dz-mvl"></span><input id="dz-mvv" type="number" step="any"><button class="btn pri sm" id="dz-mvok">Surish</button><button class="btn sm" id="dz-mvx" aria-label="Bekor">✕</button></div></div><div class="dz-side" id="dz-side"></div></div>
   <div class="dz-xyz" id="dz-xyz"></div>
   <div class="dz-status" id="dz-status"></div>
 </div>
@@ -716,7 +721,7 @@ function defMats(){return [
  {id:'akr18w',cat:'plita',kind:'Akril',name:'Akril 18 mm oq gloss (fasad)',th:18,L:2800,W:1220,price:1650000,color:'#f6f6f3'},
  {id:'akr18g',cat:'plita',kind:'Akril',name:'Akril 18 mm kulrang gloss (fasad)',th:18,L:2800,W:1220,price:1650000,color:'#8d9196'},
  {id:'akr18b',cat:'plita',kind:'Akril',name:'Akril 18 mm qora gloss (fasad)',th:18,L:2800,W:1220,price:1650000,color:'#2b2d30'},
- {id:'hdf3',cat:'plita',name:'HDF 3 mm (orqa devor)',th:3,L:2800,W:2070,price:140000,color:'#a08c70'},
+ {id:'hdf3',cat:'plita',name:'HDF 3 mm (orqa devor)',th:3,L:2800,W:2070,price:140000,color:'#f3f2ee'},
  {id:'st38',cat:'qoplama',name:'Stoleshnitsa 38 mm (postforming)',unit:'m',th:38,price:380000,color:'#4d5258'},
  {id:'stq',cat:'qoplama',name:'Stoleshnitsa kvarts tosh',unit:'m',th:20,price:1500000,color:'#e2e2de'},
  {id:'kafel',cat:'qoplama',name:"Kafel fartuk (o'rnatish bilan)",unit:'m²',th:10,price:220000,color:'#a9c7cf'},
@@ -740,6 +745,11 @@ function defMats(){return [
  {id:'mixer',cat:'furn',role:'mixer',name:'Smesitel (kran)',price:250000,unit:'dona'},
  {id:'hob',cat:'furn',role:'hob',name:'Gaz panel (varochnaya, 4 konforka)',price:2500000,unit:'dona'},
  {id:'oven',cat:'furn',role:'oven',name:"Duxovka (o'rnatiladigan)",price:3500000,unit:'dona'},
+ {id:'mikro',cat:'furn',role:'mikro',name:"Mikroto'lqinli pech (o'rnatiladigan)",price:2500000,unit:'dona'},
+ {id:'pmash',cat:'furn',role:'pmash',name:"Idish yuvish mashinasi (o'rnatiladigan, 60 sm)",price:5500000,unit:'dona'},
+ {id:'fridgeB',cat:'furn',role:'fridgeB',name:"O'rnatiladigan xolodilnik (penal ichiga, 1780 nisha)",price:9000000,unit:'dona'},
+ {id:'kargo',cat:'furn',role:'kargo',name:"Kargo mexanizmi (3 qavatli savat, sekin yopiladigan)",price:900000,unit:'dona'},
+ {id:'sushilka',cat:'furn',role:'sushilka',name:"Idish quritgich (sushilka), 2 qavatli + tomchi tagligi",price:450000,unit:'dona'},
  {id:'alprof',cat:'furn',role:'alprof',name:'Alyumin profilli oyna eshik',price:1200000,unit:'m²'},
  {id:'golaL',cat:'furn',role:'golaL',name:'Gola L profil (yuqori)',price:120000,unit:'m'},
  {id:'golaC',cat:'furn',role:'golaC',name:'Gola C profil (oraliq)',price:140000,unit:'m'},
@@ -757,9 +767,12 @@ function defMats(){return [
 /* cls: cab (shkaf), surf (qoplama), app (texnika). row: floor / hang / free */
 var TYPES={
  pastki:{label:'Pastki shkaf',cls:'cab',base:true,row:'floor',offDef:80,W:800,H:820,D:480,leg:100,shelves:1,frontType:'door',frontCount:2,plinth:true},
+  kargo:{label:'Kargo (tortiladigan savat)',cls:'cab',base:true,row:'floor',offDef:80,cargo:true,W:300,H:820,D:480,leg:100,shelves:0,frontType:'drawer',frontCount:1,plinth:true},
  moyka:{label:'Moyka shkafi',cls:'cab',base:true,row:'floor',offDef:80,W:800,H:820,D:480,leg:100,shelves:0,frontType:'door',frontCount:2,plinth:true},
  yuqori:{label:'Yuqori shkaf',cls:'cab',hang:true,elev:true,row:'hang',W:800,H:720,D:320,leg:0,shelves:1,frontType:'door',frontCount:2,e0:1450},
+  sushilka:{label:'Sushilkali shkaf (moyka tepasiga)',cls:'cab',hang:true,elev:true,row:'hang',dryer:true,W:800,H:720,D:300,leg:0,shelves:0,frontType:'door',frontCount:2,e0:1450},
  antresol:{label:'Antresol',cls:'cab',hang:true,elev:true,row:'hang',W:800,H:450,D:580,leg:0,shelves:0,frontType:'door',frontCount:2,e0:2250},
+ penalX:{label:'Penal (ichiga xolodilnik)',cls:'cab',tall:true,row:'floor',fridge:true,W:600,H:2200,D:580,leg:100,shelves:1,frontType:'door',frontCount:1,plinth:true,nH:1780},
  shkaf:{label:'Baland shkaf',cls:'cab',tall:true,row:'floor',W:600,H:2200,D:580,leg:50,shelves:4,frontType:'door',frontCount:2,plinth:true,rod:true},
  tumba:{label:'Tumba',cls:'cab',row:'floor',W:450,H:500,D:400,leg:40,shelves:0,frontType:'drawer',frontCount:2},
  stoleshnitsa:{label:'Stoleshnitsa',cls:'surf',elev:true,row:'free',W:2000,H:38,D:600,e0:820},
@@ -786,16 +799,16 @@ var TYPES={
  maxsusA:{label:'Maxsus blok (antresol)',cls:'cab',custom:true,hang:true,elev:true,row:'hang',W:800,H:450,D:580,leg:0,shelves:0,frontType:'open',frontCount:1,e0:2250}
 };
 var KOPTS={
- oshxona:[['Shkaflar',[['pastki','Pastki shkaf'],['moyka','Moyka shkafi'],['yuqori','Yuqori shkaf'],['yuqori@sekret','Sekret vityajka shkafi'],['antresol','Antresol'],['shkaf','Baland shkaf (penal)'],['burchak','Burchak shkaf (pastki)'],['burchakY','Burchak shkaf (yuqori)'],['burchak45','Burchak 45° (pastki, qiya eshik)'],['burchak45Y','Burchak 45° (yuqori, qiya eshik)'],['burchak45A','Burchak 45° (antresol, qiya eshik)']]],['Ruchkasiz (Gola)',[['pastki@gola','Pastki shkaf (Gola, eshikli)'],['pastki@golaT','Pastki tortmali (Gola, 3 tortma)'],['moyka@gola','Moyka shkafi (Gola)'],['panel@gola','Gaz panel shkafi (Gola)'],['yuqori@gola','Yuqori shkaf (ruchkasiz)'],['burchak45@gola','Burchak 45° pastki (Gola)'],['burchak45Y@gola','Burchak 45° yuqori (ruchkasiz)']]],
+ oshxona:[['Shkaflar',[['pastki','Pastki shkaf'],['kargo','Kargo (tortiladigan savat)'],['moyka','Moyka shkafi'],['yuqori','Yuqori shkaf'],['sushilka','Sushilkali shkaf (moyka tepasiga)'],['yuqori@sekret','Sekret vityajka shkafi'],['antresol','Antresol'],['shkaf','Baland shkaf (penal)'],['penalX','Penal (ichiga xolodilnik)'],['penalX@gola','Penal (ichiga xolodilnik, ruchkasiz)'],['burchak','Burchak shkaf (pastki)'],['burchakY','Burchak shkaf (yuqori)'],['burchak45','Burchak 45° (pastki, qiya eshik)'],['burchak45Y','Burchak 45° (yuqori, qiya eshik)'],['burchak45A','Burchak 45° (antresol, qiya eshik)']]],['Ruchkasiz (Gola)',[['pastki@gola','Pastki shkaf (Gola, eshikli)'],['kargo@gola','Kargo (Gola, ruchkasiz, tortiladigan savat)'],['pastki@golaT','Pastki tortmali (Gola, 3 tortma)'],['moyka@gola','Moyka shkafi (Gola)'],['panel@gola','Gaz panel shkafi (Gola)'],['burchak@gola','Burchak shkaf pastki (Gola, ruchkasiz)'],['burchakY@gola','Burchak shkaf yuqori (ruchkasiz)'],['yuqori@gola','Yuqori shkaf (ruchkasiz)'],['sushilka@gola','Sushilkali shkaf (moyka tepasiga, ruchkasiz)'],['burchak45@gola','Burchak 45° pastki (Gola)'],['burchak45Y@gola','Burchak 45° yuqori (ruchkasiz)']]],
   ['Qoplama',[['stoleshnitsa','Stoleshnitsa'],['fartuk','Kafel fartuk']]],
-  ['Texnika',[['plita','Gaz plita (alohida turadigan)'],['panel',"Gaz panel (stoleshnitsaga o'yib o'rnatiladi)"],['xolodilnik','Xolodilnik'],['mashina','Idish yuvish mashinasi'],['vityazhka','Vityajka (gaz plita usti)'],['yuqori@sekret','Sekret vityajka shkafi (yashirin vityajka)'],['texnika','Boshqa texnika']]]],
+  ['Texnika',[['plita','Gaz plita (alohida turadigan)'],['panel',"Gaz panel (stoleshnitsaga o'yib o'rnatiladi)"],['panel@oven',"Gaz panel + duxovka (pastida)"],['xolodilnik','Xolodilnik'],['mashina','Idish yuvish mashinasi'],['vityazhka','Vityajka (gaz plita usti)'],['yuqori@sekret','Sekret vityajka shkafi (yashirin vityajka)'],['texnika','Boshqa texnika']]]],
  yotoqxona:[['Shkaflar',[['kupe','Shkaf-kupe (surma eshikli)'],['shkaf','Kiyim shkafi (ochiladigan eshikli)'],['antresol','Antresol'],['burchak','Burchak shkaf'],['burchak45A','Burchak 45° antresol']]],
   ['Yotoqxona mebeli',[['krovat','Karavot'],['tumba','Tumbochka (karavot yonida)'],['komod','Komod'],['polkaD','Devor polkasi (ochiq)']]],
   ['Texnika',[['texnika','Televizor va boshqa texnika']]]]
 };
 Object.keys(KOPTS).forEach(function(k){KOPTS[k].push(['Xona elementlari (narxga kirmaydi)',[['ustun','Ustun / shaxta / devor bo\'rtig\'i'],['korob','Quvur qutisi (korob)']]])});
 var KLABEL={oshxona:'Oshxona',yotoqxona:'Yotoqxona'};
-function golaOk(m){var T=TYPES[m.type];return !!(m.gola&&T&&T.cls==='cab'&&(!T.corner||T.diag)&&!T.custom&&!T.bed&&(T.base||T.hang)&&m.frontType!=='slide'&&m.frontType!=='oven')}
+function golaOk(m){var T=TYPES[m.type];return !!(m.gola&&T&&T.cls==='cab'&&!T.custom&&!T.bed&&(T.base||T.hang)&&m.frontType!=='slide'&&m.frontType!=='oven')}
 function fxPos(m,a,b){var L=b-a,o=m&&m.fxOff>0?m.fxOff:50,g=m&&m.fxGap>0?m.fxGap:650,r=[];if(L<60)return r;if(L<=150)return [(a+b)/2];var e=Math.min(o,L/4);r.push(a+e);r.push(b-e);var n=Math.floor((L-0.5)/g),sp=L-2*e;for(var i=1;i<=n;i++)r.push(a+e+sp*i/(n+1));return r}
 var TCAT=[['pastki','Pastki bloklar'],['orta',"O'rta (osma) bloklar"],['antresol','Antresol bloklar'],['yotoq','Yotoqxona bloklari'],['buyurtma','Buyurtmalar']];
 function tcatOf(t){return TCAT.some(function(c){return c[0]===t.cat})?t.cat:'buyurtma'}
@@ -807,7 +820,7 @@ function tplSave(name,cat){kpNormalize(S.cur);var m=JSON.parse(JSON.stringify(S.
   if(ex){ex.m=m}else{ex={id:uid(),name:name,cat:cat,m:m};S.templates.push(ex)}
   if(TYPES[S.cur.type].custom){var nt=tplType(ex);if(nt!==S.cur.type){S.cur.type=nt;if(nt==='maxsusY'&&!(S.cur.elev>0))S.cur.elev=1450;if(nt==='maxsusA')S.cur.elev=Math.max(0,S.room.H-S.cur.H);if(nt==='maxsus')S.cur.elev=0}}
   S.cur.tplId=ex.id;save();renderTpl();fillSelects();return ex}
-function typeVal(c){if(c.tplId&&S.templates.some(function(t){return t.id===c.tplId}))return 'tpl:'+c.tplId;var v=c.type;if(c.gola){var g=c.type+(c.frontType==='drawer'?'@golaT':'@gola'),ok=false;(KOPTS[S.kind]||KOPTS.oshxona).forEach(function(q){q[1].forEach(function(x){if(x[0]===g)ok=true})});if(!ok&&c.frontType==='drawer'){g=c.type+'@gola';(KOPTS[S.kind]||KOPTS.oshxona).forEach(function(q){q[1].forEach(function(x){if(x[0]===g)ok=true})})}if(ok)v=g}return v}
+function typeVal(c){if(c.tplId&&S.templates.some(function(t){return t.id===c.tplId}))return 'tpl:'+c.tplId;var v=c.type;if(!c.gola&&c.frontType==='oven'&&c.type==='panel')return 'panel@oven';if(c.gola){var g=c.type+(c.frontType==='drawer'?'@golaT':'@gola'),ok=false;(KOPTS[S.kind]||KOPTS.oshxona).forEach(function(q){q[1].forEach(function(x){if(x[0]===g)ok=true})});if(!ok&&c.frontType==='drawer'){g=c.type+'@gola';(KOPTS[S.kind]||KOPTS.oshxona).forEach(function(q){q[1].forEach(function(x){if(x[0]===g)ok=true})})}if(ok)v=g}return v}
 function kindTypes(k){var o=[];(KOPTS[k||S.kind]||KOPTS.oshxona).forEach(function(g){g[1].forEach(function(x){if(x[0].indexOf('@')<0)o.push(x[0])})});return o}
 function fillTypes(){
   var el=$('#f-type');if(!el)return;
@@ -868,9 +881,10 @@ function applyWork(j){
   if(typeof j.showDims==='boolean')S.showDims=j.showDims;
   if(j.curPlace)S.curPlace=Object.assign({wall:'A',x:null,off:0},j.curPlace);
   if(j.cur&&TYPES[j.cur.type])S.cur=Object.assign(newCur(j.cur.type),j.cur);
-  S.pname=j.pname||'';S.pid=j.pid||null;if(KOPTS[j.kind])S.kind=j.kind;S.placeDir=j.placeDir==='R'?'R':'L';S.drw=j.drw||null;S.kpe=j.kpe||null;S.rkMan=j.rkMan||null;S.dzRoom=!!j.dzRoom;S.editing=null;if(j.editing&&S.project.some(function(q){return q.id===j.editing}))S.editing=j.editing;else if(j.cur&&j.curPlace&&(j.cur.panels||[]).length){var _ed=(j.project||[]).find(function(q){return q.wall===j.curPlace.wall&&Math.abs(q.x-j.curPlace.x)<1&&q.m&&q.m.W===j.cur.W&&q.m.type===j.cur.type});if(_ed)S.editing=_ed.id}S.fixDef=j.fixDef==='ekc'||j.fixDef==='ekc1'?j.fixDef:'konf';
+  S.pname=j.pname||'';S.pid=j.pid||null;if(KOPTS[j.kind])S.kind=j.kind;S.placeDir=j.placeDir==='R'?'R':'L';S.drw=j.drw||null;S.kpe=j.kpe||null;S.rkMan=j.rkMan||null;S.dzRoom=!!j.dzRoom;S.editing=null;if(j.editing&&S.project.some(function(q){return q.id===j.editing}))S.editing=j.editing;else if(j.cur&&j.curPlace&&(j.cur.panels||[]).length){var _ed=(j.project||[]).find(function(q){return q.wall===j.curPlace.wall&&Math.abs(q.x-j.curPlace.x)<1&&q.m&&q.m.W===j.cur.W&&q.m.type===j.cur.type});if(_ed)S.editing=_ed.id}try{apMigrate()}catch(_e){}S.fixDef=j.fixDef==='ekc'||j.fixDef==='ekc1'?j.fixDef:'konf';
 }
 function mergeDefaults(){
+  if(!S.set.hdfW){S.set.hdfW=1;S.mats.forEach(function(x){if(x.cat==='plita'&&/hdf|dvp/i.test(x.name||'')&&(!x.color||/^#a08c70$/i.test(x.color)))x.color='#f3f2ee'})}
   defMats().forEach(function(d){if(d.role&&!S.mats.some(function(x){return x.id===d.id}))S.mats.push(d)});
   if(!S.set.seedAkr){S.set.seedAkr=1;defMats().forEach(function(d){if(/^akr/.test(d.id)&&!S.mats.some(function(x){return x.id===d.id}))S.mats.push(d)})}
 }
@@ -979,7 +993,8 @@ function calc0(m){
   var doors=0,drawers=0,fh=0,bd=0;
   if(T.custom&&m.cmode==='panel'){
     var grp={},nk=0,ne=0,he=0,he2=0,nLift=0,nSld=0,railM=0,aluA2=0,zrA=0,glA=0,divM=0;
-    (m.panels||[]).forEach(function(p){
+    var apN={};(m.panels||[]).forEach(function(p){
+      if(p.r==='ap'){apN[p.ap]=(apN[p.ap]||0)+1;return}
       var mat=p.mat||kpMat(m,p.r),la=p.r==='o'?0:(p.r==='e'||p.r==='f')?2:1,lb=(p.r==='e'||p.r==='f')?2:0;
       if(p.kr&&p.r!=='o'){var K=function(k){return p.kr[k]?1:0};if(p.o==='V'){la=K('z0')+K('z1');lb=K('y0')+K('y1')}else if(p.o==='H'){la=K('z0')+K('z1');lb=K('x0')+K('x1')}else{la=K('y0')+K('y1');lb=K('x0')+K('x1')}}
       var kk=(p.r==='e'||p.r==='f')?m.kF:p.r==='o'?null:m.kK;
@@ -995,7 +1010,7 @@ function calc0(m){
     var jc={};try{(bzPanels({m:m,wall:'A',x:0,off:0}).joints||[]).forEach(function(j){jc[j.f]=(jc[j.f]||0)+1})}catch(e){jc={K:4*Math.max(0,nk-1)}}
     var xf=function(role,q){var x=byRole(role);if(x&&q>0)fu[x.id]=(fu[x.id]||0)+q};
     xf('confirmat',jc.K||0);xf('ekc',jc.E||0);xf('shkant',jc.D||0);xf('shelfpin',jc.P||0);
-    if(aluA2){r.aluA=(r.aluA||0)+aluA2;F('alprof',Math.round(aluA2*100)/100)}F('figcut',(m.panels||[]).filter(function(p){return (p.arc&&p.arc.length)||(p.cuts||[]).some(function(c){return c.t&&c.t!=='f'&&c.a>0})}).length);F('kupe',nSld);F('kuperels',Math.round(railM*100)/100);F('zerkalo',Math.round(zrA*100)/100);F('oynamat',Math.round(glA*100)/100);F('kupeprof',Math.round(divM*100)/100);F('hinge',he);F('hinge2',he2);F('lift',nLift);F('handle',ne+ndg);F('slider',nRol);F('tandem',nTan);var nSh=(m.panels||[]).filter(function(p){return p.r==='f'&&p.dg&&p.ff==='shurup'}).length;if(nSh)F('shurup',nSh*4);
+    if(aluA2){r.aluA=(r.aluA||0)+aluA2;F('alprof',Math.round(aluA2*100)/100)}F('figcut',(m.panels||[]).filter(function(p){return (p.arc&&p.arc.length)||(p.cuts||[]).some(function(c){return c.t&&c.t!=='f'&&c.a>0})}).length);F('kupe',nSld);F('kuperels',Math.round(railM*100)/100);F('zerkalo',Math.round(zrA*100)/100);F('oynamat',Math.round(glA*100)/100);F('kupeprof',Math.round(divM*100)/100);F('hinge',he);F('hinge2',he2);Object.keys(apN).forEach(function(k){if(APR[k])F(APR[k],apN[k])});F('lift',nLift);F('handle',ne+ndg);F('slider',nRol);F('tandem',nTan);var nSh=(m.panels||[]).filter(function(p){return p.r==='f'&&p.dg&&p.ff==='shurup'}).length;if(nSh)F('shurup',nSh*4);
   }else if(T.custom){
     var hc=0,dc=0,gc=0,pc=0;
     (m.cparts||[]).forEach(function(p){if(p.q>0&&p.a>0&&p.b>0){add(p.n||'Detal',p.q,p.a,p.b,p.mat,p.la,p.lb,m.kK);
@@ -1019,8 +1034,14 @@ function calc0(m){
     add('Usti (1)',1,W,D,m.korpus,1,0,m.kK);add('Usti (2)',1,D,Math.max(0,W2-D),m.korpus,1,0,m.kK);
     if(shelves>0){add('Polka (1)',shelves,W-t,D-20,m.korpus,1,0,m.kK);add('Polka (2)',shelves,D-t,Math.max(0,W2-D-t),m.korpus,1,0,m.kK)}
     add('Orqa devor (A)',1,Hk-2,W-2,m.back,0,0,null);add('Orqa devor (D)',1,Hk-2,W2-2,m.back,0,0,null);
-    fh=Hk-3;if(cd2){doors=2;add('Eshik (1-tomon)',1,fh,Math.max(50,W-D-ft-5),m.front,2,2,m.kF);add('Eshik (2-tomon)',1,fh,Math.max(50,W2-D-3),m.front,2,2,m.kF)}
+    fh=golaOk(m)?(T.hang?Hk+18.5:Hk-32.5):Hk-3;if(cd2){doors=2;add('Eshik (1-tomon)',1,fh,Math.max(50,W-D-ft-5),m.front,2,2,m.kF);add('Eshik (2-tomon)',1,fh,Math.max(50,W2-D-3),m.front,2,2,m.kF)}
     else{doors=1;add('Eshik',1,fh,Math.max(50,W-D-3),m.front,2,2,m.kF)}
+  }else if(T.fridge){
+    var NH=m.nH||1780,iwx=W-2*t,topH=Math.max(100,Hk-3*t-NH),fzH=Math.round(NH*0.42);
+    add('Yon devor',2,Hk,D,m.korpus,2,1,m.kK);add('Tub',1,iwx,D,m.korpus,1,0,m.kK);add('Usti',1,iwx,D,m.korpus,1,0,m.kK);add('Nisha usti (xolodilnik tepasi)',1,iwx,D,m.korpus,1,0,m.kK);
+    if(shelves>0)add('Polka',shelves,iwx,D-20,m.korpus,1,0,m.kK);add('Orqa devor (tepa bo\'lim)',1,topH+2*t,W-2,m.back,0,0,null);if(m.plinth&&leg>0)add('Tsokol',1,W,leg-5,m.korpus,1,0,m.kK);
+    add('Xolodilnik fasadi (pastki)',1,fzH+t-3,W-3,m.front,2,2,m.kF);add('Xolodilnik fasadi (yuqori)',1,NH+t/2-fzH-3,W-3,m.front,2,2,m.kF);
+    doors=1;fh=Math.max(100,Hk-NH-t-3-t/2);add('Eshik (tepa bo\'lim)',1,fh,W-3,m.front,2,2,m.kF);
   }else if(T.bed){
     var rh=Math.min(400,H);
     add('Bosh tomoni',1,H,W,m.front,2,2,m.kF);
@@ -1062,12 +1083,12 @@ function calc0(m){
     var sn=Math.max(1,m.frontCount),sw=(W+(sn-1)*40)/sn;fh=Hk-50;
     add("Kupe eshigi (to'ldirma)",sn,fh-40,sw-30,m.front,0,0,null);r.slides=sn;
   }else if(m.frontType==='drawer'){
-    drawers=m.frontCount;fh=golaOk(m)&&T.base?(Hk-32.5-(drawers-1)*31)/drawers:(Hk-3*(drawers+1))/drawers;add('Tortma old qismi',drawers,W-3,fh,m.front,2,2,m.kF);
+    drawers=m.frontCount;fh=golaOk(m)&&T.base?(Hk-32.5-(drawers-1)*31)/drawers:(Hk-3*(drawers+1))/drawers;add(T.cargo?'Kargo fasadi':'Tortma old qismi',drawers,W-3,fh,m.front,2,2,m.kF);
     bd=Math.max(250,Math.floor((D-50)/50)*50);
     var hb=Math.max(80,Math.min(150,Math.round(fh-50))),bw=iw-26;
-    add('Tortma yoni ('+bd+')',2*drawers,bd,hb,m.korpus,1,0,m.kK);
+    if(!T.cargo){add('Tortma yoni ('+bd+')',2*drawers,bd,hb,m.korpus,1,0,m.kK);
     add('Tortma oldi/orqasi',2*drawers,bw-2*t,hb,m.korpus,1,0,m.kK);
-    add('Tortma tubi (HDF)',drawers,bd-2,bw-2,m.back,0,0,null);
+    add('Tortma tubi (HDF)',drawers,bd-2,bw-2,m.back,0,0,null);}
   }
   }
   r.parts.forEach(function(p){
@@ -1077,8 +1098,8 @@ function calc0(m){
   if(T.bed){F('confirmat',16);F('foot',6)}
   else if(!T.custom){
   F('kupe',r.slides||0);
-  F('hinge',doors*hingesFor(fh));F('handle',golaOk(m)?0:doors+drawers);F('slider',drawers);
-  if(golaOk(m)&&T.base){F('golaL',Math.round(T.diag?Math.hypot(W-D,(m.W2||W)-D):W)/1000);if(m.frontType==='drawer'&&drawers>1)F('golaC',Math.round(W*(drawers-1))/1000)}
+  F('hinge',doors*hingesFor(fh));F('handle',golaOk(m)||(T.fridge&&m.gola)?0:doors+drawers+(T.fridge?2:0));if(T.fridge)F('fridgeB',1);F('slider',T.cargo?0:drawers);if(T.cargo)F('kargo',drawers);if(T.dryer)F('sushilka',1);
+  if(golaOk(m)&&T.base){F('golaL',Math.round(T.diag?Math.hypot(W-D,(m.W2||W)-D):T.corner?(W-D)+((m.W2||W)-D):W)/1000);if(m.frontType==='drawer'&&drawers>1)F('golaC',Math.round(W*(drawers-1))/1000)}
   if(m.shelfFix==='konf'&&!T.corner)F('confirmat',4*shelves);else F('shelfpin',4*shelves);if(leg>0)F('foot',T.corner?5:(W>900?6:4));
   F('confirmat',T.corner?10:(T.base?8:12));
   if(m.rod&&(m.type==='shkaf'||m.type==='kupe')){var rq=m.type==='kupe'?1:Math.max(1,Math.ceil(W/1000));F('rod',rq);F('rodholder',2*rq)}
@@ -1279,15 +1300,15 @@ function dzRoomClamp(quiet){if(!DZ.room)return false;var m=S.cur,ps=m.panels||[]
 /* --- o'ng tugma menyusi --- */
 function dzCtxMenu(cx,cy,t,pt){var it=[],add=function(lab,attr,cls){it.push('<button class="dz-cxi'+(cls?' '+cls:'')+'" '+attr+'>'+lab+'</button>')},sep=function(){it.push('<div class="dz-cxs"></div>')};
   DZ.ctxPt=pt;
-  if(t.p){if(DZ.sel.indexOf(t.p)<0){DZ.sel=dzGrpOf(t.p);kpSel=t.p;DZ.gsel=null;DZ.forceSide=true;dzRender()}var so=DZ.sel.length>1?dzSelOpening():null,pn=dzGet(t.p);
+  if(t.p){if(DZ.sel.indexOf(t.p)<0){DZ.sel=dzGrpOf(t.p);kpSel=t.p;DZ.gsel=null;DZ.forceSide=true;dzRender()}var so=DZ.sel.length>1?dzSelOpening():null,soV=!so&&DZ.sel.length>1?dzSelOpening(true):null,pn=dzGet(t.p);
     it.push('<div class="dz-cxh">'+esc(DZ.sel.length>1?DZ.sel.length+' ta panel':(pn?pn.n:'Panel'))+'</div>');
-    if(so){add('▤ Tortma qo\'yish','data-dzs="T"');add('🚪 Eshik','data-dzs="E1"');add('🚪🚪 2 eshik','data-dzs="E2"');add('▭ Polka','data-dzs="H"');sep()}
+    if(so){add('▤ Tortma qo\'yish','data-dzs="T"');add('🚪 Eshik','data-dzs="E1"');add('🚪🚪 2 eshik','data-dzs="E2"');add('▭ Polka','data-dzs="H"');add('🧊 Xolodilnik qo\'yish','data-dzs="AP:fridge"');add('♨ Duxovka qo\'yish','data-dzs="AP:oven"');add('📻 Mikroto\'lqin','data-dzs="AP:mw"');add('🍽 Idish yuvish mashinasi','data-dzs="AP:dw"');sep()}else if(soV){add('🧊 Xolodilnik qo\'yish','data-dzs="AP:fridge"');add('♨ Duxovka qo\'yish','data-dzs="AP:oven"');add('📻 Mikroto\'lqin','data-dzs="AP:mw"');add('🍽 Idish yuvish mashinasi','data-dzs="AP:dw"');sep()}
     add('⧉ Nusxa','data-dza="dup"');add('⇋ Zerkalo nusxa','data-dza="mir"');if(DZ.sel.length>1)add('≡ Teng taqsimlash','data-dza="dist"');add('🙈 Yashirish','data-dz="hide"');
     if(DZ.sel.length===1){sep();add('┃ Chiziq: chap qirradan','data-gp="l"');add('┃ Chiziq: o\'ng qirradan','data-gp="r"');add('━ Chiziq: tepadan','data-gp="t"');add('━ Chiziq: pastdan','data-gp="b"')}
     sep();add('🔩 Yevrovint bilan','data-fxs="konf"');add('🔩 Eksentrik bilan','data-fxs="ekc1"');add('▭ Polka tayanchi (derjatel)','data-fxs="pin"');sep();add('🔁 Furnitura','data-dz="furn"');add('✕ O\'chirish','data-dza="del"','dng')}
   else if(t.rmi&&(DZ.rmSels||[]).length>1&&DZ.rmSels.indexOf(t.rmi)>=0){it.push('<div class="dz-cxh">'+DZ.rmSels.length+' ta blok belgilangan</div>');add('⊕ Birlashtirish (bitta blok qilish)','data-dz="merge"');sep();add('✕ Hammasini o\'chirish','data-dz="rmdelsel"','dng')}
   else if(t.rmi){var ri=S.project.find(function(q){return q.id===t.rmi});DZ.rmSel=t.rmi;DZ.rmSels=[t.rmi];DZ.forceSide=true;dzRender();it.push('<div class="dz-cxh">'+esc(ri?ri.m.name||'Blok':'Blok')+'</div>');if(ri&&dzMergeNb(ri))add('⊕ Qo\'shni blok bilan birlashtirish','data-dz="merge"');
-    add('✏ Panellarda tahrirlash','data-rma="edit" data-id="'+t.rmi+'"');if(dzSplitOk(ri))add('⊘ Ajratish (alohida bloklarga)','data-rma="split" data-id="'+t.rmi+'"');if(ri&&ri.m.cmode==='panel'&&/\+|O'rta stoyka/.test(ri.m.name+JSON.stringify((ri.m.panels||[]).map(function(q){return q.n}))))add('🔧 Birlashuvni tuzatish (plankalar yaxlit)','data-rma="rejoin" data-id="'+t.rmi+'"');if(ri&&TYPES[ri.m.type]&&!TYPES[ri.m.type].custom)add('⚙ Modulda sozlash','data-rma="modul" data-id="'+t.rmi+'"');add('⧉ Yoniga nusxa','data-rma="dupnext" data-id="'+t.rmi+'"');add('+ Yonidan yangi blok','data-rma="newnext" data-id="'+t.rmi+'"');sep();add('✕ Xonadan o\'chirish','data-rma="del" data-id="'+t.rmi+'"','dng')}
+    if(ri&&TYPES[ri.m.type]&&!TYPES[ri.m.type].corner&&!TYPES[ri.m.type].obst&&TYPES[ri.m.type].cls!=='surf'){add('⇋ Teskari qilish (zerkalo)','data-rma="bmir" data-id="'+t.rmi+'"')}if(ri&&TYPES[ri.m.type]&&TYPES[ri.m.type].corner){add('↻ Burchakni aylantirish (90°)','data-rma="crot" data-id="'+t.rmi+'"');add('⇋ Boshqa burchakka o\'tkazish','data-rma="cflip" data-id="'+t.rmi+'"');sep()}    add('✏ Panellarda tahrirlash','data-rma="edit" data-id="'+t.rmi+'"');if(dzSplitOk(ri))add('⊘ Ajratish (alohida bloklarga)','data-rma="split" data-id="'+t.rmi+'"');if(ri&&ri.m.cmode==='panel'&&/\+|O'rta stoyka/.test(ri.m.name+JSON.stringify((ri.m.panels||[]).map(function(q){return q.n}))))add('🔧 Birlashuvni tuzatish (plankalar yaxlit)','data-rma="rejoin" data-id="'+t.rmi+'"');if(ri&&TYPES[ri.m.type]&&!TYPES[ri.m.type].custom)add('⚙ Modulda sozlash','data-rma="modul" data-id="'+t.rmi+'"');add('⧉ Yoniga nusxa','data-rma="dupnext" data-id="'+t.rmi+'"');add('+ Yonidan yangi blok','data-rma="newnext" data-id="'+t.rmi+'"');sep();add('✕ Xonadan o\'chirish','data-rma="del" data-id="'+t.rmi+'"','dng')}
   else if(t.g){DZ.gsel=t.g;DZ.sel=[];DZ.forceSide=true;dzRender();var gg=(S.cur.guides||[]).find(function(x){return x.id===t.g}),vt=gg&&gg.ax===DZV[DZ.view].u,st=DZ.gstep||600;it.push('<div class="dz-cxh">Yordamchi chiziq</div>');
     if(vt){add('⟵ '+st+' mm chapga','data-gof="-1"');add('⟶ '+st+' mm o\'ngga','data-gof="1"')}else{add('⟰ '+st+' mm tepaga','data-gof="1"');add('⟱ '+st+' mm pastga','data-gof="-1"')}add('✎ Qiymatini yozish','data-gmv="1"');sep();add('✕ O\'chirish','data-gdel="'+t.g+'"','dng')}
   else{it.push('<div class="dz-cxh">Shu yerga</div>');add('┃ Tik yordamchi chiziq','data-cx="gv"');add('━ Yotiq yordamchi chiziq','data-cx="gh"');sep();add('+ Polka','data-tool="H"');add('+ Stoyka','data-tool="V"');add('▭ Panel chizish','data-tool="R"');add('📦 Bloklar','data-tool="B"');sep();
@@ -1384,6 +1405,10 @@ function rmFixItem(it,incCur,quiet){var dl=rmResolve(rmSpanOf(it,it.x),it.id,inc
 function dzRoomCommit(){var m0=S.cur;if(!(m0.panels||[]).length)return null;dzRoomClamp(true);try{var _c=dzRoomCtx(),_d=rmResolve(rmSpanOf(null,_c.x0),'__cur',true);if(_d){S.curPlace.x=Math.round(_c.x0+_d);toast('Blok boshqa blok ustiga tushmasligi uchun '+S.curPlace.x+' mm ga surildi')}}catch(_e){}var nr=kpNormalize(m0),pl=S.curPlace||{},c=dzRoomCtx(),m=JSON.parse(JSON.stringify(m0)),x=c.x0+(nr&&nr.dx?nr.dx:0);x=Math.max(0,Math.min(Math.max(0,wallLen(c.w)-m.W),x));if(!String(m.name||'').trim())m.name='Chizma';
   if(S.editing){var it=S.project.find(function(q){return q.id===S.editing});if(it){it.m=m;it.wall=c.w;it.x=Math.round(x);it.off=pl.off||0;return it}}
   var ni={id:uid(),m:m,wall:c.w,x:Math.round(x),off:pl.off||0};S.project.push(ni);return ni}
+function dzGuideCount(){return (S.cur.guides||[]).length}
+function dzGuideClear(){var n=dzGuideCount();if(!n&&!S.roomGuides){toast('Yordamchi chiziqlar yo\'q');return}kpSnap();delete S.cur.guides;S.roomGuides=null;DZ.gsel=null;DZ.showG=true;var gb=document.getElementById('dz-gtog');if(gb)gb.classList.add('on');save();DZ.forceSide=true;dzRender();toast(n+' ta yordamchi chiziq tozalandi (Ctrl+Z — qaytarish)')}
+function dzGKeep(){return {k:dzGuideKeep(),raw:JSON.parse(JSON.stringify(S.cur.guides||[]))}}
+function dzGRest(o){if(!o)return;if(o.k&&o.k.gs.length){dzGuideRestore(o.k);if((S.cur.guides||[]).length)return}if(o.raw.length)S.cur.guides=o.raw}
 function dzGuideKeep(){if(!DZ.room)return null;var c=dzRoomCtx();return {w:c.w,gs:(S.cur.guides||[]).map(function(g){return {ax:g.ax,v:g.val+(g.ax==='x'?c.x0:g.ax==='y'?c.e:c.f)}})}}
 function dzGuideRestore(k){if(!k||!k.gs.length)return;var c=dzRoomCtx();if(c.w!==k.w)return;S.cur.guides=k.gs.map(function(g){return {id:uid(),ax:g.ax,val:Math.round((g.v-(g.ax==='x'?c.x0:g.ax==='y'?c.e:c.f))*10)/10}});S.roomGuides=k}
 /* ikki yonma-yon blokni bitta blokka birlashtirish */
@@ -1425,7 +1450,7 @@ function dzMergeSel(){var ids=(DZ.rmSels||[]).slice();if(ids.length<2){var a0=DZ
   if(!chains.length){toast('Birlashadigan bloklar yo\'q: bloklar bir xil balandlikda (poldan va bo\'yi bir xil) va bir-biriga tegib turishi kerak',true);return}
   kpSnap();var wasEd=its.some(function(q){return q.id===S.editing});if(wasEd)dzRoomCommit();
   var res=[],nPar=0,total=0;chains.forEach(function(ch){ch=ch.map(function(q){return S.project.find(function(x){return x.id===q.id})}).filter(Boolean);var A=ch[0];for(var k=1;k<ch.length;k++){var B=ch[k];if(joinCand(A,'R')===B){mergeItems(A,B);nPar++}else{var r=dzMergePair(A,B,true);if(!r)break;A=r}}res.push(A);total+=ch.length});
-  if(wasEd&&S.editing&&!S.project.some(function(q){return q.id===S.editing})){var n0=newCur('maxsus');n0.cmode='panel';n0.panels=[];n0.leg=0;n0.name='Chizma';S.cur=n0;S.editing=null;DZ.sel=[];kpSel=null}
+  if(wasEd&&S.editing&&!S.project.some(function(q){return q.id===S.editing})){var GK0=dzGKeep(),n0=newCur('maxsus');n0.cmode='panel';n0.panels=[];n0.leg=0;n0.name='Chizma';S.cur=n0;S.editing=null;dzGRest(GK0);DZ.sel=[];kpSel=null}
   var skipped=its.length-total;DZ.rmSel=res[0].id;DZ.rmSels=res.map(function(q){return q.id});save();DZRC={};DZ.sig3=null;DZ.forceSide=true;dzRender();
   toast(total+' ta blok '+res.length+' ta blokka birlashtirildi'+(skipped>0?' ('+skipped+' tasi balandligi boshqa yoki tegib turmaydi — birlashtirilmadi)':'')+' — Ctrl+Z qaytaradi')}
 /* birlashgan panelli blokni qaytadan ajratish (guruhlar bo'yicha) */
@@ -1436,10 +1461,10 @@ function dzSplit(id){var it=S.project.find(function(q){return q.id===id});if(!dz
     ps.forEach(function(p){p.x=Math.round(p.x-mn.x);p.y=Math.round(p.y-mn.y);p.z=Math.round(p.z-mn.z);delete p.grp});var ids={};ps.forEach(function(p){ids[p.id]=1});
     var n=JSON.parse(JSON.stringify(m));n.panels=ps;n.joints=(m.joints||[]).filter(function(j){return ids[j.a]&&ids[j.b]});n.groups={};n.guides=[];n.name=(m.groups||{})[g]||String(m.name||'Blok').split(' + ')[out.length]||'Blok';n.elev=Math.round((m.elev||0)+mn.y);kpFit&&kpFit(n);
     out.push({id:uid(),m:n,wall:it.wall,x:Math.round(it.x+mn.x),off:Math.round((it.off||0)+mn.z)})});
-  S.project=S.project.filter(function(q){return q!==it}).concat(out);if(S.editing===id){var n0=newCur('maxsus');n0.cmode='panel';n0.panels=[];n0.leg=0;n0.name='Chizma';S.cur=n0;S.editing=null;DZ.sel=[];kpSel=null}
+  S.project=S.project.filter(function(q){return q!==it}).concat(out);if(S.editing===id){var GK0=dzGKeep(),n0=newCur('maxsus');n0.cmode='panel';n0.panels=[];n0.leg=0;n0.name='Chizma';S.cur=n0;S.editing=null;dzGRest(GK0);DZ.sel=[];kpSel=null}
   DZ.rmSel=null;DZ.rmSels=out.map(function(q){return q.id});save();DZRC={};DZ.sig3=null;DZ.forceSide=true;dzRender();toast('Blok '+out.length+' ta blokka ajratildi (Ctrl+Z qaytaradi)')}
 /* tahrirni tugatish: joriy blok xonaga saqlanadi va kulrang bo'ladi */
-function dzFinishEdit(){if(!DZ.room||!(S.cur.panels||[]).length)return false;kpSnap();var it=dzRoomCommit();var n0=newCur('maxsus');n0.cmode='panel';n0.panels=[];n0.leg=0;n0.name='Chizma';n0.korpus=S.cur.korpus;n0.front=S.cur.front;n0.back=S.cur.back;S.cur=n0;S.editing=null;DZ.sel=[];kpSel=null;DZ.op=null;DZ.rmSel=null;DZ.rmSels=[];save();DZRC={};DZ.sig3=null;DZ.forceSide=true;dzRender();toast('Blok xonaga saqlandi — tahrir tugadi (qayta tahrirlash: ikki marta bosing)');return true}
+function dzFinishEdit(){if(!DZ.room||!(S.cur.panels||[]).length)return false;kpSnap();var it=dzRoomCommit();var GK0=dzGKeep(),n0=newCur('maxsus');n0.cmode='panel';n0.panels=[];n0.leg=0;n0.name='Chizma';n0.korpus=S.cur.korpus;n0.front=S.cur.front;n0.back=S.cur.back;S.cur=n0;S.editing=null;dzGRest(GK0);DZ.sel=[];kpSel=null;DZ.op=null;DZ.rmSel=null;DZ.rmSels=[];save();DZRC={};DZ.sig3=null;DZ.forceSide=true;dzRender();toast('Blok xonaga saqlandi — tahrir tugadi (qayta tahrirlash: ikki marta bosing)');return true}
 function dzMerge(id){var A=S.project.find(function(q){return q.id===id});if(!A)return;var B=dzMergeNb(A);if(!B){toast('Yonida tegib turgan blok yo\'q',true);return}kpSnap();dzMergePair(A,B)}
 function dzMergePair(A,B,quiet){if(B.x<A.x){var t=A;A=B;B=t}
   var wasEd=S.editing===A.id||S.editing===B.id;if(wasEd){dzRoomCommit();A=S.project.find(function(q){return q.id===A.id});B=S.project.find(function(q){return q.id===B.id})}
@@ -1447,7 +1472,7 @@ function dzMergePair(A,B,quiet){if(B.x<A.x){var t=A;A=B;B=t}
   var E=Math.min(nA.elev||0,nB.elev||0),O=Math.min(A.off||0,B.off||0),gA='g'+uid(),gB='g'+uid(),m=nA;m.groups=Object.assign({},nA.groups||{},nB.groups||{});if(!(nA.panels||[]).every(function(q){return q.grp}))m.groups[gA]=A.m.name||'Blok 1';if(!(nB.panels||[]).every(function(q){return q.grp}))m.groups[gB]=B.m.name||'Blok 2';
   var sh=function(n,it,g,dx){(n.panels||[]).forEach(function(q){q.x=Math.round(q.x+dx+(n._dx||0)*0);q.y=Math.round(q.y+(n.elev||0)-E);q.z=Math.round(q.z+(it.off||0)-O);if(!q.grp)q.grp=g})};
   sh(nA,A,gA,0);sh(nB,B,gB,B.x-A.x);m.panels=nA.panels.concat(nB.panels);m.joints=(nA.joints||[]).concat(nB.joints||[]);dzJoinPanels(m,B.x-A.x,nA.panels,nB.panels);m.guides=[];m.elev=E;m.name=(A.m.name||'Blok')+' + '+(B.m.name||'Blok');delete m._dx;delete m._dz;kpFit&&kpFit(m);
-  var ni={id:uid(),m:m,wall:A.wall,x:A.x,off:O};S.project=S.project.filter(function(q){return q!==A&&q!==B});S.project.push(ni);if(wasEd){var n0=newCur('maxsus');n0.cmode='panel';n0.panels=[];n0.leg=0;n0.name='Chizma';n0.korpus=m.korpus;n0.front=m.front;n0.back=m.back;S.cur=n0;S.editing=null;DZ.sel=[];kpSel=null}DZ.rmSel=ni.id;if(quiet)return ni;save();DZRC={};DZ.sig3=null;DZ.forceSide=true;dzRender();toast('Ikki blok bitta blokka birlashtirildi: '+Math.round(m.W)+' mm (Ctrl+Z — qaytarish)');return ni}
+  var ni={id:uid(),m:m,wall:A.wall,x:A.x,off:O};S.project=S.project.filter(function(q){return q!==A&&q!==B});S.project.push(ni);if(wasEd){var GK0=dzGKeep(),n0=newCur('maxsus');n0.cmode='panel';n0.panels=[];n0.leg=0;n0.name='Chizma';n0.korpus=m.korpus;n0.front=m.front;n0.back=m.back;S.cur=n0;S.editing=null;dzGRest(GK0);DZ.sel=[];kpSel=null}DZ.rmSel=ni.id;if(quiet)return ni;save();DZRC={};DZ.sig3=null;DZ.forceSide=true;dzRender();toast('Ikki blok bitta blokka birlashtirildi: '+Math.round(m.W)+' mm (Ctrl+Z — qaytarish)');return ni}
 function dzRoomEdit(id){var GK=dzGuideKeep();try{return dzRoomEdit0(id)}finally{dzGuideRestore(GK)}}
 function dzRoomEdit0(id){kpSnap();var it=S.project.find(function(q){return q.id===id});if(!it)return;var keepId=it.id;
   var cm=dzRoomCommit();if(cm&&cm.id===keepId){}
@@ -1502,12 +1527,13 @@ function dzRoomHTML(){if(!DZ.room)return '';var c=dzRoomCtx(),R=S.room,el=TYPES[
   h+='<div class="btns" style="margin:6px 0;flex-wrap:wrap"><span class="hint" style="width:100%">Devorga qo\'shish ('+dzRoomCtx().w+'):</span><button class="btn sm" data-dzo="win">＋ Deraza</button><button class="btn sm" data-dzo="door">＋ Eshik</button><button class="btn sm" data-dzo="socket">＋ Rozetka</button><button class="btn sm" data-dzo="water">＋ Suv</button><button class="btn sm" data-dzo="sewer">＋ Kanal</button><button class="btn sm" data-dzo="gas">＋ Gaz</button><label class="hint" style="display:flex;gap:4px;align-items:center;margin-left:auto"><input type="checkbox" id="dz-rd"'+(DZ.showRD===false?'':' checked')+'> 📏 O\'lchamlar</label></div>'+
     (CFS.length?'<div style="margin:6px 0;padding:6px 8px;border:1px solid #c0392b;border-radius:8px;color:#c0392b;font-size:12px"><b>⚠ Diqqat ('+CFS.length+')</b><br>'+CFS.slice(0,6).map(function(x){return esc(x.msg)}).join('<br>')+'</div>':'');
   var MG=(DZ.rmSels||[]).length>1?rmGroup():[];if(MG.length>1){h+='<div style="margin-top:8px;padding:8px;border:1.5px solid var(--accent);border-radius:8px"><b>'+MG.length+' ta blok belgilangan</b><p class="hint" style="margin:4px 0">Birga surish: belgilanganlardan birini sichqoncha bilan sudrang yoki ⟵ ⟶ strelka (Shift — 100 mm). Aniq masofa:</p><div class="r2" style="align-items:end"><label class="f">Masofa, mm<input id="dz-gmv" type="number" value="'+(DZ.gmv||100)+'"></label><div class="btns"><button class="btn sm" data-rma="gmvL">⟵ Chapga</button><button class="btn sm" data-rma="gmvR">O\'ngga ⟶</button></div></div><div class="btns" style="margin-top:6px"><button class="btn sm" data-rma="gmvEndL" title="Chap devorga yoki chapdagi blokka taqash">⇤ Chapga taqash</button><button class="btn sm" data-rma="gmvEndR" title="O\'ng devorga yoki o\'ngdagi blokka taqash">O\'ngga taqash ⇥</button></div><div class="btns" style="margin-top:6px"><button class="btn sm" data-dz="merge">⊕ Birlashtirish</button><button class="btn sm danger" data-dz="rmdelsel">✕ Hammasini o\'chirish</button></div></div>'}
-  else if(DZ.rmSel&&DZ.rmSel!==S.editing){var it=S.project.find(function(q){return q.id===DZ.rmSel});if(it)h+='<div style="margin-top:8px;padding:8px;border:1px solid var(--accent);border-radius:8px"><b>'+esc(it.m.name||'Blok')+'</b> <span class="hint">'+Math.round(it.m.W)+'×'+Math.round(it.m.H)+'×'+Math.round(it.m.D)+' · '+it.wall+' devor, '+Math.round(it.x)+' mm</span><div class="btns" style="margin-top:6px"><button class="btn sm pri" data-rma="edit" data-id="'+it.id+'">✏ Panellarda tahrirlash</button>'+(TYPES[it.m.type]&&!TYPES[it.m.type].custom?'<button class="btn sm" data-rma="modul" data-id="'+it.id+'">⚙ Modulda sozlash</button>':'')+'<button class="btn sm" data-rma="dupnext" data-id="'+it.id+'">⧉ Yoniga nusxa</button><button class="btn sm" data-rma="newnext" data-id="'+it.id+'">+ Yonidan yangi</button><button class="btn sm danger" data-rma="del" data-id="'+it.id+'">Xonadan o\'chirish</button>'+(dzSplitOk(it)?'<button class="btn sm" data-rma="split" data-id="'+it.id+'">⊘ Ajratish</button>':'')+(it.m.cmode==='panel'&&(it.m.panels||[]).length?'<button class="btn sm" data-rma="rejoin" data-id="'+it.id+'" title="Ikki yon devor o\'rniga bitta stoyka, plankalar va tub stoyka ustidan yaxlit">🔧 Birlashuvni tuzatish</button>':'')+(dzMergeNb(it)?'<button class="btn sm" data-dz="merge" data-id="'+it.id+'" title="Yonma-yon turgan ikki blokni bitta blokka aylantiradi">⊕ Qo\'shni blok bilan birlashtirish</button>':'')+'</div>'+(TYPES[it.m.type]&&(TYPES[it.m.type].obst||TYPES[it.m.type].cls==='surf')?'<div style="margin-top:8px"><p class="hint" style="margin:0 0 4px">'+(TYPES[it.m.type].obst?'Bu xona elementi — narx va raskroyga qo\'shilmaydi, faqat joyni band qiladi.':'O\'lchamlarni kiriting'+(it.m.type==='stoleshnitsa'?' — moyka va gaz panel teshiklari ostidagi bloklarga qarab avtomatik o\'yiladi.':''))+'</p><div class="r2"><label class="f">Uzunligi (eni)<input id="dz-oW" type="number" value="'+Math.round(it.m.W)+'"></label><label class="f">'+(it.m.type==='stoleshnitsa'?'Qalinligi':'Balandligi')+'<input id="dz-oH" type="number" value="'+Math.round(it.m.H)+'"></label><label class="f">Chuqurligi<input id="dz-oD" type="number" value="'+Math.round(it.m.D)+'"></label><label class="f">Poldan<input id="dz-oE" type="number" value="'+Math.round(it.m.elev||0)+'"></label><label class="f">Devordan<input id="dz-oO" type="number" value="'+Math.round(it.off||0)+'"></label><label class="f">Chetdan (x)<input id="dz-oX" type="number" value="'+Math.round(it.x)+'"></label></div><button class="btn sm pri" data-rma="opar" data-id="'+it.id+'">O\'lchamni qo\'llash</button></div>':'')+(TYPES[it.m.type]&&!TYPES[it.m.type].custom&&!TYPES[it.m.type].corner&&TYPES[it.m.type].cls==='cab'?'<div style="margin-top:8px"><label class="f">Eni, mm<input id="dz-ipW" type="number" min="100" value="'+Math.round(it.m.W)+'"></label>'+dzParHTML('dz-ip',Object.assign({off:it.off||0},it.m),TYPES[it.m.type]).replace(/id="dz-ipof" type="number" min="0" step="10" value="[^"]*"/,'id="dz-ipof" type="number" min="0" step="10" value="'+(it.off||0)+'"')+'</div>':'')+((S.cur.panels||[]).length?'<p class="hint" style="margin:4px 0 0">Joriy chizma avval xonaga saqlanadi.</p>':'')+'</div>'}
+  else if(DZ.rmSel&&DZ.rmSel!==S.editing){var it=S.project.find(function(q){return q.id===DZ.rmSel});if(it)h+='<div style="margin-top:8px;padding:8px;border:1px solid var(--accent);border-radius:8px"><b>'+esc(it.m.name||'Blok')+'</b> <span class="hint">'+Math.round(it.m.W)+'×'+Math.round(it.m.H)+'×'+Math.round(it.m.D)+' · '+it.wall+' devor, '+Math.round(it.x)+' mm</span><div class="btns" style="margin-top:6px"><button class="btn sm pri" data-rma="edit" data-id="'+it.id+'">✏ Panellarda tahrirlash</button>'+(TYPES[it.m.type]&&!TYPES[it.m.type].custom?'<button class="btn sm" data-rma="modul" data-id="'+it.id+'">⚙ Modulda sozlash</button>':'')+(!(TYPES[it.m.type]&&(TYPES[it.m.type].corner||TYPES[it.m.type].obst||TYPES[it.m.type].cls==='surf'))?'<button class="btn sm" data-rma="bmir" data-id="'+it.id+'" title="Chap-o\'ng teskari (zerkalo): eshik petlyalari ham almashadi">⇋ Teskari</button>':'')+(itHasAp(it.m)?'<div style="flex-basis:100%"><h3 style="margin:8px 0 2px">Texnika rangi</h3>'+apChips('data-itcol="'+it.id+'" data-c',it.m.cfA||'#e4e7e9')+'</div>':'')+(TYPES[it.m.type]&&TYPES[it.m.type].corner?'<button class="btn sm pri" data-rma="crot" data-id="'+it.id+'" title="Shu burchakda 90° burish (qaysi devorga qarashini almashtiradi)">↻ Aylantirish</button><button class="btn sm" data-rma="cflip" data-id="'+it.id+'" title="Devorning boshqa burchagiga o\'tkazish">⇋ Boshqa burchakka</button>':'')+((it.m.cmode==='panel'&&(it.m.panels||[]).some(function(q){return q.r==='e'&&!q.sld}))?(function(){var ds=it.m.panels.filter(function(q){return q.r==='e'&&!q.sld}),u=ds.every(function(q){return q.hs==='U'});return '<div style="flex-basis:100%;margin:4px 0"><span class="hint">Eshiklar ('+ds.length+' ta):</span> <button class="btn sm'+(ds.length===1?' pri':'')+'" data-rma="dE1" data-id="'+it.id+'">1 eshik</button><button class="btn sm'+(ds.length===2?' pri':'')+'" data-rma="dE2" data-id="'+it.id+'">2 eshik</button><button class="btn sm'+(u?' pri':'')+'" data-rma="dUp" data-id="'+it.id+'" title="Petlya tepada, gaz lift bilan yuqoriga ochiladi">⬆ Tepaga ochilsin</button>'+(u?'':'<button class="btn sm" data-rma="dSd" data-id="'+it.id+'" title="Chapga ↔ o\'ngga">⇄ Ochilish tomoni</button>')+'</div>'})():'')+'<button class="btn sm" data-rma="dupnext" data-id="'+it.id+'">⧉ Yoniga nusxa</button><button class="btn sm" data-rma="newnext" data-id="'+it.id+'">+ Yonidan yangi</button><button class="btn sm danger" data-rma="del" data-id="'+it.id+'">Xonadan o\'chirish</button>'+(dzSplitOk(it)?'<button class="btn sm" data-rma="split" data-id="'+it.id+'">⊘ Ajratish</button>':'')+(it.m.cmode==='panel'&&(it.m.panels||[]).length?'<button class="btn sm" data-rma="rejoin" data-id="'+it.id+'" title="Ikki yon devor o\'rniga bitta stoyka, plankalar va tub stoyka ustidan yaxlit">🔧 Birlashuvni tuzatish</button>':'')+(dzMergeNb(it)?'<button class="btn sm" data-dz="merge" data-id="'+it.id+'" title="Yonma-yon turgan ikki blokni bitta blokka aylantiradi">⊕ Qo\'shni blok bilan birlashtirish</button>':'')+'</div>'+(TYPES[it.m.type]&&(TYPES[it.m.type].obst||TYPES[it.m.type].cls==='surf')?'<div style="margin-top:8px"><p class="hint" style="margin:0 0 4px">'+(TYPES[it.m.type].obst?'Bu xona elementi — narx va raskroyga qo\'shilmaydi, faqat joyni band qiladi.':'O\'lchamlarni kiriting'+(it.m.type==='stoleshnitsa'?' — moyka va gaz panel teshiklari ostidagi bloklarga qarab avtomatik o\'yiladi.':''))+'</p><div class="r2"><label class="f">Uzunligi (eni)<input id="dz-oW" type="number" value="'+Math.round(it.m.W)+'"></label><label class="f">'+(it.m.type==='stoleshnitsa'?'Qalinligi':'Balandligi')+'<input id="dz-oH" type="number" value="'+Math.round(it.m.H)+'"></label><label class="f">Chuqurligi<input id="dz-oD" type="number" value="'+Math.round(it.m.D)+'"></label><label class="f">Poldan<input id="dz-oE" type="number" value="'+Math.round(it.m.elev||0)+'"></label><label class="f">Devordan<input id="dz-oO" type="number" value="'+Math.round(it.off||0)+'"></label><label class="f">Chetdan (x)<input id="dz-oX" type="number" value="'+Math.round(it.x)+'"></label></div><button class="btn sm pri" data-rma="opar" data-id="'+it.id+'">O\'lchamni qo\'llash</button>'+(TYPES[it.m.type].obst?' <button class="btn sm" data-rma="orot" data-id="'+it.id+'" title="Eni va balandligini almashtiradi: tik ↔ yotiq">↻ '+(it.m.H>it.m.W?'Yotqizish':'Tik qilish')+'</button>':'')+'</div>':'')+(TYPES[it.m.type]&&!TYPES[it.m.type].custom&&!TYPES[it.m.type].corner&&TYPES[it.m.type].cls==='cab'?'<div style="margin-top:8px"><label class="f">Eni, mm<input id="dz-ipW" type="number" min="100" value="'+Math.round(it.m.W)+'"></label>'+dzParHTML('dz-ip',Object.assign({off:it.off||0},it.m),TYPES[it.m.type]).replace(/id="dz-ipof" type="number" min="0" step="10" value="[^"]*"/,'id="dz-ipof" type="number" min="0" step="10" value="'+(it.off||0)+'"')+'</div>':'')+((S.cur.panels||[]).length?'<p class="hint" style="margin:4px 0 0">Joriy chizma avval xonaga saqlanadi.</p>':'')+'</div>'}
   h+='<div class="btns" style="margin-top:8px"><button class="btn sm" data-rma="new">+ Yangi blok chizish</button>'+((S.cur.panels||[]).length?'<button class="btn sm pri" data-rma="save">'+(S.editing?'Xonada yangilash':'Xonaga qo\'shish')+'</button><button class="btn sm" data-rma="dupnext">⧉ Shu blokni yoniga nusxa</button><button class="btn sm" data-rma="newnext">+ Yonidan yangi blok</button>':'')+'</div><p class="hint" style="margin:6px 0 0">Oshxona qatorini tez yig\'ish: blokni chizing → «Yonidan yangi blok» (balandligi va chuqurligi bir xil, yoniga qo\'yiladi) yoki «Yoniga nusxa». 3D ko\'rinishda butun xona ko\'rinadi: blokni bosing — tanlanadi, sudrang — suriladi, ikki marta bosing — tahrirlash.</p>';
   return h}
 var FTN=[['door','Eshik'],['drawer','Tortma'],['open','Ochiq'],['alu','Oynali profil eshik']];
+function dzVarPar(v){var gv=String(v||'').split('@')[1]||'';return gv==='golaT'?{frontType:'drawer',frontCount:3,shelves:0}:gv==='oven'?{frontType:'oven',frontCount:1,shelves:0}:{}}
 function dzParHTML(pfx,m,T){var ft=m.frontType||(T&&T.frontType)||'door',cnt=m.frontCount||(T&&T.frontCount)||2,sh=m.shelves!=null?m.shelves:(T&&T.shelves)||0,off=m.off!=null?m.off:((T&&T.offDef)||0);
-  return '<div class="r2"><label class="f">Old qismi<select id="'+pfx+'ft">'+FTN.map(function(q){return '<option value="'+q[0]+'"'+(ft===q[0]?' selected':'')+'>'+q[1]+'</option>'}).join('')+'</select></label><label class="f">'+(ft==='drawer'?'Tortmalar soni':'Eshiklar soni')+'<input id="'+pfx+'fc" type="number" min="1" max="6" value="'+cnt+'"></label></div>'+(ft!=='drawer'&&+cnt===1?'<label class="f">Bitta eshik ochilishi<select id="'+pfx+'hg"><option value="L"'+(m.hinge!=='R'?' selected':'')+'>Petlya chapda — chapga ochiladi</option><option value="R"'+(m.hinge==='R'?' selected':'')+'>Petlya o\'ngda — o\'ngga ochiladi</option></select></label>':'')+
+  return '<div class="r2"><label class="f">Old qismi<select id="'+pfx+'ft">'+(T===TYPES.panel||ft==='oven'?FTN.concat([['oven','Duxovka + tortma']]):FTN).map(function(q){return '<option value="'+q[0]+'"'+(ft===q[0]?' selected':'')+'>'+q[1]+'</option>'}).join('')+'</select></label><label class="f">'+(ft==='drawer'?'Tortmalar soni':ft==='oven'?'Soni':'Eshiklar soni')+'<input id="'+pfx+'fc" type="number" min="1" max="6" value="'+cnt+'"></label></div>'+(ft!=='drawer'&&+cnt===1?'<label class="f">Bitta eshik ochilishi<select id="'+pfx+'hg"><option value="L"'+(m.hinge!=='R'?' selected':'')+'>Petlya chapda — chapga ochiladi</option><option value="R"'+(m.hinge==='R'?' selected':'')+'>Petlya o\'ngda — o\'ngga ochiladi</option></select></label>':'')+
     (T&&T.hang&&ft!=='drawer'?'<label class="hint" style="display:flex;gap:6px;align-items:center;margin:2px 0 6px"><input type="checkbox" id="'+pfx+'lf"'+(m.lift?' checked':'')+'> ⬆ Eshik yuqoriga ochiladi (gaz lift)</label>':'')+'<div class="r2"><label class="f">Polkalar soni<input id="'+pfx+'sh" type="number" min="0" max="10" value="'+sh+'"></label><label class="f">Orqa devordan, mm<input id="'+pfx+'of" type="number" min="0" step="10" value="'+off+'"></label></div>'}
 function dzParRead(pfx,m){var g=function(id){var e=$('#'+pfx+id);return e?e.value:null},ft=g('ft'),fc=parseInt(g('fc'),10),sh=parseInt(g('sh'),10),of=parseFloat(g('of'));
   if(ft)m.frontType=ft;if(fc>0)m.frontCount=fc;var hg=g('hg');if(hg==='L'||hg==='R')m.hinge=hg;var lfe=$('#'+pfx+'lf');if(lfe)m.lift=!!lfe.checked;if(!isNaN(sh)&&sh>=0)m.shelves=sh;return isNaN(of)?null:Math.max(0,of)}
@@ -1517,10 +1543,10 @@ function dzAddReadyHTML(){var k=DZ.addKind||S.kind||'oshxona',v=DZ.addType||'',o
   var d=dzAddDef(),nm=function(id,lab,val){return '<label class="f">'+lab+'<input id="'+id+'" type="number" min="50" value="'+Math.round(val)+'"></label>'};
   return '<h3>Yangi tayyor blok qo\'shish</h3><p class="hint" style="margin:0 0 6px">Bu yangi blok qo\'shadi. Mavjud blokni o\'zgartirish uchun — uni bosing (kulrang blokda: eni, eshik soni; chizilayotganda: eshikni bosing).</p><div class="btns" style="margin-bottom:6px"><button class="btn sm'+(k==='oshxona'?' on':'')+'" data-addk="oshxona">Oshxona</button><button class="btn sm'+(k==='yotoqxona'?' on':'')+'" data-addk="yotoqxona">Yotoqxona</button></div>'+
     '<label class="f">Turi<select id="dz-addt">'+opts+'</select></label><div class="r3">'+nm('dz-addW','Eni',DZ.addW||d.W)+nm('dz-addH','Bo\'yi',DZ.addH||d.H)+nm('dz-addD','Chuq.',DZ.addD||d.D)+'</div>'+
-    dzParHTML('dz-ap',DZ.addPar||{},TYPES[(DZ.addType||'').split('@')[0]])+'<div class="btns"><button class="btn sm pri" data-rma="addready">＋ Xonaga qo\'shish</button></div><p class="hint" style="margin:4px 0 0">Blok joriy devorda oxirgi blok yoniga qo\'yiladi. Keyin uni bosib «⚙ Modulda sozlash» (eshik, tortma, polka, Gola…) yoki «✏ Panellarda tahrirlash».</p>'}
+    dzParHTML('dz-ap',Object.assign(dzVarPar(DZ.addType),DZ.addPar||{}),TYPES[(DZ.addType||'').split('@')[0]])+'<div class="btns"><button class="btn sm pri" data-rma="addready">＋ Xonaga qo\'shish</button></div><p class="hint" style="margin:4px 0 0">Blok joriy devorda oxirgi blok yoniga qo\'yiladi. Keyin uni bosib «⚙ Modulda sozlash» (eshik, tortma, polka, Gola…) yoki «✏ Panellarda tahrirlash».</p>'}
 function dzAddDef(){var v=DZ.addType||'';if(!v){var g0=(KOPTS[DZ.addKind||S.kind||'oshxona']||KOPTS.oshxona)[0];v=DZ.addType=g0[1][0][0]}if(v.indexOf('tpl:')===0){var t=S.templates.find(function(x){return 'tpl:'+x.id===v});return t?t.m:{W:600,H:720,D:560}}var d=TYPES[v.split('@')[0]]||{W:600,H:720,D:560};return d}
 function dzAddMake(){var v=DZ.addType,m;if(!v)return null;if(v.indexOf('tpl:')===0){var t=S.templates.find(function(x){return 'tpl:'+x.id===v});if(!t)return null;m=JSON.parse(JSON.stringify(t.m));ensureRefs(m)}
-  else{var sp=v.split('@'),gv=sp[1]||null;m=newCur(sp[0]);if(gv==='sekret'){m=mkSekretV(m)}else if(gv){m.gola=true;if(gv==='golaT'){m.frontType='drawer';m.frontCount=3;m.shelves=0}}}
+  else{var sp=v.split('@'),gv=sp[1]||null;m=newCur(sp[0]);if(gv==='sekret'){m=mkSekretV(m)}else if(gv==='oven'){m.frontType='oven';m.frontCount=1;m.shelves=0}else if(gv){m.gola=true;if(gv==='golaT'){m.frontType='drawer';m.frontCount=3;m.shelves=0}}}
   var apOff=dzParRead('dz-ap',m);DZ.addOff=apOff;var W=+($('#dz-addW')||{}).value,H=+($('#dz-addH')||{}).value,D=+($('#dz-addD')||{}).value;if(W>=100)m.W=W;if(H>=100)m.H=H;if(D>=100)m.D=D;if(TYPES[m.type]&&TYPES[m.type].custom&&m.cmode==='panel'&&(m.panels||[]).length){kpFit&&kpFit(m)}
   if(!m.tplId)m.name=(TYPES[m.type]?TYPES[m.type].label:'Blok')+(m.gola?' (Gola)':'')+' '+m.W;if(m.type==='antresol'||m.type==='burchak45A')m.elev=Math.max(0,S.room.H-m.H);return m}
 function dzRoomDups(){var c=dzRoomCtx(),its=S.project.filter(function(it){return it.id!==S.editing}),box=function(m,x,e){return {x0:x,x1:x+m.W,y0:e,y1:e+m.H}},ov=function(a,b){var ox=Math.min(a.x1,b.x1)-Math.max(a.x0,b.x0),oy=Math.min(a.y1,b.y1)-Math.max(a.y0,b.y0);return ox>Math.min(a.x1-a.x0,b.x1-b.x0)*0.5&&oy>Math.min(a.y1-a.y0,b.y1-b.y0)*0.5},out=[];
@@ -1528,14 +1554,43 @@ function dzRoomDups(){var c=dzRoomCtx(),its=S.project.filter(function(it){return
   if((S.cur.panels||[]).length){var cb=box(S.cur,c.x0,c.e);its.forEach(function(it){if(it.wall===c.w&&ov(cb,box(it.m,it.x,effElev(it.m)))&&out.indexOf(it)<0)out.push(it)})}
   return out}
 function dzRoomDel(id){kpSnap();var it=S.project.find(function(q){return q.id===id});if(!it)return;DZ.rmUndo=JSON.parse(JSON.stringify(it));S.project=S.project.filter(function(q){return q.id!==id});if(DZ.rmSel===id)DZ.rmSel=null;save();DZRC={};DZ.sig3=null;DZ.forceSide=true;dzRender();toast('«'+(it.m.name||'Blok')+'» xonadan o\'chirildi (qaytarish — o\'ng panelda)')}
+/* burchak blokini aylantirish */
+function cornerGap(it){var N=it.m.cornerEnd?{A:'B',B:'C',C:'D',D:'A'}[it.wall]:{A:'D',B:'A',C:'B',D:'C'}[it.wall],T=TYPES[it.m.type]||{},g=-1;S.project.forEach(function(q){if(q.id===it.id||q.wall!==N)return;var Tq=TYPES[q.m.type]||{};if(Tq.cls!=='cab'||!!Tq.hang!==!!T.hang)return;g=Math.max(g,q.off||0)});return g>=0?g:(it.off||0)}
+function cornerSnap(it){var L=wallLen(it.wall),g=cornerGap(it);it.x=it.m.cornerEnd?Math.max(0,Math.round(L-it.m.W-g)):Math.round(g);return g}
+function dzCornerRot(id,mode){var WNEXT={A:'B',B:'C',C:'D',D:'A'},WPREV={A:'D',B:'A',C:'B',D:'C'},it=S.project.find(function(q){return q.id===id});if(!it||!TYPES[it.m.type]||!TYPES[it.m.type].corner)return;var m=it.m,L=wallLen(it.wall),nearEnd=it.x+m.W/2>L/2,msg;
+  if(mode==='flip'){m.cornerEnd=!m.cornerEnd;it.x=m.cornerEnd?Math.max(0,L-m.W):0;msg='Burchak bloki devorning '+(m.cornerEnd?'o\'ng':'chap')+' burchagiga o\'tkazildi'}
+  else if(!!m.cornerEnd!==nearEnd){m.cornerEnd=nearEnd;it.x=nearEnd?Math.max(0,L-m.W):0;msg='Burchak tomoni to\'g\'rilandi — endi qo\'shni devor tomonga qaraydi'}
+  else{var W=m.W,W2=m.W2||m.D;if(m.cornerEnd){it.wall=WNEXT[it.wall];m.cornerEnd=false;m.W=W2;m.W2=W;it.x=0}else{it.wall=WPREV[it.wall];m.cornerEnd=true;m.W=W2;m.W2=W;it.x=Math.max(0,wallLen(it.wall)-m.W)}
+    if(!m.tplId)m.name=(TYPES[m.type].label||'Burchak')+' '+Math.round(m.W)+'×'+Math.round(m.W2);msg='Burchak bloki 90° burildi — endi '+it.wall+' devorda'}
+  var gp=cornerSnap(it);rmFixItem(it,true,true);DZ.rmSel=it.id;save();DZRC={};DZ.sig3=null;DZ.forceSide=true;dzRender();toast(msg+(gp?' · ikkala devordan '+gp+' mm joy':'')+' (Ctrl+Z — qaytarish)')}
+/* panellardan iborat blokni chap-o'ng teskari qilish (zerkalo) */
+function dzMirrorItem(id){var it=S.project.find(function(q){return q.id===id});if(!it)return;var m=it.m,ps=m.panels||[];
+  if(!(TYPES[m.type]&&TYPES[m.type].custom&&m.cmode==='panel'&&ps.length)){var ps2=blockToPanels(m);if(!ps2.length){toast('Bu blokni teskari qilib bo\'lmaydi',true);return}var n=dzPanelBlock(m);if(!n){toast('Bu blokni teskari qilib bo\'lmaydi',true);return}it.m=n;m=n;ps=m.panels}
+  kpFit(m);var W=m.W;ps.forEach(function(p){var b=kpBox(m,p);p.x=Math.round(p.x+(W-b.x1)-b.x0);if(p.hs==='L')p.hs='R';else if(p.hs==='R')p.hs='L'});
+  (m.guides||[]).forEach(function(g){if(g.ax==='x')g.val=Math.round((W-g.val)*10)/10});m.name=String(m.name||'Blok').replace(/ \(teskari\)$/,'')+(/ \(teskari\)$/.test(m.name||'')?'':' (teskari)');
+  DZ.rmSel=it.id;save();DZRC={};DZ.sig3=null;DZ.forceSide=true;dzRender();toast('Blok chap-o\'ng teskari qilindi (Ctrl+Z — qaytarish)')}
+function dzBlockRot(mode){if(!DZ.room){DZ.room=true;S.dzRoom=true}var id=DZ.rmSel;
+  if(!id&&(S.cur.panels||[]).length){var ed=S.editing;if(dzFinishEdit())id=ed||(S.project.length?S.project[S.project.length-1].id:null)}
+  if(!id){var c=dzRoomCtx(),cs=S.project.filter(function(q){return q.wall===c.w&&TYPES[q.m.type]&&TYPES[q.m.type].corner});if(cs.length===1)id=cs[0].id}
+  var it=id&&S.project.find(function(q){return q.id===id});if(!it){toast('Avval aylantiriladigan blokni bir marta bosib belgilang, keyin shu tugmani bosing',true);return}
+  kpSnap();if(TYPES[it.m.type]&&TYPES[it.m.type].corner)dzCornerRot(it.id,mode==='mir'?'flip':'rot');else if(mode==='mir'||!/burchak/i.test(it.m.name||''))dzMirrorItem(it.id);else dzMirrorItem(it.id)}
 function dzRoomAct(a,id){if(a!=='edit')kpSnap();
+  if(a==='orot'){var ir=S.project.find(function(q){return q.id===id});if(!ir)return;var w0=ir.m.W,h0=ir.m.H,lay=h0>w0;ir.m.W=h0;ir.m.H=w0;var wl0=wallLen(ir.wall);if(ir.x+ir.m.W>wl0)ir.x=Math.max(0,wl0-ir.m.W);var toC=lay&&!(ir.m.elev>0);if(toC)ir.m.elev=Math.max(0,S.room.H-ir.m.H);ir.m.elev=Math.max(0,Math.min(S.room.H-ir.m.H,ir.m.elev||0));ir.m.name=TYPES[ir.m.type].label+' '+ir.m.W+'×'+ir.m.D;rmFixItem(ir,true);save();DZRC={};DZ.sig3=null;DZ.forceSide=true;dzRender();toast(lay?'Yotqizildi'+(toC?' (shipga taqaldi)':'')+' — balandligini «Poldan» bilan o\'zgartiring':'Tik qilindi');return}
   if(a==='opar'){var io=S.project.find(function(q){return q.id===id});if(!io)return;var gv=function(k){var v=parseFloat(($('#dz-o'+k)||{}).value);return isNaN(v)?null:v};var w=gv('W'),h=gv('H'),d=gv('D'),e0=gv('E');var Ts=TYPES[io.m.type];if(w>=20)io.m.W=Math.round(w);if(h>=(Ts.cls==='surf'?4:20))io.m.H=Math.round(h);if(d>=5)io.m.D=Math.round(d);if(e0!=null&&e0>=0)io.m.elev=Math.round(e0);var oo=gv('O'),ox=gv('X');if(oo!=null&&oo>=0)io.off=Math.round(oo);if(ox!=null&&ox>=0)io.x=Math.round(ox);io.m.name=Ts.label+' '+io.m.W+(Ts.obst?'×'+io.m.D:'');rmFixItem(io,true);save();DZRC={};DZ.sig3=null;DZ.forceSide=true;dzRender();toast('O\'lcham yangilandi');return}
+  if(a==='crot'||a==='cflip'){dzCornerRot(id,a==='cflip'?'flip':'rot');return}
+  if(a==='bmir'){dzMirrorItem(id);return}
   if(a==='merge'){dzMerge(id);return}
   if(a==='split'){dzSplit(id);return}
   if(/^gmv/.test(a)){var GQ=rmGroup();if(GQ.length<1){if(kpUndo.length)kpUndo.pop();return}var mvd=0;if(a==='gmvL'||a==='gmvR'){var vv=parseFloat(($('#dz-gmv')||{}).value);if(!(vv>0)){if(kpUndo.length)kpUndo.pop();return}DZ.gmv=vv;mvd=rmGroupMove(GQ,a==='gmvR'?vv:-vv)}else{mvd=rmGroupMove(GQ,a==='gmvEndR'?99999:-99999,true);if(!mvd)toast('Joyida — boshqa blok yoki devorga tegib turibdi')}
     if(!mvd&&kpUndo.length)kpUndo.pop();if(mvd)toast(GQ.length+' ta blok '+(mvd>0?'o\'ngga ':'chapga ')+Math.abs(Math.round(mvd))+' mm surildi');save();DZRC={};DZ.sig3=null;DZ.forceSide=true;dzRender();return}
   if(a==='rejoin'){dzRejoin(id);return}
   if(a==='finish'){dzFinishEdit();return}if(a==='edit'){dzRoomEdit(id);return}
+  if(a==='dE1'||a==='dE2'||a==='dUp'||a==='dSd'){var ku0=kpUndo.length,wasEd=S.editing===id;if(!wasEd)dzRoomEdit(id);var ds=(S.cur.panels||[]).filter(function(q){return q.r==='e'&&!q.sld});
+    if(!ds.length){toast('Bu blokda eshik yo\'q',true)}
+    else if(a==='dUp'){var up=!ds.every(function(q){return q.hs==='U'});ds.forEach(function(q){q.hs=up?'U':'L'});toast(up?'Eshik yuqoriga ochiladigan bo\'ldi (gaz lift)':'Eshik yonga ochiladigan bo\'ldi')}
+    else if(a==='dSd'){ds.forEach(function(q){if(q.hs!=='U')q.hs=q.hs==='R'?'L':'R'});toast('Eshik ochilish tomoni almashdi')}
+    else{var wasU=ds.every(function(q){return q.hs==='U'});dzDoorRe(ds[0].id,a==='dE1'?'E1':'E2');if(wasU&&a==='dE1')(S.cur.panels||[]).forEach(function(q){if(q.r==='e'&&!q.sld)q.hs='U'});toast(a==='dE1'?'1 eshik qilindi':'2 eshik qilindi')}
+    kpFit(S.cur);if(!wasEd)dzFinishEdit();else{DZ.forceSide=true;kpChanged()}if(kpUndo.length>ku0)kpUndo.length=ku0;DZ.rmSel=id;DZ.forceSide=true;dzRender();return}
   if(a==='undel'){if(DZ.rmUndo){rmFixItem(DZ.rmUndo,true);S.project.push(DZ.rmUndo);DZ.rmSel=DZ.rmUndo.id;DZ.rmUndo=null;save();DZRC={};DZ.sig3=null;DZ.forceSide=true;dzRender();toast('Blok qaytarildi')}return}
   if(a==='deldups'){var ds=dzRoomDups();if(!ds.length)return;var ids={};ds.forEach(function(d){ids[d.id]=1});S.project=S.project.filter(function(q){return !ids[q.id]});DZ.rmSel=null;save();DZRC={};DZ.sig3=null;DZ.forceSide=true;dzRender();toast(ds.length+' ta ustma-ust tushgan blok o\'chirildi');return}
   if(a==='addready'){var m=dzAddMake();if(!m){toast('Turini tanlang',true);return}var c=dzRoomCtx(),w=c.w,x=autoX(m,w,null),L=wallLen(w);if(x+m.W>L+1){toast('Bu devorda joy yetmaydi ('+w+'). «Blok joyi» da boshqa devorni tanlang.',true);return}
@@ -1549,7 +1604,7 @@ function dzRoomAct(a,id){if(a!=='edit')kpSnap();
   if(a==='new'){dzRoomNew();return}
   if(a==='save'){var it=dzRoomCommit();if(it){S.editing=it.id;S.curPlace={wall:it.wall,x:it.x,off:it.off||0};save();DZ.forceSide=true;dzRender();toast('Xonada saqlandi')}}}
 function dzRoomPlaceLib(src,u,v){var c=dzRoomCtx(),m=JSON.parse(JSON.stringify(src)),T=TYPES[m.type];if(!m.name)m.name=src._tname||(T?T.label:'Blok');delete m._tname;
-  var xp=Math.round(c.x0+u),wl=wallLen(c.w);xp=Math.max(0,Math.min(Math.max(0,wl-m.W),xp));if(T&&T.elev)m.elev=T.obst?0:Math.max(0,Math.min(Math.max(0,S.room.H-m.H),Math.round(c.e+v)));var it={id:uid(),m:m,wall:c.w,x:xp,off:DZ.libOff!=null?DZ.libOff:((T&&T.offDef)||0)};var lifted=rmLiftOver(it);if(lifted)toast('Blok '+lifted+' mm ko\'tarildi — pastdagi blok ustiga o\'tqazildi');var dl=rmResolve(rmSpanOf(it,it.x),it.id,true);if(dl==null||Math.abs(dl)>m.W/2){var bz=rmWho(it);toast('Bu joy band'+(bz?': «'+(bz.m?bz.m.name:'siz chizayotgan blok')+'»':'')+'. Avval uni o\'chiring yoki boshqa joyni tanlang',true);if(bz&&bz.id)DZ.rmSel=bz.id;return null}if(dl)it.x=Math.round(it.x+dl);kpSnap();S.project.push(it);DZ.rmSel=it.id;save();return it}
+  var xp=Math.round(c.x0+u),wl=wallLen(c.w);xp=Math.max(0,Math.min(Math.max(0,wl-m.W),xp));if(T&&T.elev)m.elev=T.obst&&m.H>=S.room.H-5?0:Math.max(0,Math.min(Math.max(0,S.room.H-m.H),Math.round(c.e+v)));var it={id:uid(),m:m,wall:c.w,x:xp,off:DZ.libOff!=null?DZ.libOff:((T&&T.offDef)||0)};if(T&&T.corner){m.cornerEnd=xp+m.W/2>wl/2;cornerSnap(it)}var lifted=rmLiftOver(it);if(lifted)toast('Blok '+lifted+' mm ko\'tarildi — pastdagi blok ustiga o\'tqazildi');var dl=rmResolve(rmSpanOf(it,it.x),it.id,true);if(dl==null||Math.abs(dl)>m.W/2){var bz=rmWho(it);toast('Bu joy band'+(bz?': «'+(bz.m?bz.m.name:'siz chizayotgan blok')+'»':'')+'. Avval uni o\'chiring yoki boshqa joyni tanlang',true);if(bz&&bz.id)DZ.rmSel=bz.id;return null}if(dl)it.x=Math.round(it.x+dl);kpSnap();S.project.push(it);DZ.rmSel=it.id;save();return it}
 /* raskroyni qo'lda boshqarish */
 function rkRefresh(){PKC={};save();if(RKL&&RKL.fn)RKL.fn()}
 function rkPop(g,ev){var mat=g.dataset.rk,key=g.dataset.rkk,si=+g.dataset.rks,cr=g.dataset.rkr==='1',pp=$('#rk-pop');
@@ -1786,26 +1841,34 @@ function makeViewer(host,grid){
   V.clear=function(){V.anims=[];if(!V.ok)return;while(V.group.children.length){var o=V.group.children.pop();o.traverse(function(n){if(n.geometry)n.geometry.dispose();if(n.material){if(n.material.map)n.material.map.dispose();n.material.dispose()}})}};
   return V;
 }
+/* ketma-ket harakat: avval tortmalar birin-ketin ochilib, birin-ketin yopiladi, keyin eshiklar ochiladi (bir-biriga tegmaydi) */
+function animOrder(V){if(V._ordN===V.anims.length&&V._ordG===V.group)return;V._ordN=V.anims.length;V._ordG=V.group;
+  var dr=V.anims.filter(function(a){return a.k==='drawer'}),c=new THREE.Vector3();
+  dr.forEach(function(a){try{a.o.updateMatrixWorld(true);var bx=new THREE.Box3().setFromObject(a.o);bx.getCenter(c);a.cx=c.x;a.cy=c.y;a.cz=c.z}catch(e){a.cx=a.cy=a.cz=0}});
+  dr.sort(function(p,q){return (Math.round((p.cx+p.cz)*8)-Math.round((q.cx+q.cz)*8))||(q.cy-p.cy)});dr.forEach(function(a,i){a.i=i});V._nd=dr.length;V._nDoor=V.anims.length-dr.length}
 function applyAnim(V){
   if(!V||!V.ok)return;
+  animOrder(V);var t=A.t,nd=V._nd||0,hasD=V._nDoor>0,seq=A.seq!==false;
+  var P=nd&&hasD?0.55:1,u=Math.min(1,t/P),w=seq&&nd&&hasD?Math.max(0,Math.min(1,(t-0.55)/0.45)):t;
+  var Lo=0.45,dd=nd>1?Math.max(0.12,Lo*0.55):Lo,st=nd>1?(Lo-dd)/(nd-1):0,cl=function(x){return Math.max(0,Math.min(1,x))};
   V.anims.forEach(function(a){
-    if(a.k==='door')a.o.rotation.y=(a.side==='L'?-1:1)*A.t*1.75;
-    else if(a.k==='slide')a.o.position.x=A.t*a.dx*0.001;
-    else if(a.k==='lift')a.o.rotation.x=-A.t*1.3;
-    else a.o.position.z=A.t*a.len*0.7*0.001;
+    if(a.k==='door')a.o.rotation.y=(a.side==='L'?-1:1)*w*1.75;
+    else if(a.k==='slide')a.o.position.x=w*a.dx*0.001;
+    else if(a.k==='lift')a.o.rotation.x=-w*1.3;
+    else{var v=t;if(seq){var s0=(a.i||0)*st,o=cl((u-s0)/dd),cc=cl((u-0.55-s0)/dd);v=o*(1-cc)}a.o.position.z=v*a.len*0.7*0.001}
   });
   V.dirty=true;
 }
 function applyAnimAll(){[EV,RV,CV,DV].forEach(applyAnim);syncAnimUI()}
 function syncAnimUI(){
   $$('[data-anim]').forEach(function(el){if(document.activeElement!==el)el.value=Math.round(A.t*100)});
-  $$('[data-play]').forEach(function(b){b.textContent=A.play?"■ To'xtatish":'▶ Ochish / yopish';b.classList.toggle('on',A.play)});
+  $$('[data-play]').forEach(function(b){var pm=b.getAttribute('data-play');if(pm==='i')b.innerHTML=(A.play?'■':'▶')+'<span>'+(A.play?'To\'xta':'Harakat')+'</span>';else if(pm==='t')b.textContent=A.play?'■':'▶';else b.textContent=A.play?"■ To'xtatish":'▶ Ochish / yopish';b.classList.toggle('on',A.play)});
 }
 (function anLoop(){
   requestAnimationFrame(anLoop);
   var now=Date.now(),d=A.target-A.t;
   if(A.play&&Math.abs(d)<0.003){if(!A.hold)A.hold=now+800;else if(now>A.hold){A.target=A.target?0:1;A.hold=0}}
-  if(Math.abs(d)>0.001){A.t+=Math.sign(d)*Math.min(Math.abs(d),Math.max(0.012,Math.abs(d)*0.09));applyAnimAll()}
+  if(Math.abs(d)>0.001){A.t+=Math.sign(d)*Math.min(Math.abs(d),A.play?0.0045:Math.max(0.012,Math.abs(d)*0.09));applyAnimAll()}
 })();
 
 /* Blok detallarini quti va silindrlar ro'yxatiga aylantiradi.
@@ -1957,6 +2020,10 @@ function boxes3d(m,mode,holes){
     var grp={},dbp={};
     var HID=(m===S.cur&&typeof DZ!=='undefined'&&DZ.open&&DZ.hid)||{};
     (m.panels||[]).forEach(function(p){if(HID[p.id])return;if(nf&&(p.r==='e'||p.r==='f'))return;
+      if(p.r==='ap'){var ab=kpBox(m,p),AK=p.id===kpSel&&m===S.cur?'p':'a';out.push({x0:ab.x0,x1:ab.x1,y0:ab.y0,y1:ab.y1,z0:ab.z0,z1:ab.z1-4,k:AK,col:AK==='a'?(p.col||m.cfA||null):null});
+        if(p.ap==='oven'||p.ap==='mw'){out.push({x0:ab.x0+10,x1:ab.x1-10,y0:ab.y0+10,y1:ab.y1-(p.ap==='oven'?90:10),z0:ab.z1-4,z1:ab.z1,k:'g'});out.push({x0:ab.x0+10,x1:ab.x1-10,y0:ab.y1-80,y1:ab.y1-10,z0:ab.z1-4,z1:ab.z1,k:'m'});if(p.ap==='oven')out.push({x0:ab.x0+70,x1:ab.x1-70,y0:ab.y1-110,y1:ab.y1-98,z0:ab.z1,z1:ab.z1+25,k:'m'})}
+        else if(p.ap==='fridge'){var ym=ab.y0+(ab.y1-ab.y0)*0.42;out.push({x0:ab.x0+2,x1:ab.x1-2,y0:ym-3,y1:ym+3,z0:ab.z1-4,z1:ab.z1,k:'g'})}
+        else out.push({x0:ab.x0+4,x1:ab.x1-4,y0:ab.y1-70,y1:ab.y1-8,z0:ab.z1-4,z1:ab.z1,k:'g'});return}
       var b=kpBox(m,p),k=p.id===kpSel&&m===S.cur?'p':p.r==='e'||p.r==='f'?'f':p.r==='o'?'k':'b',pg=kpPoly(m,p),tg=out;
       if(p.sld){var sd={dx:p.sld.dx||0,boxes:[]},fw=KPPF[p.sld.pf||'std'].w,ak=KPPC[p.sld.pc]?'al'+p.sld.pc[0]:'al';slides.push(sd);
         kpeSecs(p,b.y1-b.y0-50,20).forEach(function(q,si,arr){var s1=b.y1-25-q.t,s0=s1-q.h,kk=q.c==='Z'?'mr':q.c==='O'?'gl':k,zm=(b.z0+b.z1)/2;
@@ -1988,6 +2055,15 @@ function boxes3d(m,mode,holes){
         else if(j.f==='P'){var pq=at(ax,-dir*4);if(A.lax==='y')pq[1]=A.lb.y0-2.5;cy(ax,pq,2.5,8,'p')}
         else if(j.f==='H'){var dr2=dbp[Bq.pid];if(dr2)cy(ax,at(ax,dir*6),17.5,12,'h',dr2.cyl);else cy(ax,at(ax,dir*6),17.5,12,'h')}
       });}
+    try{var Hd=m.H,Dd=m.D;holeParts(m).forEach(function(hp){var ox=hp.x,Wd=hp.W;if(!(Wd>200))return;
+      if(hp.k==='hob'){var hr=Hd+38,hw2=Math.min(Wd-40,590),hd=Math.min(Dd-60,510),hx=ox+(Wd-hw2)/2,hz=(Dd-hd)/2+10,hb0=hobRect({W:Wd,D:Dd});
+        B(ox+hb0.x0,ox+hb0.x1,hr-50,hr-2,hb0.z0,hb0.z1,'a');B(hx,hx+hw2,hr,hr+5,hz,hz+hd,'g');
+        [[.27,.3],[.73,.3],[.27,.7],[.73,.7]].forEach(function(q,i){var px=hx+hw2*q[0],pz=hz+hd*q[1],rb=i===0?50:i===3?38:44;Cy('y',px,hr+9,pz,rb,4);Cy('y',px,hr+13,pz,rb*0.5,6,'g');B(px-hw2*0.2,px+hw2*0.2,hr+16,hr+22,pz-4,pz+4,'g');B(px-4,px+4,hr+16,hr+22,pz-hd*0.18,pz+hd*0.18,'g')});
+        for(var kb=0;kb<4;kb++)Cy('y',hx+hw2*(0.38+0.08*kb),hr+10,hz+hd-22,9,8,'m')}
+      else if(hp.k==='sink'){var sr0=sinkRect({W:Wd,D:Dd}),sr={x0:ox+sr0.x0,x1:ox+sr0.x1,z0:sr0.z0,z1:sr0.z1},rim=Hd+38,bt=Hd-190,cx=(sr.x0+sr.x1)/2;
+        B(sr.x0-25,sr.x1+25,rim,rim+4,sr.z0-25,sr.z0,'m');B(sr.x0-25,sr.x1+25,rim,rim+4,sr.z1,sr.z1+25,'m');B(sr.x0-25,sr.x0,rim,rim+4,sr.z0,sr.z1,'m');B(sr.x1,sr.x1+25,rim,rim+4,sr.z0,sr.z1,'m');
+        B(sr.x0,sr.x0+3,bt,rim,sr.z0,sr.z1,'m');B(sr.x1-3,sr.x1,bt,rim,sr.z0,sr.z1,'m');B(sr.x0,sr.x1,bt,rim,sr.z0,sr.z0+3,'m');B(sr.x0,sr.x1,bt,rim,sr.z1-3,sr.z1,'m');B(sr.x0,sr.x1,bt,bt+3,sr.z0,sr.z1,'m');
+        Cy('y',cx,bt+4,(sr.z0+sr.z1)/2,28,2,'g');var fz=Math.max(20,sr.z0-55);Cy('y',cx,rim+20,fz,20,40,'m');Cy('y',cx,rim+160,fz,10,240,'m');Cy('z',cx,rim+275,fz+65,9,130,'m')}})}catch(_e){}
     return res();
   }
   if(T.custom&&(m.cparts||[]).length){
@@ -2070,6 +2146,17 @@ function boxes3d(m,mode,holes){
     }
     return res();
   }
+  if(T.fridge){
+    var NH=m.nH||1780,yn=y0+t+NH,fz=Math.round(NH*0.42);
+    B(0,t,y0,H,0,D,'b');B(W-t,W,y0,H,0,D,'b');B(t,W-t,y0,y0+t,0,D,'b');B(t,W-t,H-t,H,0,D,'b');B(t,W-t,yn,yn+t,0,D,'b');
+    var ns=m.shelves||0,gs=(H-t-(yn+t)-ns*t)/(ns+1);for(var si=1;si<=ns;si++){var ys=yn+t+si*gs+(si-1)*t;B(t,W-t,ys,ys+t,0,D-20,'b')}
+    B(0,W,yn,H,-tb,0,'k');B(t+4,W-t-4,y0+t+4,yn-6,30,D-24,'a');B(t+4,W-t-4,y0+t+4+fz,y0+t+8+fz,D-26,D-24,'g');
+    if(m.plinth&&leg>0)B(0,W,0,leg-5,D-60-t,D-60,'b');
+    if(!nf){var FD=function(ya,yb,hy){var d={px:1.5,pz:D,side:'L',boxes:[],cyl:[]};B(1.5,W-1.5,ya,yb,D,D+ft,'f',d.boxes);if(!m.gola)B(W-40,W-30,hy-120,hy+120,D+ft,D+ft+14,'m',d.boxes);if(cm){d.px=W-d.px;d.side='R'}doors.push(d)};
+      FD(y0+1.5,y0+t+fz-1.5,y0+t+fz-200);FD(y0+t+fz+1.5,yn+t/2-1.5,y0+t+fz+250);FD(yn+t/2+1.5,H-1.5,yn+t/2+120)}
+    if(leg>0&&!m.plinth)[[45,45],[W-45,45],[45,D-45],[W-45,D-45]].forEach(function(p){Cy('y',p[0],leg/2,p[1],20,leg)});
+    return res();
+  }
   if(T.corner){
     var W2=m.W2||W,cd2=+m.cdoors===2;
     B(0,D,y0,H,W2-t,W2,'b');if(!cd2)B(D-t,D,y0,H,D,W2-t,'b');B(W-t,W,y0,H,0,D,'b');
@@ -2079,16 +2166,18 @@ function boxes3d(m,mode,holes){
       if(hw){Cy('x',W-t-4,yb-5,60,2.5,8,'p');Cy('x',W-t-4,yb-5,D-60,2.5,8,'p');Cy('z',60,yb-5,W2-t-4,2.5,8,'p');Cy('z',D-t-60,yb-5,W2-t-4,2.5,8,'p')}}
     B(0,W,y0,H,-tb,0,'k');B(-tb,0,y0,H,0,W2,'k');
     if(leg>0)[[45,45],[W-45,45],[45,W2-45],[D-45,W2-45],[W-45,D-45]].forEach(function(p){Cy('y',p[0],leg/2,p[1],20,leg)});
+    var cya=GO&&T.hang?y0-18.5:y0+1.5,cyb=GL?H-31:H-1.5;
+    if(GL){var cgd=27;B(D,W,H-58,H-56,D-cgd,D,'al');B(D,W,H-58,H,D-cgd,D-cgd+2,'al');B(D-cgd,D,H-58,H-56,D,W2,'al');B(D-cgd,D-cgd+2,H-58,H,D,W2,'al')}
     if(!nf){
       if(cd2){
-        mkDoor(D+ft+2,W-1.5,y0+1.5,H-1.5,'R',D,hy0,true);
+        mkDoor(D+ft+2,W-1.5,cya,cyb,'R',D,hy0,true);
         var za=D+2,zb=W2-1.5,d2={px:D,pz:zb,side:'L',boxes:[],cyl:[]};
-        B(D,D+ft,y0+1.5,H-1.5,za,zb,'f',d2.boxes);
-        B(D+ft,D+ft+14,hy0-70,hy0+70,za+16,za+26,'m',d2.boxes);
+        B(D,D+ft,cya,cyb,za,zb,'f',d2.boxes);
+        if(!GO)B(D+ft,D+ft+14,hy0-70,hy0+70,za+16,za+26,'m',d2.boxes);
         if(hw){var k2=hingesFor(H-y0-3);for(var hi=0;hi<k2;hi++){var yh=k2===1?(y0+H)/2:y0+100+hi*(H-y0-200)/(k2-1);Cy('x',D+6,yh,zb-22,17.5,12,'h',d2.cyl)}}
         if(cm){d2.px=W-d2.px;d2.side='R'}
         doors.push(d2);
-      }else mkDoor(D,W,y0+1.5,H-1.5,'R',D,hy0,true);
+      }else mkDoor(D,W,cya,cyb,'R',D,hy0,true);
     }
     if(hw)[y0+t/2,H-t/2].forEach(function(yy){
       [50,D-50].forEach(function(z){Cy('x',W-25,yy,z,4,50,'c')});
@@ -2124,6 +2213,11 @@ function boxes3d(m,mode,holes){
     if(hw){var zs=[sz0+Math.min(50,sd3/4),sz1-Math.min(50,sd3/4)];
       if(kf3)[[xi0,zs[0]],[xi0,zs[1]],[xi1,zs[0]],[xi1,zs[1]]].forEach(function(p,ii){Cy('x',ii<2?p[0]+16:p[0]-16,yb2+t/2,p[1],3.5,50,'c')});
       else [[xi0+4,zs[0]],[xi0+4,zs[1]],[xi1-4,zs[0]],[xi1-4,zs[1]]].forEach(function(p){Cy('x',p[0],yb2-5,p[1],2.5,8,'p')})}}
+  if(T.dryer&&!m._inner){var rx0=t+12,rx1=W-t-12,rw=rx1-rx0,zf=D-40,zb=25;
+    B(rx0,rx1,y0+t+4,y0+t+9,zb,zf,'h');
+    [[y0+t+60,'c'],[y0+(H-y0)*0.52,'p']].forEach(function(q){var yy=q[0];B(rx0,rx1,yy,yy+4,zb,zb+4,'h');B(rx0,rx1,yy,yy+4,zf-4,zf,'h');B(rx0,rx0+4,yy,yy+4,zb,zf,'h');B(rx1-4,rx1,yy,yy+4,zb,zf,'h');
+      if(q[1]==='p'){var nw=Math.max(6,Math.round(rw/30));for(var wi=1;wi<nw;wi++){var wx=rx0+wi*rw/nw;B(wx-2.5,wx+2.5,yy,yy+150,zb+58,zb+64,'h');B(wx-2.5,wx+2.5,yy,yy+90,zf-52,zf-46,'h')}}
+      else{var nc=Math.max(4,Math.round(rw/60));for(var ci=1;ci<nc;ci++){var cx2=rx0+ci*rw/nc;B(cx2-2.5,cx2+2.5,yy,yy+5,zb,zf,'h')}}})}
   if(!m._inner){B(0,W,y0,H,-tb,0,'k');
   if(m.plinth&&leg>0)B(0,W,0,leg-5,D-60-t,D-60,'b');}
   if(leg>0&&!m.plinth&&!m._inner)[[45,45],[W-45,45],[45,D-45],[W-45,D-45]].forEach(function(p){Cy('y',p[0],leg/2,p[1],20,leg)});
@@ -2190,7 +2284,11 @@ function boxes3d(m,mode,holes){
     for(var q=0;q<dr;q++){
       var ya=GL&&GL.fr?GL.fr[q][0]:y0+3+q*(fh+3),yx=ya+20,z1=D,z0=D-bd,xa=xi0+13,xb=xi1-13,dd={len:bd,boxes:[],cyl:[]};
       drawers.push(dd);
-      B(xa,xa+t,yx,yx+hb,z0,z1,'b',dd.boxes);B(xb-t,xb,yx,yx+hb,z0,z1,'b',dd.boxes);B(xa+t,xb-t,yx,yx+hb,z0,z0+t,'b',dd.boxes);B(xa+t,xb-t,yx,yx+hb,z1-t,z1,'b',dd.boxes);B(xa,xb,yx-3,yx,z0,z1,'k',dd.boxes);
+      if(T.cargo){var cz0=z0+10,cz1=D-8,cx0=xa+4,cx1=xb-4,ty=fh-40,nt=ty>500?3:2;B(cx0,cx0+12,yx,ya+fh-20,cz1-12,cz1,'h',dd.boxes);B(cx0,cx0+12,yx,ya+fh-20,cz0,cz0+12,'h',dd.boxes);B(cx0,cx0+12,ya+fh-32,ya+fh-20,cz0,cz1,'h',dd.boxes);
+        for(var ti=0;ti<nt;ti++){var ty0=yx+ti*(ty-20)/nt;B(cx0,cx1,ty0,ty0+3,cz0,cz0+3,'h',dd.boxes);B(cx0,cx1,ty0,ty0+3,cz1-3,cz1,'h',dd.boxes);B(cx0,cx0+3,ty0,ty0+3,cz0,cz1,'h',dd.boxes);B(cx1-3,cx1,ty0,ty0+3,cz0,cz1,'h',dd.boxes);
+          B(cx0,cx1,ty0+80,ty0+83,cz0,cz0+3,'h',dd.boxes);B(cx0,cx1,ty0+80,ty0+83,cz1-3,cz1,'h',dd.boxes);B(cx0,cx0+3,ty0+80,ty0+83,cz0,cz1,'h',dd.boxes);B(cx1-3,cx1,ty0+80,ty0+83,cz0,cz1,'h',dd.boxes);
+          for(var tr=1;tr<5;tr++){var tz=cz0+tr*(cz1-cz0)/5;B(cx0,cx1,ty0,ty0+4,tz-2,tz+2,'h',dd.boxes)}}}
+      else{B(xa,xa+t,yx,yx+hb,z0,z1,'b',dd.boxes);B(xb-t,xb,yx,yx+hb,z0,z1,'b',dd.boxes);B(xa+t,xb-t,yx,yx+hb,z0,z0+t,'b',dd.boxes);B(xa+t,xb-t,yx,yx+hb,z1-t,z1,'b',dd.boxes);B(xa,xb,yx-3,yx,z0,z1,'k',dd.boxes);}
       if(!nf){B(1.5,W-1.5,ya,ya+fh,D,D+ft,'f',dd.boxes);if(!GO)B(W/2-70,W/2+70,ya+fh/2-5,ya+fh/2+5,D+ft,D+ft+14,'m',dd.boxes)}
       if(hw){B(t,t+13,yx+hb/2-5,yx+hb/2+5,z0,z1,'h');B(W-t-13,W-t,yx+hb/2-5,yx+hb/2+5,z0,z1,'h')}
     }
@@ -2213,7 +2311,7 @@ function boxes3d(m,mode,holes){
 }
 function colorsFor(m){
   var sm=M(m.surfMat);
-  return {b:m.cfB||(TYPES[m.type].custom?(m.color||'#c9b48a'):((M(m.korpus)||{}).color||'#cdb892')),f:m.cfF||(M(m.front)||{}).color||'#eceae3',k:(M(m.back)||{}).color||'#a08c70',m:'#8c969b',a:'#e4e7e9',w:'#d8d2c6',g:'#2c3135',s:m.cfS||(sm&&sm.color)||'#4d5258',t:m.cfS||(sm&&sm.color)||'#a9c7cf',
+  return {b:m.cfB||(TYPES[m.type].custom?(m.color||'#c9b48a'):((M(m.korpus)||{}).color||'#cdb892')),f:m.cfF||(M(m.front)||{}).color||'#eceae3',k:(M(m.back)||{}).color||'#f3f2ee',m:'#8c969b',a:m.cfA||'#e4e7e9',w:'#d8d2c6',g:'#2c3135',s:m.cfS||(sm&&sm.color)||'#4d5258',t:m.cfS||(sm&&sm.color)||'#a9c7cf',
     h:'#aeb4ba',c:'#d9a521',ce:'#2f9e6b',dw:'#b9854a',p:'#2f7fc4',x:m.color||'#c9b48a',al:({qora:'#1f2224',oltin:'#c4a052',kumush:'#b9c0c5'})[m.alu]||'#1f2224',gl:'#9fc2d0',mr:'#c9d6dc',alq:'#1f2224',alk:'#b9c0c5',alo:'#c4a052',alw:'#e9e9e6'};
 }
 function buildGroup(m,mode,sel,V,holes){
@@ -2221,7 +2319,7 @@ function buildGroup(m,mode,sel,V,holes){
   var edgeW=new THREE.LineBasicMaterial({color:sel?0x8a4a1c:0x1d2b36,transparent:true,opacity:0.9}),edgeP=new THREE.LineBasicMaterial({color:0x00b7e0});
   var edge=new THREE.LineBasicMaterial({color:sel?0xb0551a:0x222222,transparent:true,opacity:sel?1:(glass?0.75:0.5)});
   var fwood=!/mdf|emal|glyan|akril|bo'yoq/i.test(((M(m.front)||{}).name)||'');
-  function mat(k){if(wire)return new THREE.MeshBasicMaterial({color:k==='p'?0x00b7e0:(col[k]||'#999999'),transparent:true,opacity:k==='p'?0.28:k==='gl'?0.03:0.07,depthWrite:false,side:THREE.DoubleSide});var o={color:col[k]||'#999999'};if(k==='gl'){o.transparent=true;o.opacity=glass?0.12:0.32;o.depthWrite=false}else if(glass&&!HW[k]){o.transparent=true;o.opacity=k==='a'?0.3:0.16;o.depthWrite=false}
+  function mat(k,cc){if(wire)return new THREE.MeshBasicMaterial({color:k==='p'?0x00b7e0:(cc||col[k]||'#999999'),transparent:true,opacity:k==='p'?0.28:k==='gl'?0.03:0.07,depthWrite:false,side:THREE.DoubleSide});var o={color:cc||col[k]||'#999999'};if(k==='gl'){o.transparent=true;o.opacity=glass?0.12:0.32;o.depthWrite=false}else if(glass&&!HW[k]){o.transparent=true;o.opacity=k==='a'?0.3:0.16;o.depthWrite=false}
     if(!HQ)return new THREE.MeshLambertMaterial(o);
     var q=PBR[k]||[0.6,0,0];o.roughness=q[0];o.metalness=q[1];o.envMapIntensity=k==='gl'?0.8:0.35;
     if((q[2]||(k==='f'&&fwood))&&!glass){o.map=grainTex();if(k==='f')o.roughness=0.6}
@@ -2229,12 +2327,12 @@ function buildGroup(m,mode,sel,V,holes){
   function addBox(b,par,ox,oz){
     var geo,mesh;
     if(b.poly&&b.pax==='x'){var sp2=new THREE.Shape();b.poly.forEach(function(p,i){if(i)sp2.lineTo((p[0]-oz)*s,p[1]*s);else sp2.moveTo((p[0]-oz)*s,p[1]*s)});
-      geo=new THREE.ExtrudeGeometry(sp2,{depth:(b.x1-b.x0)*s,bevelEnabled:false});mesh=new THREE.Mesh(geo,mat(b.k));mesh.rotation.y=-Math.PI/2;mesh.position.set((b.x1-ox)*s,0,0)}
+      geo=new THREE.ExtrudeGeometry(sp2,{depth:(b.x1-b.x0)*s,bevelEnabled:false});mesh=new THREE.Mesh(geo,mat(b.k,b.col));mesh.rotation.y=-Math.PI/2;mesh.position.set((b.x1-ox)*s,0,0)}
     else if(b.poly&&b.pax==='z'){var sp3=new THREE.Shape();b.poly.forEach(function(p,i){if(i)sp3.lineTo((p[0]-ox)*s,p[1]*s);else sp3.moveTo((p[0]-ox)*s,p[1]*s)});
-      geo=new THREE.ExtrudeGeometry(sp3,{depth:(b.z1-b.z0)*s,bevelEnabled:false});mesh=new THREE.Mesh(geo,mat(b.k));mesh.position.set(0,0,(b.z0-oz)*s)}
+      geo=new THREE.ExtrudeGeometry(sp3,{depth:(b.z1-b.z0)*s,bevelEnabled:false});mesh=new THREE.Mesh(geo,mat(b.k,b.col));mesh.position.set(0,0,(b.z0-oz)*s)}
     else if(b.poly){var sp=new THREE.Shape();b.poly.forEach(function(p,i){if(i)sp.lineTo((p[0]-ox)*s,(p[1]-oz)*s);else sp.moveTo((p[0]-ox)*s,(p[1]-oz)*s)});
-      geo=new THREE.ExtrudeGeometry(sp,{depth:(b.y1-b.y0)*s,bevelEnabled:false});mesh=new THREE.Mesh(geo,mat(b.k));mesh.rotation.x=Math.PI/2;mesh.position.set(0,b.y1*s,0)}
-    else{geo=new THREE.BoxGeometry((b.x1-b.x0)*s,(b.y1-b.y0)*s,(b.z1-b.z0)*s);mesh=new THREE.Mesh(geo,mat(b.k));
+      geo=new THREE.ExtrudeGeometry(sp,{depth:(b.y1-b.y0)*s,bevelEnabled:false});mesh=new THREE.Mesh(geo,mat(b.k,b.col));mesh.rotation.x=Math.PI/2;mesh.position.set(0,b.y1*s,0)}
+    else{geo=new THREE.BoxGeometry((b.x1-b.x0)*s,(b.y1-b.y0)*s,(b.z1-b.z0)*s);mesh=new THREE.Mesh(geo,mat(b.k,b.col));
       mesh.position.set(((b.x0+b.x1)/2-ox)*s,(b.y0+b.y1)/2*s,((b.z0+b.z1)/2-oz)*s);if(b.ry)mesh.rotation.y=b.ry}
     par.add(mesh);if(b.pid&&V&&V.tagPid)mesh.userData.pid='p:'+b.pid;
     if(HQ&&!glass&&!wire&&b.k!=='gl'){mesh.castShadow=true;mesh.receiveShadow=true}
@@ -2431,6 +2529,7 @@ document.addEventListener('click',function(e){
   if(b.hasAttribute('data-hq')){HQ=!HQ;try{localStorage.setItem('mebel-hq',HQ?'1':'0')}catch(e){}
     $$('[data-hq]').forEach(function(x){x.classList.toggle('on',HQ)});$$('[data-hqbw]').forEach(function(x){x.style.display=HQ?'inline-flex':'none'});[EV,RV,CV,typeof DV!=='undefined'?DV:null].forEach(setHQ);rebuildEditor(false);rebuildRoom(false);if(S.client)rebuildClient(false);return}
   if(b.hasAttribute('data-play')){
+    if(b.closest('#dz')&&typeof DZ!=='undefined'&&DZ.view!=='3'&&!A.play){DZ.view='3';DZ.op=null;DZ.ghost=null;DZ.tool='sel';dzRender();setTimeout(function(){dz3d('fit')},30)}
     if(!A.play){A.play=true;A.target=1;A.hold=0}else{A.play=false;A.target=0}
     syncAnimUI();
   }
@@ -2879,7 +2978,7 @@ updKindUI();
 var KPO={V:'Tik (yon/stoyka)',H:'Gorizontal (tub/polka)',F:'Frontal (eshik/orqa)'},KPR={k:'Korpus',e:'Eshik (fasad)',f:'Fasad (qotirilgan)',o:'Orqa (HDF)'};
 var kpSel=null,kpStep=10;
 function kpMat(m,r){return r==='e'||r==='f'?m.front:r==='o'?m.back:m.korpus}
-function kpTh(m,p){return (M(p.mat||kpMat(m,p.r))||{th:p.r==='o'?3:16}).th}
+function kpTh(m,p){if(p.th>0)return p.th;return (M(p.mat||kpMat(m,p.r))||{th:p.r==='o'?3:16}).th}
 function kpArc3(p1,pm,p2,n){var ax=p1[0],ay=p1[1],bx=pm[0],by=pm[1],cx=p2[0],cy=p2[1],d=2*(ax*(by-cy)+bx*(cy-ay)+cx*(ay-by));if(Math.abs(d)<1e-6)return [];
   var ux=((ax*ax+ay*ay)*(by-cy)+(bx*bx+by*by)*(cy-ay)+(cx*cx+cy*cy)*(ay-by))/d,uy=((ax*ax+ay*ay)*(cx-bx)+(bx*bx+by*by)*(ax-cx)+(cx*cx+cy*cy)*(bx-ax))/d,r=Math.hypot(ax-ux,ay-uy);
   var a1=Math.atan2(ay-uy,ax-ux),am=Math.atan2(by-uy,bx-ux),a2=Math.atan2(cy-uy,cx-ux),nr=function(a){while(a<0)a+=2*Math.PI;while(a>=2*Math.PI)a-=2*Math.PI;return a};
@@ -2931,7 +3030,8 @@ function kpContact(a,b){var A3=['x','y','z'];for(var i=0;i<3;i++){var ax=A3[i],o
     if(Math.abs(a[ax+'0']-b[ax+'1'])<1.5)c=a[ax+'0'];else if(Math.abs(a[ax+'1']-b[ax+'0'])<1.5)c=a[ax+'1'];if(c==null)continue;
     var lo=o.map(function(q){return Math.max(a[q+'0'],b[q+'0'])}),hi=o.map(function(q){return Math.min(a[q+'1'],b[q+'1'])});if(hi[0]-lo[0]<=0.5||hi[1]-lo[1]<=0.5)continue;
     if(hi[1]-lo[1]>hi[0]-lo[0]){o=[o[1],o[0]];lo=[lo[1],lo[0]];hi=[hi[1],hi[0]]}return {ax:ax,c:c,oa:o,lo:lo,hi:hi}}return null}
-function blockToPanels(src){
+function blockToPanels(src){var _ps=blockToPanels0(src);try{var _T=TYPES[src.type]||{};if(src.frontType==='oven'&&!_T.custom)apAuto(src,_ps,'oven');if(_T.fridge)apAuto(src,_ps,'fridge')}catch(_e){}return _ps}
+function blockToPanels0(src){
   var d=boxes3d(src,'solid'),out=[],cnt={};
   function push(b,role){var dx=b.x1-b.x0,dy=b.y1-b.y0,dz=b.z1-b.z0,mn=Math.min(dx,dy,dz);if(mn>40||Math.max(dx,dy,dz)<60)return null;
     var o=mn===dx?'V':mn===dy?'H':'F',n;
@@ -3314,7 +3414,7 @@ function dzRender(){try{var _cb=document.getElementById('dz-showb');if(_cb)_cb.c
   $$('#dz [data-m3]').forEach(function(b){b.classList.toggle('on',b.dataset.m3===DZ.mode3)});var rb=$('#dz-roomb');if(rb)rb.classList.toggle('on',!!DZ.room);
   (function(){var ids={};dzPanels().forEach(function(p){ids[p.id]=1});Object.keys(DZ.hid).forEach(function(k){if(!ids[k])delete DZ.hid[k]});var n=Object.keys(DZ.hid).length,b=$('#dz-unhide');b.hidden=!n;b.textContent='👁 Hammasini ko\'rsatish ('+n+')'})();
   $('#dz-wposw').hidden=DZ.tool!=='R';$('#dz-jf').hidden=DZ.tool!=='J';
-  if(DZ.view==='3'){sv.style.display='none';h3.hidden=false;h3.classList.remove('pip');dz3d();$$('#dz [data-view]').forEach(function(b){b.classList.toggle('on',b.dataset.view==='3')});$$('#dz [data-tool]').forEach(function(b){b.classList.remove('on')});dzSide();dzXYZ();$('#dz-status').textContent='Ko\'rinish: 3D · bosib panel tanlang, sudrab aylantiring, g\'ildirak bilan yaqinlashtiring. Chizish uchun Old/Yon/Tepadan ni tanlang.';return}
+  if(DZ.view==='3'){sv.style.display='none';h3.hidden=false;h3.classList.remove('pip');dz3d();$$('#dz [data-view]').forEach(function(b){b.classList.toggle('on',b.dataset.view==='3')});$$('#dz [data-tool]').forEach(function(b){b.classList.remove('on')});dzSide();dzXYZ();dzWallNav();$('#dz-status').textContent='Ko\'rinish: 3D · bosib panel tanlang, sudrab aylantiring, g\'ildirak bilan yaqinlashtiring. Chizish uchun Old/Yon/Tepadan ni tanlang.';return}
   sv.style.display='';h3.hidden=!(DZ.pip&&ps.length);if(!h3.hidden){h3.classList.add('pip');dz3d()}
   if(!DZ.vb){dzFit();return}
   var cvv=$('#dz-cv'),cw=Math.max(50,cvv.clientWidth),ch=Math.max(50,cvv.clientHeight);if(Math.abs(DZ.vb.h/DZ.vb.w-ch/cw)>0.001){var nh=DZ.vb.w*ch/cw;DZ.vb.y+=(DZ.vb.h-nh)/2;DZ.vb.h=nh}
@@ -3338,11 +3438,12 @@ function dzRender(){try{var _cb=document.getElementById('dz-showb');if(_cb)_cb.c
   var isFace=function(p){return dzThin(p)===dzW3()};
   var ord=function(p){return p.r==='o'?0:p.r==='k'?(isFace(p)?0.5:1):2};
   ps.slice().sort(function(a,b){return ord(a)-ord(b)}).forEach(function(p){if(!dzVisible(p))return;
-    var q=dzProj(kpBox(m,p)),sel=!!selm[p.id],fr=p.r==='e'||p.r==='f',cls=fr?'dz-fr':p.r==='o'?'dz-bk':'dz-pn';
-    var fill=sel?'var(--dz-sel)':fr?'rgba(176,85,26,.06)':p.r==='o'?'rgba(160,140,112,.18)':isFace(p)?(DZ.view==='F'||DZ.view==='B'?'var(--dz-face)':'rgba(200,175,130,.22)'):'var(--dz-edge)';
+    var q=dzProj(kpBox(m,p)),sel=!!selm[p.id],fr=p.r==='e'||p.r==='f',cls=fr?'dz-fr':p.r==='o'?'dz-bk':'dz-pn',apx=p.r==='ap';
+    var fill=sel?'var(--dz-sel)':apx?'rgba(90,120,150,.16)':fr?'rgba(176,85,26,.06)':p.r==='o'?'rgba(160,140,112,.18)':isFace(p)?(DZ.view==='F'||DZ.view==='B'?'var(--dz-face)':'rgba(200,175,130,.22)'):'var(--dz-edge)';
     var pg=kpPoly(m,p),att=' class="'+cls+'" data-p="'+p.id+'" fill="'+fill+'" stroke="'+(sel?'var(--accent)':fr?'#8a5a3c':'var(--dz-line)')+'" stroke-width="'+r(sel?sw*2:sw)+'"'+(fr?' stroke-dasharray="'+r(6*px)+' '+r(4*px)+'"':'');
     if(pg&&isFace(p)){var VP=DZV[DZ.view],pts=pg.pts.map(function(c){return r(c[0]*VP.su)+','+r(Yv(c[1]*VP.sv))}).join(' ');h+='<polygon points="'+pts+'"'+att+'/>'}
-    else h+='<rect x="'+r(q.u0)+'" y="'+r(Yv(q.v1))+'" width="'+r(Math.max(px,q.u1-q.u0))+'" height="'+r(Math.max(px,q.v1-q.v0))+'"'+att+'/>';
+    else h+='<rect x="'+r(q.u0)+'" y="'+r(Yv(q.v1))+'" width="'+r(Math.max(px,q.u1-q.u0))+'" height="'+r(Math.max(px,q.v1-q.v0))+'"'+att+(apx?' stroke-dasharray="'+r(3*px)+' '+r(3*px)+'"':'')+'/>';
+    if(apx&&q.u1-q.u0>40*px&&q.v1-q.v0>20*px){var tu=(q.u0+q.u1)/2,tv=Yv((q.v0+q.v1)/2);h+='<line x1="'+r(q.u0)+'" y1="'+r(Yv(q.v0))+'" x2="'+r(q.u1)+'" y2="'+r(Yv(q.v1))+'" stroke="#5b6b7b" stroke-width="'+r(px)+'" opacity=".5" style="pointer-events:none"/><line x1="'+r(q.u0)+'" y1="'+r(Yv(q.v1))+'" x2="'+r(q.u1)+'" y2="'+r(Yv(q.v0))+'" stroke="#5b6b7b" stroke-width="'+r(px)+'" opacity=".5" style="pointer-events:none"/><text x="'+r(tu)+'" y="'+r(tv+fs*0.35)+'" font-size="'+r(fs)+'" text-anchor="middle" fill="#3d4b58" class="dz-nt" style="pointer-events:none">'+(API[p.ap]||'')+' '+esc(p.n)+'</text>'}
     if(fr&&DZ.view==='F'&&DZ.showS!==false){var x0=q.u0,x1=q.u1,yt=Yv(q.v1),yb=Yv(q.v0);
       if(p.sld){h+='<line x1="'+r(x0+25*px)+'" x2="'+r(x1-25*px)+'" y1="'+r((yt+yb)/2)+'" y2="'+r((yt+yb)/2)+'" stroke="#8a5a3c" stroke-width="'+r(sw*1.5)+'" marker-start="url(#dzB)" marker-end="url(#dzB)" style="pointer-events:none"/>';
         var sc2=kpeSecs(p,p.b-50,20),kf2=(yb-yt)/Math.max(1,p.b);for(var s2=0;s2<sc2.length;s2++){var ya2=yt+(25+sc2[s2].t-(s2?10:25))*kf2,yb2=yt+(25+sc2[s2].t+sc2[s2].h+(s2<sc2.length-1?10:25))*kf2,c2=sc2[s2].c;
@@ -3351,7 +3452,7 @@ function dzRender(){try{var _cb=document.getElementById('dz-showb');if(_cb)_cb.c
       else if(p.r==='e'){var xa=p.hs==='R'?x1:x0,xo=p.hs==='R'?x0:x1;h+='<polyline points="'+r(xo)+','+r(yt)+' '+r(xa)+','+r((yt+yb)/2)+' '+r(xo)+','+r(yb)+'" fill="none" stroke="#8a5a3c" stroke-width="'+r(sw)+'" style="pointer-events:none"/>'}
       else h+='<line x1="'+r((x0+x1)/2-30)+'" x2="'+r((x0+x1)/2+30)+'" y1="'+r((yt+yb)/2)+'" y2="'+r((yt+yb)/2)+'" stroke="#8a5a3c" stroke-width="'+r(sw*2)+'" style="pointer-events:none"/>'}
   });
-  if(DZ.showK){var VK2=DZV[DZ.view],kp='';ps.forEach(function(p){if(p.r==='o'||!dzVisible(p)||(p.dg&&p.r==='k'))return;var kr=kpKr(p),b=kpBox(m,p),q=dzProj(b);
+  if(DZ.showK){var VK2=DZV[DZ.view],kp='';ps.forEach(function(p){if(p.r==='o'||p.r==='ap'||!dzVisible(p)||(p.dg&&p.r==='k'))return;var kr=kpKr(p),b=kpBox(m,p),q=dzProj(b);
       Object.keys(kr).forEach(function(k){if(!kr[k])return;var ax=k[0],val=b[k];
         if(ax===VK2.u){var uu=val*VK2.su;kp+='M'+r(uu)+' '+r(Yv(q.v0))+'V'+r(Yv(q.v1))}else if(ax===VK2.v){var vv=val*VK2.sv;kp+='M'+r(q.u0)+' '+r(Yv(vv))+'H'+r(q.u1)}});
       var fk={F:'z1',B:'z0',S:'x0',R:'x1',T:'y1'}[DZ.view];if(kr[fk]){var cu=(q.u0+q.u1)/2,cv=(q.v0+q.v1)/2;if(q.u1-q.u0>=q.v1-q.v0)kp+='M'+r(q.u0+2*px)+' '+r(Yv(cv))+'H'+r(q.u1-2*px);else kp+='M'+r(cu)+' '+r(Yv(q.v0+2*px))+'V'+r(Yv(q.v1-2*px))}});
@@ -3418,14 +3519,56 @@ function dzXYZ(){var el=document.getElementById('dz-xyz');if(!el||!DZ.open)retur
       h+='<b title="'+esc(p.n)+'">'+esc(p.n)+'</b>'+AX.map(function(a){return mv(a,p[a])}).join('')+'<span class="xyz-sp"></span>'+
         '<label class="xyz-f" title="'+esc(L[0])+'"><i>'+esc(L[0].replace(/\s*\(.*\)/,''))+'</i><input type="number" step="1" min="10" data-dzf="a" value="'+Math.round(p.a)+'"></label>'+
         '<label class="xyz-f" title="'+esc(L[1])+'"><i>'+esc(L[1].replace(/\s*\(.*\)/,''))+'</i><input type="number" step="1" min="10" data-dzf="b" value="'+Math.round(p.b)+'"></label>'+
-        '<span class="xyz-c" title="Qalinligi"><i>Qal.</i>'+t+'</span><span class="xyz-sp"></span>'+
-        '<select data-dzf="mat" title="Material"><option value="">Blok bo\'yicha ('+esc((M(kpMat(m,p.r))||{name:'—'}).name)+')</option>'+S.mats.filter(function(x){return x.cat==='plita'}).map(function(x){return '<option value="'+x.id+'"'+(p.mat===x.id?' selected':'')+'>'+esc(x.name)+'</option>'}).join('')+'</select>'}
+        '<span class="xyz-c" title="Qalinligi"><i>'+(p.r==='ap'?'Chuq.':'Qal.')+'</i>'+t+'</span><span class="xyz-sp"></span>'+(p.r==='ap'?'':
+        '<select data-dzf="mat" title="Material"><option value="">Blok bo\'yicha ('+esc((M(kpMat(m,p.r))||{name:'—'}).name)+')</option>'+S.mats.filter(function(x){return x.cat==='plita'}).map(function(x){return '<option value="'+x.id+'"'+(p.mat===x.id?' selected':'')+'>'+esc(x.name)+'</option>'}).join('')+'</select>')}
     else{h+='<b>'+ps.length+' ta panel</b>'+AX.map(function(a){return mv(a,bb[a+'0'])}).join('')+'<span class="xyz-sp"></span><span class="xyz-c" title="Belgilanganlar gabariti"><i>Gabarit</i>'+Math.round(bb.x1-bb.x0)+'×'+Math.round(bb.y1-bb.y0)+'×'+Math.round(bb.z1-bb.z0)+'</span>'}
     h+='</div>'}
   else h+='<span class="xyz-h">Panelni tanlang — X / Y / Z, o\'lcham va materialni shu yerda yozib o\'zgartirasiz</span>';
   el.innerHTML=h}
+/* devorlar bo'ylab burilish: A → B (o'ng) → C → D (chap) */
+var WORD=['A','B','C','D'],WNM={A:'old devor',B:'o\'ng devor',C:'qarshi devor',D:'chap devor'};
+function dzWallNext(w,d){var i=WORD.indexOf(w||'A');return WORD[(i+d+4)%4]}
+function dzTurnWall(nw){if(!nw)return;if(!DZ.room){DZ.room=true;S.dzRoom=true}var c=dzRoomCtx();if(nw===c.w&&!(S.cur.panels||[]).length){dzFit();return}
+  kpSnap();var GK=dzGuideKeep();S.wallGuides=S.wallGuides||{};if(GK)S.wallGuides[GK.w]=GK;
+  if((S.cur.panels||[]).length)dzRoomNew0();
+  S.curPlace=S.curPlace||{off:0};S.curPlace.wall=nw;S.lastWall=nw;S.curPlace.x=null;S.curPlace.x=autoX(S.cur,nw,null)||0;delete S.cur.guides;
+  var g=S.wallGuides[nw];if(g)dzGuideRestore(g);
+  DZ.sel=[];kpSel=null;DZ.rmSel=null;DZ.rmSels=[];DZ.gsel=null;DZ.view='F';DZ.sig3=null;DZRC={};DZ.forceSide=true;save();dzFit();
+  toast(nw+' — '+WNM[nw]+' ('+wallLen(nw)+' mm). Chizishni shu devorda davom ettiring')}
+function dzWallNav(){var el=document.getElementById('dz-wnav');if(!el)return;var show=DZ.open&&DZ.room&&DZ.view!=='3';el.hidden=!show;if(!show)return;
+  var w=dzRoomCtx().w,sig=w+S.room.W+'x'+S.room.L+S.project.map(function(i){return i.wall}).join('');if(el.dataset.sig===sig)return;el.dataset.sig=sig;
+  var cnt={};S.project.forEach(function(i){cnt[i.wall]=(cnt[i.wall]||0)+1});
+  var R=S.room,k=56/Math.max(R.W,R.L),pw=R.W*k,pl=R.L*k,x0=(64-pw)/2,y0=(64-pl)/2,L={A:[x0,y0,x0+pw,y0],B:[x0+pw,y0,x0+pw,y0+pl],C:[x0+pw,y0+pl,x0,y0+pl],D:[x0,y0+pl,x0,y0]};
+  var svg='<svg viewBox="0 0 64 64" width="30" height="30" aria-hidden="true"><rect x="'+x0+'" y="'+y0+'" width="'+pw+'" height="'+pl+'" fill="var(--surface)" stroke="var(--line)"/>'+WORD.map(function(q){var a=L[q],on=q===w;return '<line x1="'+a[0]+'" y1="'+a[1]+'" x2="'+a[2]+'" y2="'+a[3]+'" stroke="'+(on?'var(--accent)':cnt[q]?'#8a8a8a':'#cfcfcf')+'" stroke-width="'+(on?9:6)+'" stroke-linecap="round" data-dz="wall:'+q+'" style="cursor:pointer"><title>'+q+' — '+WNM[q]+'</title></line>'}).join('')+'<circle cx="32" cy="'+(y0+pl*0.62)+'" r="2.6" fill="var(--accent)"/><path d="M32 '+(y0+pl*0.62-3)+' l-3 -5 h6z" fill="var(--accent)"/></svg>';
+  var l=dzWallNext(w,-1),r=dzWallNext(w,1);
+  el.innerHTML='<button class="btn sm" data-dz="wall:'+l+'" title="Chapdagi devorga o\'tish: '+l+' ('+WNM[l]+')">↶ '+l+'</button>'+svg+'<button class="btn sm" data-dz="wall:'+r+'" title="O\'ngdagi devorga o\'tish: '+r+' ('+WNM[r]+')">'+r+' ↷</button><span class="wn-l" title="'+WNM[w]+', '+wallLen(w)+' mm"><b>'+w+'</b><span class="tx"> '+WNM[w]+'</span></span>'}
+/* ---- panelli blok ichidagi maishiy texnika (xolodilnik, duxovka, mikroto'lqin, idish yuvish) ---- */
+var APC=[['Oq','#f1f2f0'],['Kumush (inoks)','#b9bec2'],['Qora','#2b2e31'],['Grafit','#4a4f55'],['Bej','#d8c8a8'],['Qizil','#a8322d']];
+function apChips(attr,cur){return '<div class="btns" style="gap:4px;margin:4px 0 8px">'+APC.map(function(c){return '<button class="btn sm'+(cur===c[1]?' pri':'')+'" '+attr+'="'+c[1]+'" title="'+c[0]+'" style="min-width:0;padding:4px 8px"><span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:'+c[1]+';border:1px solid #888;vertical-align:-2px"></span> '+c[0]+'</button>'}).join('')+'</div>'}
+var APN={fridge:'Xolodilnik (o\'rnatiladigan)',oven:'Duxovka',mw:'Mikroto\'lqinli pech',dw:'Idish yuvish mashinasi'},APR={fridge:'fridgeB',oven:'oven',mw:'mikro',dw:'pmash'},API={fridge:'🧊',oven:'♨',mw:'📻',dw:'🍽'};
+function itHasAp(m){var T=TYPES[m.type]||{};return T.cls==='app'&&!T.obst||m.frontType==='oven'||m.type==='panel'||!!T.fridge||(m.cmode==='panel'&&((m.panels||[]).some(function(p){return p.r==='ap'})||holeParts(m).some(function(h){return h.k==='hob'})))}
+function apMake(kind,g){var gw=g.x1-g.x0,gh=g.y1-g.y0,gd=g.z1-g.z0,w,h,d,y,x;
+  if(kind==='fridge'){w=gw-4;h=gh-6;d=Math.min(560,gd-20);y=g.y0+3}
+  else if(kind==='oven'){w=Math.min(595,gw-4);h=Math.min(595,gh-4);d=Math.min(550,gd-20);y=g.y1-h-2}
+  else if(kind==='mw'){w=Math.min(595,gw-4);h=Math.min(380,gh-4);d=Math.min(350,gd-20);y=g.y0+2}
+  else{w=Math.min(598,gw-4);h=Math.min(815,gh-4);d=Math.min(550,gd-20);y=g.y0+2}
+  x=g.x0+(gw-w)/2;d=Math.max(100,d);return {id:uid(),r:'ap',ap:kind,o:'F',n:APN[kind]||'Texnika',x:Math.round(x),y:Math.round(y),z:Math.round(g.z1-d),a:Math.round(w),b:Math.round(h),th:Math.round(d)}}
+function apGaps(m,ps){var V=ps.filter(function(p){return p.r==='k'&&p.o==='V'&&!p.dg}).map(function(p){return kpBox(m,p)}).sort(function(a,b){return a.x0-b.x0});if(V.length<2)return [];
+  var L=V[0],R=V[V.length-1],x0=L.x1,x1=R.x0;if(x1-x0<200)return [];
+  var Hs=ps.filter(function(p){return p.r==='k'&&p.o==='H'&&!p.dg}).map(function(p){return kpBox(m,p)}).filter(function(b){return b.x0<x0+40&&b.x1>x1-40}).sort(function(a,b){return a.y0-b.y0});
+  var prev=Math.min(L.y0,R.y0),top=Math.max(L.y1,R.y1),z0=Math.max(L.z0,R.z0),z1=Math.min(L.z1,R.z1),out=[];
+  Hs.forEach(function(b){if(b.y0-prev>100)out.push({x0:x0,x1:x1,y0:prev,y1:b.y0,z0:z0,z1:z1});prev=Math.max(prev,b.y1)});if(top-prev>100)out.push({x0:x0,x1:x1,y0:prev,y1:top,z0:z0,z1:z1});return out}
+function apAuto(m,ps,kind){var gs=apGaps(m,ps);if(!gs.length)return null;var best=null,score=1e9,want={fridge:9999,oven:600,mw:400,dw:820}[kind];
+  gs.forEach(function(g){var h=g.y1-g.y0,sc=kind==='fridge'?-h:Math.abs(h-want)-(kind==='oven'?g.y0*0.01:0);if(kind!=='fridge'&&h<want*0.75)sc+=5000;if(sc<score){score=sc;best=g}});
+  if(!best)return null;var p=apMake(kind,best);ps.push(p);return p}
+function apMigrate(){var all=S.project.map(function(i){return i.m});if(S.cur)all.push(S.cur);
+  all.forEach(function(m){if(!m||m.cmode!=='panel'||m.apMig||!(m.panels||[]).length)return;m.apMig=1;if(m.panels.some(function(p){return p.r==='ap'}))return;var nm=String(m.name||'');
+    if(/duxovka/i.test(nm))apAuto(m,m.panels,'oven');if(/xolodilnik/i.test(nm))apAuto(m,m.panels,'fridge')})}
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-apcol],[data-itcol]');if(!b)return;
+  if(b.hasAttribute('data-apcol')){var p=DZ.sel.length===1?dzGet(DZ.sel[0]):null;if(!p||p.r!=='ap')return;kpSnap();p.col=b.getAttribute('data-apcol');DZ.forceSide=true;kpChanged();return}
+  var it=S.project.find(function(q){return q.id===b.getAttribute('data-itcol')});if(!it)return;kpSnap();it.m.cfA=b.getAttribute('data-c');(it.m.panels||[]).forEach(function(q){if(q.r==='ap')delete q.col});if(S.editing===it.id){S.cur.cfA=it.m.cfA;(S.cur.panels||[]).forEach(function(q){if(q.r==='ap')delete q.col})}save();DZRC={};DZ.sig3=null;DZ.forceSide=true;dzRender();try{rebuildRoom(false)}catch(_e){}toast('Texnika rangi o\'zgardi')});
 function dzReq(){if(DZ.rq)return;DZ.rq=requestAnimationFrame(function(){DZ.rq=0;dzRender()})}
-function dzStatus(){dzXYZ();if(DZ.view==='3')return;var c=DZ.cur,V=DZV[DZ.view],t='Ko\'rinish: '+V.n+' · Masshtab: '+Math.round(100/dzPx())/100+' px/mm';
+function dzStatus(){dzXYZ();dzWallNav();if(DZ.view==='3')return;var c=DZ.cur,V=DZV[DZ.view],t='Ko\'rinish: '+V.n+' · Masshtab: '+Math.round(100/dzPx())/100+' px/mm';
   if(c)t+=' · '+V.u.toUpperCase()+' '+Math.round(c.u*V.su)+'  '+V.v.toUpperCase()+' '+Math.round(c.v*V.sv);
   t+=' · '+(DZ.tool==='H'?'Gorizontal panel: bo\'shliqqa bosing':DZ.tool==='V'?'Vertikal panel: bo\'shliqqa bosing':DZ.tool==='R'?'Panel chizish: to\'rtburchak torting ('+dzW3().toUpperCase()+' = '+DZ.wpos+' mm)':DZ.tool==='J'?(DZ.jA?'Qotirish: endi ikkinchi panelni bosing (uning chetiga buraladi)':'Qotirish: avval teshik o\'tadigan panelni bosing'):DZ.tool==='B'?(DZ.libT?'Blokni joylash: chizmada kerakli joyga bosing':'O\'ng tomondan blok turini tanlang'):DZ.sel.length?DZ.sel.length+' ta panel tanlangan':'Panelni bosib tanlang, bo\'shliqni bosib ichiga qo\'ying');
   $('#dz-status').textContent=t}
@@ -3435,11 +3578,15 @@ function dzSide(){
   if(DZ.tool==='B'){box.innerHTML='<div class="dz-task"><b>Vazifa:</b> tayyor blok qo\'yish <button class="btn sm" data-ctxx="1" title="Esc">✕ Chiqish</button></div>'+dzLibHTML();return}
   if(DZ.tool==='H'||DZ.tool==='V'||DZ.tool==='R'||DZ.tool==='J'){box.innerHTML=dzToolHTML();return}
   if(DZ.gsel&&!DZ.sel.length&&DZ.view!=='3'){var gh=dzGuideSelHTML();if(gh){box.innerHTML=gh;return}}
-  if(!ps.length){box.innerHTML=(DZ.room?dzRoomHTML()+'<hr style="border:0;border-top:1px solid var(--line,#ddd);margin:10px 0">':'')+'<h3>'+(DZ.room?'Yangi blok chizish':'Nimadan boshlaymiz?')+'</h3><div class="r3"><label class="f">Eni<input id="dz-W" type="number" value="'+m.W+'"></label><label class="f">Bo\'yi<input id="dz-H" type="number" value="'+m.H+'"></label><label class="f">Chuqurligi<input id="dz-D" type="number" value="'+m.D+'"></label></div>'+
+  if(!ps.length){box.innerHTML=(DZ.room?dzRoomHTML()+'<hr style="border:0;border-top:1px solid var(--line,#ddd);margin:10px 0">':'')+(dzGuideCount()?'<button class="btn sm" data-dz="gclr" style="margin:0 0 10px">🧹 Yordamchi chiziqlarni tozalash ('+dzGuideCount()+' ta)</button>':'')+'<h3>'+(DZ.room?'Yangi blok chizish':'Nimadan boshlaymiz?')+'</h3><div class="r3"><label class="f">Eni<input id="dz-W" type="number" value="'+m.W+'"></label><label class="f">Bo\'yi<input id="dz-H" type="number" value="'+m.H+'"></label><label class="f">Chuqurligi<input id="dz-D" type="number" value="'+m.D+'"></label></div>'+
     '<div class="btns" style="flex-direction:column;align-items:stretch"><button class="btn pri sm" data-dza="start">Korpus (shkaf, tumba)</button><button class="btn sm" data-dza="tpl-desk">Ofis stoli</button><button class="btn sm" data-dza="tpl-pc">Kompyuter stoli (tumbali)</button><button class="btn sm" data-dza="tpl-shelf">Ochiq stellaj</button><button class="btn sm" data-dza="empty">Bo\'sh — o\'zim chizaman</button><button class="btn sm" data-tool="B">📦 Tayyor bloklardan yig\'ish</button></div>'+
     '<p class="hint">Bo\'sh varaqda «▭ Panel» (R) bilan istalgan ko\'rinishda to\'rtburchak tortib panel chizasiz: Old ko\'rinishda — old panel, Yonda — yon panel, Tepadan — gorizontal panel.</p>';return}
   if(DZ.fxAsk&&DZ.sel.length)h+=dzFxPickHTML();
-  if(DZ.sel.length===1){var p=dzGet(DZ.sel[0]);if(p){var L=kpLabels(p.o),nm=function(f,tt){return '<label class="f">'+tt+'<input data-dzf="'+f+'" type="number" step="1" value="'+p[f]+'"></label>'};
+  if(DZ.sel.length===1){var p=dzGet(DZ.sel[0]);if(p&&p.r==='ap'){var an=function(f,tt){return '<label class="f">'+tt+'<input data-dzf="'+f+'" type="number" step="1" value="'+Math.round(p[f]||0)+'"></label>'};
+    h+='<h3>'+(API[p.ap]||'')+' Texnika</h3><div class="fields"><label class="f">Turi<select data-dzf="ap">'+Object.keys(APN).map(function(k){return '<option value="'+k+'"'+(k===p.ap?' selected':'')+'>'+API[k]+' '+APN[k]+'</option>'}).join('')+'</select></label><label class="f">Nomi<input data-dzf="n" value="'+esc(p.n)+'"></label>'+
+      '<div class="r3">'+an('x','X chapdan')+an('y','Y pastdan')+an('z','Z orqadan')+'</div><div class="r3">'+an('a','Eni')+an('b','Bo\'yi')+an('th','Chuqurligi')+'</div></div><h3>Texnika rangi</h3>'+apChips('data-apcol',p.col||S.cur.cfA||'#e4e7e9')+
+      '<p class="hint">Texnika detallar ro\'yxati va Bazis\'ga tushmaydi, narxi «Materiallar → Furnitura» dagi '+esc((byRole(APR[p.ap])||{name:'—'}).name)+' bo\'yicha hisoblanadi. Old tomoniga fasad kerak bo\'lsa, yon devorlarni belgilab «Eshik» qo\'ying.</p><div class="btns"><button class="btn sm danger" data-dza="del">O\'chirish (Del)</button></div>'}
+  else if(p){var L=kpLabels(p.o),nm=function(f,tt){return '<label class="f">'+tt+'<input data-dzf="'+f+'" type="number" step="1" value="'+p[f]+'"></label>'};
     h+='<h3>Panel</h3><div class="fields"><label class="f">Nomi<input data-dzf="n" value="'+esc(p.n)+'"></label>'+
       '<div class="r2"><label class="f">Yo\'nalish<select data-dzf="o">'+Object.keys(KPO).map(function(k){return '<option value="'+k+'"'+(k===p.o?' selected':'')+'>'+KPO[k]+'</option>'}).join('')+'</select></label>'+
       '<label class="f">Turi<select data-dzf="r">'+Object.keys(KPR).map(function(k){return '<option value="'+k+'"'+(k===p.r?' selected':'')+'>'+KPR[k]+'</option>'}).join('')+'</select></label></div>'+
@@ -3451,7 +3598,7 @@ function dzSide(){
       '</div><div class="btns"><button class="btn sm" data-dza="dist">≡ O\'rtaga qo\'yish</button><button class="btn sm" data-dza="dup">Nusxa (Ctrl+D)</button><button class="btn sm danger" data-dza="del">O\'chirish (Del)</button></div>';}}
   else if(DZ.sel.length>1){var so=dzSelOpening();h+='<h3>'+DZ.sel.length+' ta panel'+(dzSelGrp()?' · '+esc((S.cur.groups||{})[dzSelGrp()]||'Guruh'):'')+'</h3>'+(DZ.fxAsk?'':dzFxPickHTML())+'<p class="hint">Birga surish uchun birini sudrang, strelka bosing yoki Alt+strelka bilan aniq masofa kiriting.</p><div class="btns"><button class="btn sm" data-dza="dist">≡ Teng taqsimlash</button><button class="btn sm" data-dza="mir">⇋ Zerkalo nusxa</button><button class="btn sm" data-dza="dup">Nusxa</button><button class="btn sm danger" data-dza="del">O\'chirish</button></div>'+
     '<h3>Belgilanganlar orasiga qo\'yish</h3>'+(so?'<p class="hint">Bo\'shliq: '+Math.round(so.x1-so.x0)+' × '+Math.round(so.y1-so.y0)+' × '+Math.round(so.z1-so.z0)+' mm'+(so.cols?' · ichida stoyka bor: <b>'+so.cols.length+' bo\'lim yonma-yon</b> ('+so.cols.map(function(c){return Math.round(c.x1-c.x0)}).join(' + ')+' mm)':'')+'</p>'+(so.cols?'<label class="hint" style="display:flex;gap:6px;align-items:center;margin:0 0 6px"><input type="checkbox" id="dz-tall"> Bo\'limlarga bo\'lmasdan, butun eniga qo\'yish</label>':'')+'<div class="dz-drwq" style="display:flex;gap:6px;align-items:end;margin:4px 0 8px;padding:6px 8px;border:1px solid var(--line);border-radius:8px"><label class="f" style="flex:1">Tortmalar soni'+(so.cols?' (har bo\'limga)':'')+'<input id="dz-tdn" type="number" min="1" max="8" value="'+(DZ.tdn||3)+'"></label><button class="btn pri sm" data-dzs="T">▤ Tortma qo\'yish</button></div><div class="r2"><label class="f">Soni<input id="dz-tn" type="number" min="1" max="20" value="1"></label><label class="f">Joyi, mm<input id="dz-tp" type="number" placeholder="teng"></label></div>'+
-      '<div class="btns"><button class="btn sm" data-dzs="E1">Eshik</button><button class="btn sm" data-dzs="E2">2 eshik</button><button class="btn sm" data-dzs="AL1">Oynali profil eshik</button><button class="btn sm" data-dzs="AL2">2 oynali eshik</button><button class="btn sm" data-dzs="KP">Kupe eshik</button><button class="btn sm" data-dzs="H">Polka</button><button class="btn sm" data-dzs="V">Stoyka</button></div>'+dzSlideSel()+dzKpeHTML():dzNoOpHTML())+
+      '<div class="btns"><button class="btn sm" data-dzs="E1">Eshik</button><button class="btn sm" data-dzs="E2">2 eshik</button><button class="btn sm" data-dzs="AL1">Oynali profil eshik</button><button class="btn sm" data-dzs="AL2">2 oynali eshik</button><button class="btn sm" data-dzs="KP">Kupe eshik</button><button class="btn sm" data-dzs="H">Polka</button><button class="btn sm" data-dzs="V">Stoyka</button></div><h3>Texnika qo\'yish</h3><div class="btns"><button class="btn sm" data-dzs="AP:fridge">🧊 Xolodilnik</button><button class="btn sm" data-dzs="AP:oven">♨ Duxovka</button><button class="btn sm" data-dzs="AP:mw">📻 Mikroto\'lqin</button><button class="btn sm" data-dzs="AP:dw">🍽 Idish yuvish</button></div>'+dzSlideSel()+dzKpeHTML():(dzSelOpening(true)?'<h3>Texnika qo\'yish</h3><p class="hint">Yon devorlar orasiga (tagida tub yo\'q bo\'lsa ham):</p><div class="btns"><button class="btn sm" data-dzs="AP:fridge">🧊 Xolodilnik</button><button class="btn sm" data-dzs="AP:oven">♨ Duxovka</button><button class="btn sm" data-dzs="AP:mw">📻 Mikroto\'lqin</button><button class="btn sm" data-dzs="AP:dw">🍽 Idish yuvish</button></div>':'')+dzNoOpHTML())+
     dzGrpHTML()+dzFold('kr',dzKrMultiHTML(DZ.sel.map(dzGet).filter(Boolean)))+dzFold('fx','<h3>Qotirish</h3>'+dzFxSel((function(){var v=null,same=true;DZ.sel.forEach(function(i){var p=dzGet(i),f=(p&&p.fx)||'';if(v===null)v=f;else if(v!==f)same=false});return same?v:''})()))+
     '<h3>Orqa devor</h3><button class="btn sm" data-dza="hdfsel">Belgilanganlar orqasiga HDF</button>'}
   else if(DZ.op&&(DZ.view!=='F'||!kpOpenings(m).some(function(q){return q.key===DZ.op}))){var o2=dzOps().find(function(q){return q.key===DZ.op});if(o2){var TL2={F:['Polka','Stoyka'],B:['Polka','Stoyka'],R:['Polka','Ko\'ndalang panel'],S:['Polka','Ko\'ndalang panel'],T:['Old/orqa panel','Stoyka']}[DZ.view];
@@ -3480,7 +3627,7 @@ function dzSlideSel(){var d=drwOpt(),o=function(id,lab,opts,v){return '<label cl
   return '<details class="more" style="margin:6px 0"'+(DZ.drwOpen?' open':'')+'><summary>Tortma sozlamalari ('+(d.slide==='tandem'?'tandem':'rolikli')+', '+(d.fix==='ekc'?'eksentrik':'shurup')+')</summary><div style="margin-top:8px"></div><div class="r2">'+o('slide','Yo\'naltiruvchi',[['rolik','Rolikli (13 mm)'],['tandem','Tandem, yashirin (5 mm)']],d.slide)+o('bot','Tortma tubi',[['paz','Pazga (yonlari pastga tushib turadi)'],['under','Pastdan qoqiladi']],d.bot)+'</div>'+
     '<div class="r2">'+(d.bot==='paz'?nm('rec','Yonlar tushib turishi, mm',d.rec):'<span></span>')+o('fix','Fasadni qotirish',[['shurup','Shurup bilan'],['ekc','Eksentrik bilan']],d.fix)+'</div>'+
     '<div class="r3">'+o('fas','Fasad',[['over','Ustiga (nakladnoy)'],['in','Ichkariga (vkladnoy)']],d.fas)+nm('gap','Yon zazor, mm',d.gap)+nm('gapM','Fasadlar orasi, mm',d.gapM)+'</div></details>'}
-function dzSelOpening(){
+function dzSelOpening(virt){
   var m=S.cur,sel=DZ.sel.map(dzGet).filter(function(p){return p&&p.r==='k'&&!p.dg&&(p.o==='V'||p.o==='H')});if(sel.length<2)return null;
   var bx=function(p){return {p:p,b:kpBox(m,p)}},V=sel.filter(function(p){return p.o==='V'}).map(bx),H=sel.filter(function(p){return p.o==='H'}).map(bx);
   var all=dzPanels().filter(function(p){return p.r==='k'&&!p.dg}).map(bx),L=null,Rr=null,B=null,T=null;
@@ -3493,6 +3640,7 @@ function dzSelOpening(){
   if(B)y0=B.b.y1;if(T)y1=T.b.y0;yr=[y0,y1];
   if(!L){all.forEach(function(q){if(q.p.o!=='V'||!ov(q.b.y0,q.b.y1,yr[0],yr[1]))return;if(x1!=null&&q.b.x1>x1)return;if(!L||q.b.x0<L.b.x0)L=q})}
   if(!Rr){all.forEach(function(q){if(q.p.o!=='V'||!ov(q.b.y0,q.b.y1,yr[0],yr[1]))return;if(L&&q.b.x0<L.b.x1)return;if(!Rr||q.b.x1>Rr.b.x1)Rr=q})}
+  if(virt&&L&&Rr){if(!B){var fy=Math.max(L.b.y0,Rr.b.y0);B={p:null,b:{x0:L.b.x1,x1:Rr.b.x0,y0:fy,y1:fy,z0:0,z1:0}}}if(!T){var ty=Math.min(L.b.y1,Rr.b.y1);T={p:null,b:{x0:L.b.x1,x1:Rr.b.x0,y0:ty,y1:ty,z0:0,z1:0}}}}
   if(!L||!Rr||!B||!T)return null;x0=L.b.x1;x1=Rr.b.x0;y0=B.b.y1;y1=T.b.y0;if(x1-x0<50||y1-y0<50)return null;
   var o={x0:x0,x1:x1,y0:y0,y1:y1,L:{p:L.p,b:L.b},R:{p:Rr.p,b:Rr.b},B:{p:B.p,b:B.b},T:{p:T.p,b:T.b},z0:Math.max(L.b.z0,Rr.b.z0),z1:Math.min(L.b.z1,Rr.b.z1)};
   o.key=[x0,x1,y0,y1].map(Math.round).join('_');
@@ -3584,7 +3732,7 @@ function dzLibHTML(){var k=DZ.libKind||S.kind||'oshxona',h='<h3>Tayyor bloklar</
   (KOPTS[k]||[]).forEach(function(g){var items=g[1].filter(function(x){var T=TYPES[x[0].split('@')[0]];return T&&!T.custom&&(sepOK||(!T.corner&&T.cls==='cab'))});if(!items.length)return;
     h+='<h3>'+esc(g[0])+'</h3><div class="dz-list" style="max-height:none">'+items.map(function(x){var T=TYPES[x[0].split('@')[0]];return '<div class="dz-li'+(DZ.libT===x[0]?' on':'')+'" data-libt="'+x[0]+'"><span>'+esc(x[1])+'</span><span class="hint">'+T.W+'×'+T.H+'</span></div>'}).join('')+'</div>'});
   if(!sepOK)h+='<p class="hint">Burchak va boshqa murakkab bloklar «🏠 Xona» rejimida (alohida blok qilib) qo\'yiladi.</p>';
-  if(DZ.libT){var T=TYPES[DZ.libT.split('@')[0]],z=DZ.libSz||{};h='<h3>'+esc(T.label)+'</h3><div class="r3"><label class="f">Eni<input id="dz-lW" type="number" value="'+(z.W||T.W)+'"></label><label class="f">Bo\'yi<input id="dz-lH" type="number" value="'+(z.H||T.H)+'"></label><label class="f">Chuq.<input id="dz-lD" type="number" value="'+(z.D||T.D)+'"></label></div>'+(T&&!T.corner&&T.cls==='cab'?dzParHTML('dz-lp',DZ.libPar||{},T):'')+'<p class="hint">Chizmada joyiga bosing — blok panellarga aylanib qo\'yiladi va qo\'shni panellarga yopishadi.</p><label class="hint" style="display:flex;gap:6px;align-items:center;margin:0 0 6px"><input type="checkbox" data-libfit'+(DZ.libFitOn!==false?' checked':'')+'> Yordamchi chiziqlar orasiga moslash (eni avtomatik)</label>'+(DZ.room?'<label class="hint" style="display:flex;gap:6px;align-items:center;margin:0 0 6px"><input type="checkbox" data-libsep'+(DZ.libSep!==false?' checked':'')+'> Xonaga alohida blok qilib qo\'yish</label>':'')+'<button class="btn sm" data-libt="">← Ro\'yxatga qaytish</button>'+h}
+  if(DZ.libT){var T=TYPES[DZ.libT.split('@')[0]],z=DZ.libSz||{};h='<h3>'+esc(T.label)+'</h3><div class="r3"><label class="f">Eni<input id="dz-lW" type="number" value="'+(z.W||T.W)+'"></label><label class="f">Bo\'yi<input id="dz-lH" type="number" value="'+(z.H||T.H)+'"></label><label class="f">Chuq.<input id="dz-lD" type="number" value="'+(z.D||T.D)+'"></label></div>'+(T&&!T.corner&&T.cls==='cab'?dzParHTML('dz-lp',Object.assign(dzVarPar(DZ.libT),DZ.libPar||{}),T):'')+'<p class="hint">Chizmada joyiga bosing — blok panellarga aylanib qo\'yiladi va qo\'shni panellarga yopishadi.</p><label class="hint" style="display:flex;gap:6px;align-items:center;margin:0 0 6px"><input type="checkbox" data-libfit'+(DZ.libFitOn!==false?' checked':'')+'> Yordamchi chiziqlar orasiga moslash (eni avtomatik)</label>'+(DZ.room?'<label class="hint" style="display:flex;gap:6px;align-items:center;margin:0 0 6px"><input type="checkbox" data-libsep'+(DZ.libSep!==false?' checked':'')+'> Xonaga alohida blok qilib qo\'yish</label>':'')+'<button class="btn sm" data-libt="">← Ro\'yxatga qaytish</button>'+h}
   return h}
 /* Sekret (yashirin) vityajka shkafi: ichida o'rnatiladigan vityajka, tubi yo'q, vityajka ustida polka (truba teshigi), eshik butun balandlikda */
 function mkSekretV(src){var n=newCur('maxsus'),W=Math.round(src.W||600),H=Math.round(src.H||720),D=Math.round(src.D||320),t=(M(src.korpus||n.korpus)||{th:16}).th||16,tb=(M(src.back||n.back)||{th:3}).th||3,hh=Math.max(150,Math.min(300,Math.round(H*0.28)));
@@ -3597,7 +3745,7 @@ function mkSekretV(src){var n=newCur('maxsus'),W=Math.round(src.W||600),H=Math.r
   P.push(kpNew('F','o','Orqa devor',0,hh,0,W,H-hh));
   var dr=kpNew('F','e','Eshik',2,2,D,W-4,H-4);dr.hs='L';P.push(dr);
   n.panels=P;n.joints=[];n.guides=[];return n}
-function dzLibSrc(){if(DZ.libT&&DZ.libT.indexOf('tpl:')===0){var tt=S.templates.find(function(t){return 'tpl:'+t.id===DZ.libT});var c0=JSON.parse(JSON.stringify(tt.m));DZ.libSz={W:c0.W,H:c0.H,D:c0.D};c0._tname=tt.name;return c0}var gv=DZ.libT.split('@')[1]||null,T=TYPES[DZ.libT.split('@')[0]],src=newCur(DZ.libT.split('@')[0]),g=function(id,d){var v=parseFloat(($('#'+id)||{}).value);return isNaN(v)||v<50?d:v};src.W=g('dz-lW',T.W);src.H=g('dz-lH',T.H);src.D=g('dz-lD',T.D);src.korpus=S.cur.korpus;src.front=S.cur.front;src.back=S.cur.back;src.fix=S.cur.fix;if(gv&&gv!=='sekret'){src.gola=true;if(gv==='golaT'){src.frontType='drawer';src.frontCount=3;src.shelves=0}}var lpo=$('#dz-lpft')?dzParRead('dz-lp',src):null;DZ.libOff=lpo;if(src.type==='antresol'||src.type==='burchak45A')src.elev=Math.max(0,S.room.H-src.H);DZ.libSz={W:src.W,H:src.H,D:src.D};if(DZ.libFit&&DZ.libFitOn!==false){if(DZ.libFit.W)src.W=DZ.libFit.W;if(DZ.libFit.H&&!T.obst)src.H=DZ.libFit.H}if(T.obst){src.H=Math.min(src.H,S.room.H);src.elev=0}src.name=(T.label||'Blok')+(src.gola?' (Gola)':'')+' '+Math.round(src.W);if(gv==='sekret'){var sk=mkSekretV(src);sk._tname=sk.name;return sk}return src}
+function dzLibSrc(){if(DZ.libT&&DZ.libT.indexOf('tpl:')===0){var tt=S.templates.find(function(t){return 'tpl:'+t.id===DZ.libT});var c0=JSON.parse(JSON.stringify(tt.m));DZ.libSz={W:c0.W,H:c0.H,D:c0.D};c0._tname=tt.name;return c0}var gv=DZ.libT.split('@')[1]||null,T=TYPES[DZ.libT.split('@')[0]],src=newCur(DZ.libT.split('@')[0]),g=function(id,d){var v=parseFloat(($('#'+id)||{}).value);return isNaN(v)||v<50?d:v};src.W=g('dz-lW',T.W);src.H=g('dz-lH',T.H);src.D=g('dz-lD',T.D);src.korpus=S.cur.korpus;src.front=S.cur.front;src.back=S.cur.back;src.fix=S.cur.fix;if(gv==='oven'){src.frontType='oven';src.frontCount=1;src.shelves=0}else if(gv&&gv!=='sekret'){src.gola=true;if(gv==='golaT'){src.frontType='drawer';src.frontCount=3;src.shelves=0}}var lpo=$('#dz-lpft')?dzParRead('dz-lp',src):null;DZ.libOff=lpo;if(src.type==='antresol'||src.type==='burchak45A')src.elev=Math.max(0,S.room.H-src.H);DZ.libSz={W:src.W,H:src.H,D:src.D};if(DZ.libFit&&DZ.libFitOn!==false){if(DZ.libFit.W)src.W=DZ.libFit.W;if(DZ.libFit.H)src.H=DZ.libFit.H}if(T.obst){src.H=Math.min(src.H,S.room.H);if(!(DZ.libFit&&DZ.libFit.H&&DZ.libFitOn!==false))src.elev=0}src.name=(T.label||'Blok')+(src.gola?' (Gola)':'')+(src.frontType==='oven'?' + duxovka':'')+' '+Math.round(src.W);if(gv==='sekret'){var sk=mkSekretV(src);sk._tname=sk.name;return sk}return src}
 function dzBz(){var m=S.cur,sig=JSON.stringify([m.panels,m.joints,m.fix,m.korpus,m.fxOff,m.fxGap]);if(DZ.jSig===sig)return DZ.bzC;var r=[],items={},e0=0;
   try{e0=effElev(m);var out=bzPanels({m:m,wall:'A',x:0,off:0});(out.joints||[]).forEach(function(j){if(!j.p)return;var p=[j.p[0],j.p[1]-e0,j.p[2]];if(j.f==='P'&&j.a&&j.a.lax==='y'&&j.a.lb)p[1]=j.a.lb.y0-2.5;r.push({f:j.f,p:p,a:j.a&&j.a.pid,b:j.b&&j.b.pid})});
     out.forEach(function(o){if(o.pid)items[o.pid]=o})}catch(er){}
@@ -3750,7 +3898,7 @@ function dzGhost(pt){
         var gb=null,gt=null;gvv.forEach(function(v){if(v<=pt.v&&(gb==null||v>gb))gb=v;if(v>=pt.v&&(gt==null||v<gt))gt=v});if(gb!=null&&gt!=null&&gt-gb>=100&&gt-gb<=3000){DZ.libFit=DZ.libFit||{};DZ.libFit.H=Math.round(gt-gb);sz.H=DZ.libFit.H;v0=gb}else if(gb!=null&&pt.v-gb<sz.H)v0=gb;else if(gt!=null&&gt-pt.v<sz.H)v0=gt-sz.H}
       if(!(DZ.libFit&&DZ.libFit.W)){var su=dzSnapVal(u0,E1.us,tlb),su2=dzSnapVal(u0+sz.W,E1.us,tlb);if(su!=null)u0=su;else if(su2!=null)u0=su2-sz.W;else u0=Math.round(u0/DZ.step)*DZ.step}
       if(!(DZ.libFit&&DZ.libFit.H)){var sv0=dzSnapVal(v0,E1.vs,tlb),sv2=dzSnapVal(v0+sz.H,E1.vs,tlb);if(sv0!=null)v0=sv0;else if(sv2!=null)v0=sv2-sz.H;else v0=Math.round(v0/DZ.step)*DZ.step}
-      if(DZ.room&&!(DZ.libFit&&DZ.libFit.H)){var TT=TYPES[DZ.libT.split('@')[0]];if(TT&&!TT.elev){var c9=dzRoomCtx();v0=-c9.e}}{var TO=TYPES[DZ.libT.split('@')[0]];if(DZ.room&&TO&&TO.obst){if(DZ.libFit)delete DZ.libFit.H;sz.H=Math.min(TO.H,S.room.H);v0=-dzRoomCtx().e}}
+      if(DZ.room&&!(DZ.libFit&&DZ.libFit.H)){var TT=TYPES[DZ.libT.split('@')[0]];if(TT&&!TT.elev){var c9=dzRoomCtx();v0=-c9.e}}{var TO=TYPES[DZ.libT.split('@')[0]];if(DZ.room&&TO&&TO.obst&&!(DZ.libFit&&DZ.libFit.H)){sz.H=Math.min(TO.H,S.room.H);v0=-dzRoomCtx().e}}
       var gbz='';if(DZ.room&&DZ.libSep!==false&&DZ.libT.indexOf('tpl:')<0){try{var c8=dzRoomCtx(),ty8=DZ.libT.split('@')[0],T8=TYPES[ty8]||{},m8={type:ty8,W:sz.W,H:sz.H,D:(DZ.libSz&&DZ.libSz.D)||600,elev:T8.elev?Math.max(0,c8.e+v0):0},g8={id:'__g',m:m8,wall:c8.w,x:Math.round(c8.x0+u0),off:DZ.libOff!=null?DZ.libOff:(T8.offDef||0)},lf8=rmLiftOver(g8),d8=rmResolve(rmSpanOf(g8,g8.x),'__g',true);if(lf8)gbz=' (↑'+lf8+' mm — pastdagi blok ustiga)';if(d8==null||Math.abs(d8)>sz.W/2)gbz=' ⛔ joy band';else if(d8)gbz=' (yonidagi blokka taqaladi)'}catch(_e){}}
       DZ.libG={u:u0,v:v0};DZ.ghost={x0:u0,x1:u0+sz.W,y0:v0,y1:v0+sz.H,lab:[[u0+sz.W/2,v0+sz.H/2,(DZ.libT.indexOf('tpl:')===0?'':TYPES[DZ.libT.split('@')[0]].label+' ')+Math.round(sz.W)+'×'+Math.round(sz.H)+(DZ.libFit?' ↔ chiziqlarga moslandi':'')+gbz]],bad:!!gbz&&gbz.indexOf('⛔')>=0};dzRender();return}
     if(!d){var oh=dzOpAt(pt),key=(oh&&oh.key)||null;if(DZ.tool==='H'||DZ.tool==='V'){dzGhost(pt);dzRender()}else if((DZ.hover&&DZ.hover.key)!==key){DZ.hover=oh;dzRender()}else dzReq();return}
@@ -3822,6 +3970,10 @@ function dzGhost(pt){
     b=e.target.closest('[data-tool]');if(b&&b.dataset.tool==='J'&&DZ.sel.length&&DZ.tool!=='J'){DZ.fxAsk=!DZ.fxAsk;DZ.forceSide=true;dzRender();if(DZ.fxAsk)toast('Belgilangan '+DZ.sel.length+' ta panel uchun qotirish turini o\'ng tomonda tanlang');return}if(b){DZ.fxAsk=false;DZ.tool=DZ.tool===b.dataset.tool?'sel':b.dataset.tool;DZ.jA=null;DZ.ghost=null;DZ.forceSide=true;if(DZ.view==='3'){DZ.view='F';dzFit();return}dzRender();return}
     b=e.target.closest('[data-dz]');if(b){var a=b.dataset.dz;
       if(a==='furn'){furOpen('dz');return}
+      if(a==='gclr'){dzGuideClear();return}
+      if(a==='brot'||a==='bmir'){dzBlockRot(a==='bmir'?'mir':'rot');return}
+      if(a.indexOf('wall:')===0){dzTurnWall(a.slice(5));return}
+      if(a==='wallR'||a==='wallL'){dzTurnWall(dzWallNext(dzRoomCtx().w,a==='wallR'?1:-1));return}
       if(a==='bzc'){var dzE=$('#dz'),on=!dzE.classList.contains('bzc');dzE.classList.toggle('bzc',on);try{localStorage.setItem('mebel-bzc',on?'1':'0')}catch(_e){}toast(on?'Ixcham (Bazis uslubi) panel':'To\'liq yozuvli panel');setTimeout(function(){dzRender()},20);return}
       if(a==='bzsub'){var dzE2=$('#dz');dzE2.classList.toggle('bzsub');b.classList.toggle('on',dzE2.classList.contains('bzsub'));setTimeout(function(){dzRender()},20);return}
       if(a==='clean'){dzClean();return}
@@ -3859,7 +4011,8 @@ function dzGhost(pt){
     b=e.target.closest('[data-rma]');if(b){dzRoomAct(b.dataset.rma,b.dataset.id);return}
     b=e.target.closest('[data-rmli]');if(b){DZ.rmSel=b.dataset.rmli;DZ.forceSide=true;dzRender();return}
     b=e.target.closest('[data-kpg]');if(b){dzKupeApply(b.dataset.g,b.dataset.kpg);return}
-    b=e.target.closest('[data-dzs]');if(b){var so3=dzSelOpening();if(!so3){toast('Belgilangan panellar orasida bo\'shliq topilmadi',true);return}var n4=parseFloat(($('#dz-tn')||{}).value),p4=parseFloat(($('#dz-tp')||{}).value),a4=b.dataset.dzs;
+    b=e.target.closest('[data-dzs]');if(b){var so3=dzSelOpening()||(b.dataset.dzs.indexOf('AP:')===0?dzSelOpening(true):null);if(!so3){toast('Belgilangan panellar orasida bo\'shliq topilmadi',true);return}var n4=parseFloat(($('#dz-tn')||{}).value),p4=parseFloat(($('#dz-tp')||{}).value),a4=b.dataset.dzs;
+       if(a4.indexOf('AP:')===0){kpSnap();var apn=apMake(a4.slice(3),so3);S.cur.panels.push(apn);DZ.sel=[apn.id];kpSel=apn.id;DZ.forceSide=true;kpChanged();toast(apn.n+' qo\'yildi: '+apn.a+'×'+apn.b+'×'+apn.th+' mm (o\'lchamini o\'ngda o\'zgartirasiz)');return}
       if(a4==='T'){var tn=parseFloat(($('#dz-tdn')||{}).value);if(tn>=1)n4=tn}
       if(a4==='KP'&&!(n4>=2))n4=2;if(a4==='T'&&!(n4>=1))n4=3;var nn4=isNaN(n4)?1:Math.max(1,Math.min(20,Math.round(n4))),useC=so3.cols&&a4!=='KP'&&a4!=='V'&&!($('#dz-tall')&&$('#dz-tall').checked);
       if(useC){var u0=kpUndo.length;so3.cols.forEach(function(cc){kpOpObj=cc;kpOpAct(a4,nn4,isNaN(p4)?NaN:p4)});if(kpUndo.length>u0+1)kpUndo.splice(u0+1)}else{kpOpObj=so3;kpOpAct(a4,nn4,isNaN(p4)?NaN:p4)}
@@ -3937,7 +4090,8 @@ function dzGhost(pt){
     if((el.id==='dz-W'||el.id==='dz-H'||el.id==='dz-D')&&dzPanels().length){var k=el.id.slice(3),v=parseFloat(el.value);if(isNaN(v)||v<100)return;kpResize(S.cur,{W:'x',H:'y',D:'z'}[k],S.cur[k],v);DZ.forceSide=true;kpChanged();return}
     if(el.dataset&&el.dataset.bzm){var bax=el.dataset.bzm,bv=parseFloat(el.value),bb0=dzSelBB();if(isNaN(bv)||!bb0)return;var dd=Math.round(bv-bb0[bax+'0']);if(!dd)return;kpSnap();dzSelMove().forEach(function(i){var q=dzGet(i);if(q)q[bax]=Math.round(q[bax]+dd)});dzRoomClamp();DZ.xyzSig=null;DZ.forceSide=true;el.blur();kpChanged();return}
     var f=el.dataset.dzf;if(!f||DZ.sel.length!==1)return;var p=dzGet(DZ.sel[0]);if(!p)return;kpSnap();if(el.closest&&el.closest('#dz-xyz')){DZ.xyzSig=null;setTimeout(function(){try{el.blur()}catch(_e){}},0)}
-    if(f==='n'||f==='r'||f==='hs')p[f]=el.value;
+    if(f==='ap'){if(APN[el.value]){var on=p.n===APN[p.ap];p.ap=el.value;if(on)p.n=APN[p.ap]}}
+    else if(f==='n'||f==='r'||f==='hs')p[f]=el.value;
     else if(f==='gr'){if(el.value)p.gr=el.value;else delete p.gr}
     else if(f==='mat'){if(el.value)p.mat=el.value;else delete p.mat}
     else if(f==='o'){if(p.o!==el.value){var b=kpBox(S.cur,p),nx=el.value;p.o=nx;if(nx==='V'){p.a=Math.round(b.y1-b.y0);p.b=Math.round(b.z1-b.z0)}else if(nx==='H'){p.a=Math.round(b.x1-b.x0);p.b=Math.round(b.z1-b.z0)}else{p.a=Math.round(b.x1-b.x0);p.b=Math.round(b.y1-b.y0)}}}
@@ -4023,7 +4177,7 @@ function bzPanels(it){
     return b.y1<=leg+5?'Tsokol':'Panel';
   }
   var list=[];
-  if(T.custom&&m.cmode==='panel')(m.panels||[]).forEach(function(p){if(p.alu)return;var b=kpBox(m,p),k=p.r==='e'||p.r==='f'?'f':p.r==='o'?'k':'b',pg=kpPoly(m,p);if(pg){b=Object.assign({},b,{poly:pg.pts,bandAll:p.r!=='o'});if(pg.pax!=='y')b.pax=pg.pax}list.push({b:b,k:k,n:p.n,mat:p.mat,fx:p.fx,kr:p.kr,pid:p.id,src:p.r==='e'&&!p.sld?'door':null,side:p.hs||'L'})});
+  if(T.custom&&m.cmode==='panel')(m.panels||[]).forEach(function(p){if(p.alu||p.r==='ap')return;var b=kpBox(m,p),k=p.r==='e'||p.r==='f'?'f':p.r==='o'?'k':'b',pg=kpPoly(m,p);if(pg){b=Object.assign({},b,{poly:pg.pts,bandAll:p.r!=='o'});if(pg.pax!=='y')b.pax=pg.pax}list.push({b:b,k:k,n:p.n,mat:p.mat,fx:p.fx,kr:p.kr,pid:p.id,src:p.r==='e'&&!p.sld?'door':null,side:p.hs||'L'})});
   else{
     var d=boxes3d(m,'solid');
     d.boxes.forEach(function(b){list.push({b:b,k:b.k,n:b.n})});
@@ -4420,7 +4574,7 @@ $$('[data-k]').forEach(function(el){el.addEventListener('input',function(){
   if(el.type==='checkbox')c[k]=el.checked;else if(el.type==='number'){var n=parseFloat(el.value);if(isNaN(n))return;c[k]=n}else c[k]=el.value;
   var gv=null;if(k==='type'){var sp=String(c.type).split('@');c.type=sp[0];gv=sp[1]||null}
   if(k==='type'){var d=TYPES[c.type],keep=c.extras;Object.assign(c,{W2:d.W2||d.W,cornerEnd:false,cdoors:d.corner?2:1,W:d.W,H:d.H,D:d.D,leg:d.leg||0,shelves:d.shelves||0,frontType:d.frontType||'door',frontCount:d.frontCount||2,plinth:!!d.plinth,rod:!!d.rod,elev:d.e0||0,price:d.price||0,incl:false,name:d.label+' '+d.W});
-    if(c.type==='antresol'||c.type==='burchak45A')c.elev=Math.max(0,S.room.H-d.H);c.hood='kamin';c.extras=keep;if(TYPES[c.type].custom&&!(c.cparts||[]).length){c.cmode='panel';c.panels=c.panels||[]}if(!S.editing){S.curPlace.off=d.offDef||0;if($('#pl-off'))$('#pl-off').value=S.curPlace.off||''}ensureRefs(c);if(c.type==='maxsus'&&!(c.cparts||[]).length)c.cparts=stdParts(c);c.gola=!!gv&&gv!=='sekret';if(gv==='golaT'){c.frontType='drawer';c.frontCount=3;c.shelves=0}if(gv&&gv!=='sekret'){c.name=(gv==='golaT'?'Tortmali':d.label)+' (Gola) '+c.W}if(gv==='sekret'){var sk2=mkSekretV(c);ensureRefs(sk2);S.cur=sk2;c=sk2}rebuildFit=true;fillSelects()}
+    if(c.type==='antresol'||c.type==='burchak45A')c.elev=Math.max(0,S.room.H-d.H);c.hood='kamin';c.extras=keep;if(TYPES[c.type].custom&&!(c.cparts||[]).length){c.cmode='panel';c.panels=c.panels||[]}if(!S.editing){S.curPlace.off=d.offDef||0;if($('#pl-off'))$('#pl-off').value=S.curPlace.off||''}ensureRefs(c);if(c.type==='maxsus'&&!(c.cparts||[]).length)c.cparts=stdParts(c);c.gola=!!gv&&gv!=='sekret'&&gv!=='oven';if(gv==='oven'){c.frontType='oven';c.frontCount=1;c.shelves=0;c.name='Gaz panel + duxovka '+c.W}if(gv==='golaT'){c.frontType='drawer';c.frontCount=3;c.shelves=0}if(gv&&gv!=='sekret'&&gv!=='oven'){c.name=(gv==='golaT'?'Tortmali':d.label)+' (Gola) '+c.W}if(gv==='sekret'){var sk2=mkSekretV(c);ensureRefs(sk2);S.cur=sk2;c=sk2}rebuildFit=true;fillSelects()}
   if(k==='gola'){rebuildFit=true;fillSelects()}
   if(k==='fix'){S.fixDef=c.fix;toast(c.fix==='ekc1'?'Eksentrik (shkantsiz) tanlandi. Keyingi yangi bloklar ham shunday bo\'ladi.':c.fix==='ekc'?'Eksentrik + shkant tanlandi. Keyingi yangi bloklar ham shunday bo\'ladi.':'Yevrovint tanlandi.')}
   if(k==='hood'){if(c.hood==='ichki'){c.H=200;c.D=300;c.elev=1250}else{var dv=TYPES.vityazhka;c.H=dv.H;c.D=dv.D;c.elev=dv.e0}rebuildFit=true}
@@ -4627,7 +4781,7 @@ function sharePayload(rec){
   });
   var src=(rec.mats&&rec.mats.length)?rec.mats:S.mats;
   var mats=src.filter(function(x){return used[x.id]}).map(function(x){return {id:x.id,cat:x.cat,name:x.name,th:x.th,L:x.L,W:x.W,unit:x.unit,color:x.color,price:0}});
-  return {v:1,n:rec.name,r:{W:rec.room.W,L:rec.room.L,H:rec.room.H,wallC:rec.room.wallC,floorT:rec.room.floorT,ceilC:rec.room.ceilC,ceil:rec.room.ceil,openings:rec.room.openings||[]},i:items,p:rec.pipes||[],m:mats};
+  return {v:1,ad:{t:S.set.adT!=null?S.set.adT:AD_T,ph:S.set.adP!=null?S.set.adP:AD_P},n:rec.name,r:{W:rec.room.W,L:rec.room.L,H:rec.room.H,wallC:rec.room.wallC,floorT:rec.room.floorT,ceilC:rec.room.ceilC,ceil:rec.room.ceil,openings:rec.room.openings||[]},i:items,p:rec.pipes||[],m:mats};
 }
 function pjMsg(t,bad){var el=$('#pjMsg');el.textContent=t;el.style.color=bad?'var(--bad)':''}
 function defName(){var d=new Date(),z=function(n){return (n<10?'0':'')+n};return (KLABEL[S.kind]||'Loyiha')+' '+z(d.getDate())+'.'+z(d.getMonth()+1)+' '+z(d.getHours())+':'+z(d.getMinutes())}
@@ -4686,7 +4840,7 @@ $('#pj-new').addEventListener('click',function(e){
   clearTimeout(newArmT);newArm=false;e.target.textContent='Yangi loyiha';
   var btn=e.target;btn.disabled=true;
   storeCurrent().then(function(r){
-    S.project=[];S.pipes=[];S.pname='';S.pid=null;S.selected=null;S.undo=null;S.editing=null;S.room.openings=[];save();$('#pj-name').value='';
+    S.project=[];S.pipes=[];S.pname='';S.pid=null;S.selected=null;S.undo=null;S.editing=null;S.room.openings=[];if(S.cur){delete S.cur.guides}S.roomGuides=null;save();$('#pj-name').value='';
     pjMsg(r?'Oldingi loyiha «'+r.name+'» saqlandi. Yangi loyiha boshlandi.':'Yangi loyiha boshlandi.');renderSaved();
   }).catch(function(){pjMsg("Oldingi loyihani saqlab bo'lmadi, xona tozalanmadi. Qayta urinib ko'ring.",true)}).then(function(){btn.disabled=false});
 });
@@ -4840,7 +4994,7 @@ function autoCorner(kind){kind=kind||(DZ&&DZ.cornerKind)||'L';var made=[],skip=[
     rows.forEach(function(rw){var row=rw[0],tp=kind==='45'?rw[2]:rw[1],T=TYPES[tp];
       var onP=S.project.filter(function(q){return q.wall===P&&rowOf(q)===row}),onQ=S.project.filter(function(q){return q.wall===Q&&rowOf(q)===row});if(!onP.length||!onQ.length)return;
       if(onP.concat(onQ).some(function(q){return TYPES[q.m.type].corner&&((q.wall===P&&q.m.cornerEnd)||(q.wall===Q&&!q.m.cornerEnd))})){skip.push(P+'–'+Q+' ('+(row==='floor'?'pastki':'yuqori')+'): burchak bloki allaqachon bor');return}
-      var pl=onP.reduce(function(a,b){return a.x+a.m.W>b.x+b.m.W?a:b}),qf=onQ.reduce(function(a,b){return a.x<b.x?a:b}),xe=pl.x+pl.m.W,xs=qf.x,W=Math.round(LP-xe),W2=Math.round(xs);
+      var pl=onP.reduce(function(a,b){return a.x+a.m.W>b.x+b.m.W?a:b}),qf=onQ.reduce(function(a,b){return a.x<b.x?a:b}),xe=pl.x+pl.m.W,xs=qf.x,gQ=qf.off||0,W=Math.round(LP-xe-gQ),W2=Math.round(xs);
       if(W>1500||W2>1500)return;var needP=(qf.off||0)+qf.m.D+100,needQ=(pl.off||0)+pl.m.D+100;
       if(W<needP||W2<needQ){skip.push(P+'–'+Q+' ('+(row==='floor'?'pastki':'yuqori')+'): joy '+W+'×'+W2+' mm, kamida '+Math.round(needP)+'×'+Math.round(needQ)+' kerak');return}
       var m=newCur(tp);m.W=W;m.W2=W2;m.cornerEnd=true;m.H=pl.m.H;m.D=Math.min(pl.m.D,qf.m.D);if(T.elev)m.elev=effElev(pl.m);m.leg=pl.m.leg!=null?pl.m.leg:m.leg;['korpus','front','back','fix','gola','plinth'].forEach(function(k){if(pl.m[k]!=null)m[k]=pl.m[k]});
@@ -4996,14 +5150,14 @@ function snapshots(d){
     TV.r.setSize(900,600,false);TV.cam.aspect=1.5;TV.cam.updateProjectionMatrix();TV.scene.background=new THREE.Color(0xe6e9e7);
     var mx=Math.max(S.room.W,S.room.L,S.room.H)*0.001;
     [['solid',0.55,0.5,1.9,0],['solid',0,0.25,1.9,0],['solid',0,1.5,1.8,0],['glass',0.55,0.5,1.9,0],['solid',0.55,0.5,1.9,1]].forEach(function(v){
-      S.view=v[0];A.t=v[4];buildRoomScene(TV,false,null);
+      S.view=v[0];A.t=v[4];A.seq=false;buildRoomScene(TV,false,null);
       TV.az=v[1];TV.el=v[2];TV.dist=mx*v[3];
       var c=TV.cam,t=TV.target;
       c.position.set(t.x+TV.dist*Math.cos(TV.el)*Math.sin(TV.az),t.y+TV.dist*Math.sin(TV.el),t.z+TV.dist*Math.cos(TV.el)*Math.cos(TV.az));c.lookAt(t);
       wallVis(TV);TV.r.render(TV.scene,c);out.push(TV.r.domElement.toDataURL('image/jpeg',0.88));
     });
   }finally{
-    S.mats=bak.mats;S.room=bak.room;S.project=bak.project;S.pipes=bak.pipes;S.showDims=bak.showDims;S.selected=bak.selected;S.view=bak.view;A.t=bak.t;
+    S.mats=bak.mats;S.room=bak.room;S.project=bak.project;S.pipes=bak.pipes;S.showDims=bak.showDims;S.selected=bak.selected;S.view=bak.view;A.t=bak.t;A.seq=true;
     try{TV.clear();TV.r.dispose()}catch(e){}host.remove();
   }
   return out;
@@ -5028,7 +5182,7 @@ $('#pj-view').addEventListener('click',function(){if(lastShare)enterClient(lastS
 var OWNER_BAK=null;
 function enterClient(d,fromOwner){
   if(fromOwner)OWNER_BAK={mats:S.mats,room:S.room,project:S.project,pipes:S.pipes,pname:S.pname,showDims:S.showDims,selected:S.selected,tab:S.tab};
-  S.client=true;S.clBak=null;S.clPick={};d=JSON.parse(JSON.stringify(d));S.mats=d.m||[];S.room=Object.assign({W:3400,L:2800,H:2700,pipeGap:0,wallC:'#ece7df',floorT:'laminat',ceilC:'#f6f6f3',ceil:false,openings:[]},d.r);
+  S.client=true;S.clBak=null;S.clPick={};d=JSON.parse(JSON.stringify(d));S.clAd=d.ad||null;S.mats=d.m||[];S.room=Object.assign({W:3400,L:2800,H:2700,pipeGap:0,wallC:'#ece7df',floorT:'laminat',ceilC:'#f6f6f3',ceil:false,openings:[]},d.r);
   S.project=(d.i||[]).filter(function(it){return it&&it.m&&TYPES[it.m.type]});S.pipes=d.p||[];S.selected=null;S.showDims=true;S.pname=d.n||'';
   document.body.classList.add('cl-mode');
   ['module','room','mats','project','saved'].forEach(function(k){$('#p-'+k).hidden=true});
@@ -5056,7 +5210,13 @@ function clColorsHTML(){S.clPick=S.clPick||{};var rows=CLG.filter(function(x){re
     '<div class="btns" style="margin-top:10px"><button class="btn pri" data-ccsend>Tanlovimni ustaga yuborish (Telegram)</button></div>'}
 function clApply(g,col){S.clPick=S.clPick||{};S.clPick[g]=col;if(g==='devor'){S.room.wallC=col}else{var k=CLG.find(function(x){return x[0]===g})[2];clItems(g).forEach(function(it){if(k==='f')it.m.cfF=col;else if(k==='b')it.m.cfB=col;else it.m.cfS=col})}
   $('#cl-colors').innerHTML=clColorsHTML();rebuildClient(false)}
+var AD_T='Ishonchingizni oqlashga harakat qilamiz!',AD_P='+998 93 208 88 88';
+function adHTML(ad){ad=ad||{};var t=ad.t!=null?ad.t:AD_T,ph=ad.ph!=null?ad.ph:AD_P;if(!t&&!ph)return '';var tel=String(ph||'').replace(/[^\d+]/g,'');return (t?'<b>'+esc(t)+'</b>':'')+(ph?'<a href="tel:'+esc(tel)+'">📞 '+esc(ph)+'</a>':'')}
+(function(){var at=document.getElementById('pj-adt'),ap=document.getElementById('pj-adp');if(!at||!ap)return;var fill=function(){at.value=S.set.adT!=null?S.set.adT:AD_T;ap.value=S.set.adP!=null?S.set.adP:AD_P};fill();
+  [at,ap].forEach(function(el){el.addEventListener('change',function(){S.set.adT=at.value.trim();S.set.adP=ap.value.trim();save();toast('Reklama yozuvi saqlandi — yangi havola olsangiz mijozda ko\'rinadi')})});
+  document.addEventListener('click',function(e){if(e.target&&e.target.id==='pj-share')setTimeout(fill,50)})})();
 function renderClient(fit){
+  try{$('#cl-ad').innerHTML=adHTML(S.clAd)}catch(_e){}
   var R=S.room,sel=S.project.find(function(x){return x.id===S.selected});
   $('#cl-title').textContent=S.pname||'Loyiha';
   $('#cl-sub').textContent='Xona '+R.W+' × '+R.L+' × '+R.H+' mm · '+S.project.length+' ta blok. 3D ko\'rinishni barmoq bilan aylantiring, ikki barmoq bilan yaqinlashtiring.';
