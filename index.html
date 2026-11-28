@@ -4755,11 +4755,12 @@ async function encodeShare(obj){
 /* eski telefonlar uchun: brauzer o'zi ocha olmasa, pako kutubxonasi bilan ochiladi */
 function loadPako(){return new Promise(function(res,rej){if(window.pako)return res(window.pako);var sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako_inflate.min.js';sc.onload=function(){window.pako?res(window.pako):rej(new Error('pako'))};sc.onerror=function(){rej(new Error('pako'))};document.head.appendChild(sc)})}
 async function inflateRawAny(bytes){if(window.DecompressionStream){try{return await pipeBytes(bytes,new DecompressionStream('deflate-raw'))}catch(e){}}var pk=await loadPako();return pk.inflateRaw(bytes)}
+function shareUnpack(d){(d&&d.i||[]).forEach(function(it){var m=it&&it.m;if(!m||!m.pk)return;m.panels=m.pk.map(function(r,i){var p={id:'c'+i,n:'',r:r[0].slice(0,-1),o:r[0].slice(-1),x:r[1],y:r[2],z:r[3],a:r[4],b:r[5]};if(r[6])Object.keys(r[6]).forEach(function(k){p[k]=r[6][k]});return p});delete m.pk});return d}
 async function decodeShare(h){
   var mm=/^#?mijoz([01])-(\d{6})([0-9A-Za-z-]+)$/.exec(h);if(!mm)return null;
   var bytes=b63d(mm[3],+mm[2]);
   if(mm[1]==='1')bytes=await inflateRawAny(bytes);
-  return JSON.parse(new TextDecoder().decode(bytes));
+  return shareUnpack(JSON.parse(new TextDecoder().decode(bytes)));
 }
 function clone(o){return JSON.parse(JSON.stringify(o))}
 function usedMatIds(project){
@@ -4776,6 +4777,8 @@ function sharePayload(rec){
   var used={};
   var items=rec.project.map(function(it){
     var m=clone(it.m);delete m.extras;delete m.price;delete m.incl;delete m.sinkIncl;
+    ['guides','joints','apMig','fxOff','fxGap','kK','kF','tplId','_tname'].forEach(function(k){delete m[k]});
+    if(Array.isArray(m.panels)&&m.panels.length){m.pk=m.panels.map(function(p){var rest={};Object.keys(p).forEach(function(k){if(['r','o','x','y','z','a','b','n','id','kr','fx','gr'].indexOf(k)<0)rest[k]=p[k]});var row=[p.r+p.o,Math.round(p.x*10)/10,Math.round(p.y*10)/10,Math.round(p.z*10)/10,Math.round(p.a*10)/10,Math.round(p.b*10)/10];if(Object.keys(rest).length)row.push(rest);return row});delete m.panels}
     ['korpus','back','front','surfMat'].forEach(function(k){if(m[k])used[m[k]]=1});(m.cparts||[]).forEach(function(p){if(p.mat)used[p.mat]=1});
     return {id:it.id,m:m,wall:it.wall,x:it.x,off:it.off||0};
   });
@@ -4830,7 +4833,7 @@ async function showShare(rec){
   $('#pj-link').value=SITE+'#'+code;lastCode=code;lastName=(rec.name||'Mebel loyihasi')+" — loyihani ko'rish";$('#pj-sharebox').hidden=false;
   $('#pj-tg').href='https://t.me/share/url?url='+encodeURIComponent(SITE+'#'+code)+'&text='+encodeURIComponent(rec.name||'Mebel loyihasi');
   $('#pj-short').href=SITE+'?q=1&n='+encodeURIComponent(rec.name||'')+'#'+code;
-  $('#pj-linkmsg').textContent='Tayyor. «Qisqa havola olish» ni bosing: yangi oynada qisqa havola chiqadi, o\'sha yerdan Telegramga yuborasiz.';
+  var LL=(SITE+'#'+code).length;$('#pj-linkmsg').textContent=(LL>3900?'⚠ Havola juda uzun ('+LL+' belgi) — Telegram uni qirqib qo\'yishi mumkin. «Qisqa havola olish» ni ishlating yoki PDF yuboring. ':'Tayyor (havola '+LL+' belgi). ')+'«Qisqa havola olish» ni bosing: yangi oynada qisqa havola chiqadi, o\'sha yerdan Telegramga yuborasiz.';
 }
 $('#pj-save').addEventListener('click',saveProject);
 $('#pj-name').addEventListener('input',function(e){S.pname=e.target.value;save()});
@@ -5143,7 +5146,7 @@ function snapshots(d){
   host.style.cssText='position:fixed;left:-10000px;top:0;width:900px;height:600px;pointer-events:none';document.body.appendChild(host);
   var TV=makeViewer(host,false);
   if(!TV.ok){host.remove();return out}
-  var bak={mats:S.mats,room:S.room,project:S.project,pipes:S.pipes,showDims:S.showDims,selected:S.selected,view:S.view,t:A.t};
+  d=shareUnpack(JSON.parse(JSON.stringify(d)));var bak={mats:S.mats,room:S.room,project:S.project,pipes:S.pipes,showDims:S.showDims,selected:S.selected,view:S.view,t:A.t};
   try{
     S.mats=d.m||[];S.room=Object.assign({W:3400,L:2800,H:2700,pipeGap:0,wallC:'#ece7df',floorT:'laminat',ceilC:'#f6f6f3',ceil:false,openings:[]},d.r);
     S.project=(d.i||[]).filter(function(it){return it&&it.m&&TYPES[it.m.type]});S.pipes=d.p||[];S.showDims=true;S.selected=null;
@@ -5182,7 +5185,7 @@ $('#pj-view').addEventListener('click',function(){if(lastShare)enterClient(lastS
 var OWNER_BAK=null;
 function enterClient(d,fromOwner){
   if(fromOwner)OWNER_BAK={mats:S.mats,room:S.room,project:S.project,pipes:S.pipes,pname:S.pname,showDims:S.showDims,selected:S.selected,tab:S.tab};
-  S.client=true;S.clBak=null;S.clPick={};d=JSON.parse(JSON.stringify(d));S.clAd=d.ad||null;S.mats=d.m||[];S.room=Object.assign({W:3400,L:2800,H:2700,pipeGap:0,wallC:'#ece7df',floorT:'laminat',ceilC:'#f6f6f3',ceil:false,openings:[]},d.r);
+  S.client=true;S.clBak=null;S.clPick={};d=shareUnpack(JSON.parse(JSON.stringify(d)));S.clAd=d.ad||null;S.mats=d.m||[];S.room=Object.assign({W:3400,L:2800,H:2700,pipeGap:0,wallC:'#ece7df',floorT:'laminat',ceilC:'#f6f6f3',ceil:false,openings:[]},d.r);
   S.project=(d.i||[]).filter(function(it){return it&&it.m&&TYPES[it.m.type]});S.pipes=d.p||[];S.selected=null;S.showDims=true;S.pname=d.n||'';
   document.body.classList.add('cl-mode');
   ['module','room','mats','project','saved'].forEach(function(k){$('#p-'+k).hidden=true});
